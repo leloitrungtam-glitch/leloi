@@ -121,8 +121,8 @@
         .f-privacy { color: #333; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-top: 20px; border-top: 1px solid #e0e5ec; padding-top: 15px;}
         .f-privacy i { color: #198754; font-size: 16px; }
         .f-map-wrapper { border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
-        .f-support-btn { background-color: #00d5ff; color: #112255; border: none; border-radius: 50px; padding: 14px 25px; font-weight: 700; width: 100%; display: inline-flex; justify-content: center; align-items: center; text-transform: uppercase; transition: all 0.3s; cursor: pointer;}
-        .f-support-btn:hover { background-color: #00bce6; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 213, 255, 0.4); }
+        .f-support-btn { background-color: #00d5ff; color: #112255; border: none; border-radius: 50px; padding: 14px 25px; font-weight: 700; width: 100%; display: inline-flex; justify-content: center; align-items: center; text-transform: uppercase; transition: all 0.3s; cursor: pointer; text-decoration: none !important; }
+        .f-support-btn:hover { background-color: #00bce6; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 213, 255, 0.4); color: #112255; }
         .f-support-btn i { margin-right: 8px; font-size: 18px; }
 
         .activity-container { max-width: 900px; margin: 0 auto; }
@@ -157,7 +157,12 @@
             .main-header { height: 70px; } .header-logo { width: 50px; height: 50px; } .header-title { font-size: 18px; }
             .custom-text-box h1, .custom-text-box h2, .custom-text-box h3, .section-heading h2 { font-size: 32px !important; line-height: 1.3 !important; }
             .hero-section { flex-direction: column; justify-content: flex-start; min-height: auto; aspect-ratio: 16/9; background-size: cover; margin-top: 70px; }
-            .btn-fixed-register { position: relative; bottom: auto; right: auto; width: 100%; max-width: 350px; margin: 0 auto 40px auto; padding: 16px 20px; z-index: 10; }
+            
+            .btn-fixed-register { position: relative; bottom: auto; right: auto; width: 100%; max-width: 280px; margin: 0 auto 30px auto; padding: 12px 15px; font-size: 14px; z-index: 10; }
+            .btn-fixed-register i { font-size: 16px; }
+            .f-support-btn { padding: 10px 15px; font-size: 13px; }
+            .f-support-btn i { font-size: 15px; }
+            
             #backToTopBtn { bottom: 30px; right: 20px; width: 45px; height: 45px; font-size: 24px; }
             .footer-right { width: 100%; text-align: left;} .footer-container { gap: 20px; }
             .course-card-img { height: 180px; margin-bottom: 20px; }
@@ -177,6 +182,28 @@
             .ep-btn i { width: 22px; height: 22px; font-size: 11px; margin-left: 6px; }
             .teacher-card { padding: 0 !important; }
             .teacherSwiper .swiper-slide, .techSwiper .swiper-slide, .englishSwiper .swiper-slide { padding: 0 5px; }
+        }
+
+        /* --- HIỆU ỨNG POPUP CHI TIẾT MƯỢT MÀ --- */
+        #detailModal.fade .modal-dialog {
+            transform: scale(0.8) translateY(-50px);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0;
+        }
+        #detailModal.show .modal-dialog {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        /* --- HIỆU ỨNG POPUP ĐĂNG KÝ TRƯỢT LÊN MỀM MẠI --- */
+        #registrationModal.fade .modal-dialog {
+            transform: translateY(60px);
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            opacity: 0;
+        }
+        #registrationModal.show .modal-dialog {
+            transform: translateY(0);
+            opacity: 1;
         }
     </style>
 </head>
@@ -279,9 +306,11 @@
                 <div class="f-map-wrapper">
                     <iframe id="f_map" src="" width="100%" height="150px" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
-                <button class="f-support-btn" data-bs-toggle="modal" data-bs-target="#registrationModal">
-                    <i class="bi bi-headset"></i> Tư Vấn Hỗ Trợ
-                </button>
+                
+                <a href="https://www.facebook.com/profile.php?id=61585530223166" target="_blank" class="f-support-btn">
+                    <i class="bi bi-chat-dots"></i> Tư Vấn Qua facebook
+                </a>
+
             </div>
         </div>
     </footer>
@@ -336,9 +365,20 @@
         window.addEventListener('load', () => { setTimeout(() => { const loader = document.getElementById('page-loader'); if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); } }, 600); });
         
         window.showDetailModal = (encodedContent) => {
-            document.getElementById('detailModalBody').innerHTML = decodeURIComponent(encodedContent);
-            let detailModal = new bootstrap.Modal(document.getElementById('detailModal'));
+            const modalBody = document.getElementById('detailModalBody');
+            
+            modalBody.style.opacity = '0';
+            modalBody.style.transform = 'translateY(15px)';
+            modalBody.innerHTML = decodeURIComponent(encodedContent);
+            
+            let detailModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('detailModal'));
             detailModal.show();
+
+            setTimeout(() => {
+                modalBody.style.transition = 'all 0.4s ease';
+                modalBody.style.opacity = '1';
+                modalBody.style.transform = 'translateY(0)';
+            }, 150);
         };
     </script>
 
@@ -349,7 +389,7 @@
         const firebaseConfig = { apiKey: "AIzaSyA85V7th40ettZccP5or_tUNBE5_LRF1wU", authDomain: "test-web1-b1795.firebaseapp.com", databaseURL: "https://test-web1-b1795-default-rtdb.firebaseio.com", projectId: "test-web1-b1795" };
         const app = initializeApp(firebaseConfig); const db = getDatabase(app);
 
-        let backgroundImages = [ "url('https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:format(webp):quality(75)/2023_11_26_638366159843367754_hinh-nen-bien.png')", "url('https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:format(webp):quality(75)/2023_11_26_638366159843367754_hinh-nen-bien.png')" ];
+        let backgroundImages = [  ];
         let currentIndex = 0; const heroSection = document.getElementById('wrap_hero'); const heroIndicators = document.getElementById('hero-indicators');
 
         function updateIndicators() { if (!heroIndicators) return; heroIndicators.innerHTML = ''; backgroundImages.forEach((_, idx) => { heroIndicators.innerHTML += `<div class="indicator-bar ${idx === currentIndex ? 'active' : ''}" onclick="window.setSlide(${idx})"></div>`; }); }
