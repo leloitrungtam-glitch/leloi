@@ -205,11 +205,18 @@
                             <select id="filterAge" class="form-select"><option value="all">Tất cả</option></select>
                         </div>
                         <div class="col-md-3"><label class="small fw-bold">Lọc Ngày</label><input type="date" id="filterDate" class="form-control"></div>
-                        <div class="col-md-4"><button id="btnFilter" class="btn btn-primary me-2">Lọc</button><button id="btnClearFilter" class="btn btn-secondary">Bỏ lọc</button></div>
+                        <div class="col-md-4">
+                            <button id="btnFilter" class="btn btn-primary me-1">Lọc</button>
+                            <button id="btnClearFilter" class="btn btn-secondary me-1">Bỏ lọc</button>
+                            <button class="btn btn-danger" onclick="window.bulkDelete()"><i class="bi bi-trash"></i> Xóa chọn</button>
+                        </div>
                         <div class="col-md-2 text-end"><span class="badge bg-success p-2" id="totalCount">Tổng: 0</span></div>
                     </div>
                     <div class="card-table"><div class="table-responsive"><table class="table table-hover mb-0">
-                        <thead><tr><th>STT</th><th>Phụ Huynh</th><th>SĐT</th><th>Độ Tuổi</th><th>Khóa Học</th><th>Ghi Chú</th><th>Thời Gian</th><th class="text-center">Tác Vụ</th></tr></thead>
+                        <thead><tr>
+                            <th class="text-center" style="width: 40px;"><input type="checkbox" id="selectAllCheckbox" onchange="window.toggleSelectAll(this)"></th>
+                            <th>STT</th><th>Phụ Huynh</th><th>SĐT</th><th>Độ Tuổi</th><th>Khóa Học</th><th>Ghi Chú</th><th>Thời Gian</th><th class="text-center">Tác Vụ</th>
+                        </tr></thead>
                         <tbody id="data-body"></tbody>
                     </table></div></div>
                 </div>
@@ -251,7 +258,11 @@
                                     </div>
 
                                     <div class="section-master mt-4" id="wrap_teacher_global" style="border-color: #00d5ff; background: #fff;">
-                                        <div class="sm-toolbar" style="background: #00d5ff; color: #112255;"><button onclick="cmsToggleVis('teacher')"><i class="bi bi-eye"></i> Ẩn/Hiện Giảng Viên</button></div>
+                                        <div class="sm-toolbar" style="background: #00d5ff; color: #112255;">
+                                            <button onclick="cmsToggleVis('teacher')"><i class="bi bi-eye"></i> Ẩn/Hiện Giảng Viên</button> 
+                                            <span class="mx-1">|</span> 
+                                            <button onclick="cmsDeleteGlobalTeacher()"><i class="bi bi-trash"></i> Xóa Khối</button>
+                                        </div>
                                         <div class="section-master-header" style="border-bottom-color: #00d5ff;">
                                             <h5 class="sm-title editable-block p-1 m-0" onclick="cmsEditTeacherTitle(null)" style="color:#00d5ff;">
                                                 <i class="bi bi-person-video3" id="p_teacher_icon_global"></i> <span id="p_teacher_title_global">Đội Ngũ Giảng Viên</span>
@@ -388,7 +399,53 @@
         let allRecs = []; let globalData = {}; const tbody = document.getElementById('data-body');
         function loadData() { onValue(ref(db, 'registrations'), (snap) => { allRecs = []; globalData = {}; if (snap.exists()) { snap.forEach((c) => { let i = c.val(); i.id = c.key; allRecs.push(i); globalData[i.id] = i; }); allRecs.reverse(); } applyFilters(); }); }
         function applyFilters() { const age = document.getElementById('filterAge').value; const d = document.getElementById('filterDate').value; let fd = allRecs.filter(i => { let mAge = (age==='all'||i.ageGroup===age); let mDate = true; if(d&&i.timestamp){ const dObj = new Date(i.timestamp); const str = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,'0')}-${String(dObj.getDate()).padStart(2,'0')}`; mDate = (str===d); } return mAge&&mDate; }); document.getElementById('totalCount').innerText = `Tổng: ${fd.length}`; draw(fd); }
-        function draw(arr) { tbody.innerHTML=''; if(arr.length===0){ tbody.innerHTML='<tr><td colspan="8" class="text-center py-4">Trống.</td></tr>'; return; } arr.forEach((i, idx) => { tbody.innerHTML+=`<tr><td>${idx+1}</td><td>${i.parentName||''}</td><td>${i.phone||''}</td><td><span class="badge bg-info text-dark">${i.ageGroup||''}</span></td><td><span class="badge bg-primary text-white">${i.course||'Chưa chọn'}</span></td><td class="note-cell">${i.note||'<i class="text-muted">Trống</i>'}</td><td>${i.timestamp?new Date(i.timestamp).toLocaleString('vi-VN'):''}</td><td class="text-center"><button class="btn btn-sm btn-primary" onclick="window.oEdit('${i.id}')"><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-danger" onclick="window.dRec('${i.id}')"><i class="bi bi-trash"></i></button></td></tr>`; }); }
+        function draw(arr) { 
+            tbody.innerHTML=''; 
+            if(arr.length===0){ tbody.innerHTML='<tr><td colspan="9" class="text-center py-4">Trống.</td></tr>'; return; } 
+            arr.forEach((i, idx) => { 
+                tbody.innerHTML+=`<tr>
+                    <td class="text-center"><input type="checkbox" class="row-checkbox" value="${i.id}"></td>
+                    <td>${idx+1}</td>
+                    <td>${i.parentName||''}</td>
+                    <td>${i.phone||''}</td>
+                    <td><span class="badge bg-info text-dark">${i.ageGroup||''}</span></td>
+                    <td><span class="badge bg-primary text-white">${i.course||'Chưa chọn'}</span></td>
+                    <td class="note-cell">${i.note||'<i class="text-muted">Trống</i>'}</td>
+                    <td>${i.timestamp?new Date(i.timestamp).toLocaleString('vi-VN'):''}</td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-primary" onclick="window.oEdit('${i.id}')"><i class="bi bi-pencil"></i></button> 
+                        <button class="btn btn-sm btn-danger" onclick="window.dRec('${i.id}')"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>`; 
+            }); 
+        }
+
+        window.toggleSelectAll = (el) => {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(cb => cb.checked = el.checked);
+        };
+
+        window.bulkDelete = async () => {
+            const checked = document.querySelectorAll('.row-checkbox:checked');
+            if (checked.length === 0) {
+                Swal.fire({ icon: 'warning', title: 'Chưa chọn dữ liệu', text: 'Vui lòng tích vào các ô để xóa!' });
+                return;
+            }
+            Swal.fire({
+                title: `Xóa ${checked.length} dòng đã chọn?`, text: "Hành động này không thể hoàn tác!", icon: 'warning',
+                showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Xóa vĩnh viễn'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({title: 'Đang xóa...', allowOutsideClick: false, didOpen: () => {Swal.showLoading()}});
+                    const updates = {};
+                    checked.forEach(cb => { updates[`registrations/${cb.value}`] = null; });
+                    await update(ref(db), updates);
+                    document.getElementById('selectAllCheckbox').checked = false;
+                    Swal.fire('Đã xóa', 'Dữ liệu đã được xóa thành công.', 'success');
+                }
+            });
+        };
+
         let eMod = new bootstrap.Modal(document.getElementById('editModal')); window.oEdit = (id) => { const d=globalData[id]; document.getElementById('edit_id').value=id; document.getElementById('edit_name').value=d.parentName; document.getElementById('edit_phone').value=d.phone; document.getElementById('edit_note').value=d.note||''; eMod.show(); }; document.getElementById('btnSaveEdit').addEventListener('click', async () => { const id=document.getElementById('edit_id').value; await update(ref(db, `registrations/${id}`),{parentName:document.getElementById('edit_name').value, phone:document.getElementById('edit_phone').value, note:document.getElementById('edit_note').value}); eMod.hide(); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); }); window.dRec = async (id) => { Swal.fire({title:'Xóa vĩnh viễn?', icon:'warning', showCancelButton:true}).then(async (r)=>{ if(r.isConfirmed){ await remove(ref(db, `registrations/${id}`)); Swal.fire('Đã xóa', '', 'success'); } }); }; document.getElementById('btnFilter').addEventListener('click', applyFilters); document.getElementById('btnClearFilter').addEventListener('click', ()=>{ document.getElementById('filterAge').value='all'; document.getElementById('filterDate').value=''; applyFilters(); });
 
         window.renderFormConfigOptions = () => {
@@ -434,13 +491,17 @@
                     let updatedVis = false;
                     if(cmsData.visibility.activity === undefined) { cmsData.visibility.activity = true; updatedVis = true; }
                     if(cmsData.visibility.teacher === undefined) { cmsData.visibility.teacher = true; updatedVis = true; }
+                    
+                    // FIX LỖI KHỐI GIÁO VIÊN BỊ ẨN MẶC ĐỊNH
+                    if(cmsData.visibility.teacher === false) { cmsData.visibility.teacher = true; updatedVis = true; }
+
                     if(updatedVis) update(ref(db, 'pageContent/visibility'), cmsData.visibility); 
                 }
 
                 if (!cmsData.footer_data) { cmsData.footer_data = { logo: "https://media.leloipt.edu.vn/Media/30_TH1041/Images/footer-logo-leloi83f2a8da-5-e.png", name: "CÔNG TY CỔ PHẦN QUỐC TẾ ANH VĂN HỘI VIỆT MỸ", license: "Giấy chứng nhận doanh nghiệp số: 0313548147", address: "Trụ Sở Chính Tại 189 Nguyễn Thị Minh Khai, Phường Bến Thành, TP. Hồ Chí Minh", privacy: "Chính sách bảo vệ dữ liệu cá nhân", map_lat: "10.768820", map_lng: "106.688320", map_w: "100%", map_h: "150px" }; update(ref(db, 'pageContent'), { footer_data: cmsData.footer_data }); }
 
                 const applyVis = (id, key) => { let el = document.getElementById(id); if(el) { if(!cmsData.visibility[key]) el.classList.add('is-hidden-section'); else el.classList.remove('is-hidden-section'); } };
-                applyVis('wrap_header', 'header'); applyVis('wrap_activity', 'activity'); applyVis('wrap_teacher_global', 'teacher'); applyVis('wrap_intro', 'intro'); applyVis('wrap_footer', 'footer');
+                applyVis('wrap_header', 'header'); applyVis('wrap_activity', 'activity'); applyVis('wrap_intro', 'intro'); applyVis('wrap_footer', 'footer');
 
                 const setT = (id) => { if(document.getElementById('p_'+id)) document.getElementById('p_'+id).innerHTML = cmsData[id]||'...'; }; const setI = (id) => { if(document.getElementById('p_'+id)) document.getElementById('p_'+id).src = cmsData[id]||''; };
                 setI('logo'); setT('site_title'); setT('sec1_title'); setT('sec1_desc');
@@ -461,20 +522,29 @@
                 }
                 document.getElementById('cms_activity_render').innerHTML = actHTML;
 
-                // RENDER KHỐI GIÁO VIÊN TOÀN CỤC BỊ ẨN MẤT
+                // RENDER KHỐI GIÁO VIÊN TOÀN CỤC BỊ ẨN MẤT HOẶC XÓA
                 document.getElementById('p_teacher_title_global').innerText = cmsData.teacher_data.title || "ĐỘI NGŨ GIẢNG VIÊN";
                 let gtbColor = cmsData.teacher_data.color || '#00d5ff';
                 let gtbIcon = cmsData.teacher_data.icon || 'bi-person-video3';
                 let wg = document.getElementById('wrap_teacher_global');
                 if(wg) {
-                    wg.style.borderColor = gtbColor;
-                    let st = wg.querySelector('.sm-toolbar'); if(st) st.style.background = gtbColor;
-                    let ei = document.getElementById('p_teacher_icon_global'); if(ei) ei.className = `bi ${gtbIcon}`;
-                    let eh = wg.querySelector('.editable-block'); if(eh) eh.style.color = gtbColor;
+                    if (cmsData.teacher_data.isDeleted) {
+                        wg.style.display = 'none';
+                    } else {
+                        wg.style.display = 'block';
+                        wg.style.borderColor = gtbColor;
+                        let st = wg.querySelector('.sm-toolbar'); if(st) st.style.background = gtbColor;
+                        let ei = document.getElementById('p_teacher_icon_global'); if(ei) ei.className = `bi ${gtbIcon}`;
+                        let eh = wg.querySelector('.editable-block'); if(eh) eh.style.color = gtbColor;
+                        
+                        // Áp dụng lớp ẩn nếu thuộc tính visibility đang false
+                        if(!cmsData.visibility['teacher']) wg.classList.add('is-hidden-section');
+                        else wg.classList.remove('is-hidden-section');
+                    }
                 }
 
                 let globalTeacherHTML = '';
-                if(cmsData.teacher_data.cards) {
+                if(cmsData.teacher_data.cards && !cmsData.teacher_data.isDeleted) {
                     cmsData.teacher_data.cards.forEach((c, cIndex) => {
                         let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience || '0'}</span><small>năm<br>kinh nghiệm</small></div>`; 
                         globalTeacherHTML += `<div class="swiper-slide"><div class="cms-card-wrapper teacher-card" onclick="event.stopPropagation();" style="border-color: ${c.bgColor||'#00d5ff'} !important;"><div class="cms-actions"><button onclick="event.stopPropagation(); cmsEditTeacherCard(${cIndex}, null)" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Sửa</button><button onclick="event.stopPropagation(); cmsDeleteTeacherCard(${cIndex}, null)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button></div>${badgeHTML}<img src="${c.img || 'https://via.placeholder.com/400x500?text=Teacher'}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role || 'Chức vụ'}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name || 'TÊN GIÁO VIÊN'}</h4></div></div></div>`;
@@ -659,6 +729,8 @@
         window.cmsToggleVisBlock = async (bIndex) => { cmsData.custom_blocks[bIndex].isHidden = !cmsData.custom_blocks[bIndex].isHidden; await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); };
         window.cmsDeleteBlock = async (bIndex) => { Swal.fire({title:'Xóa vĩnh viễn khối này?', icon:'warning', showCancelButton:true}).then(async (r)=>{ if(r.isConfirmed) { cmsData.custom_blocks.splice(bIndex, 1); await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); } }); };
         
+        window.cmsDeleteGlobalTeacher = async () => { Swal.fire({title:'Xóa vĩnh viễn khối này?', text: 'Khối Giảng Viên mặc định sẽ bị xóa (Có thể thêm lại bằng menu bên trái).', icon:'warning', showCancelButton:true}).then(async (r)=>{ if(r.isConfirmed) { cmsData.teacher_data.isDeleted = true; await update(ref(db, 'pageContent/teacher_data'), cmsData.teacher_data); Swal.fire('Đã xóa', '', 'success'); } }); };
+
         window.cmsEditBlockTitle = async (bIndex) => { 
             let block = cmsData.custom_blocks[bIndex];
             let htmlForm = `<input id="swal-bt-title" class="swal2-input mt-0 mb-3" placeholder="Nhập tiêu đề..." value="${block.title||''}">`;
