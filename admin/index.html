@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Trị & CMS Kéo Thả</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <style>
+        /* Đổi sang font Inter chuẩn tiếng Việt chống lỗi chữ */
+        body { background-color: #f4f7f6; font-family: 'Inter', Arial, Helvetica, sans-serif; overflow-x: hidden; }
+        
+        /* LOGIN */
+        #login-section { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f4f7f6 0%, #e0e5ec 100%); }
+        .login-card { background: #ffffff; padding: 40px 30px 30px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); width: 100%; max-width: 400px; text-align: center; position: relative; margin-top: 50px; }
+        .logo-img { width: 110px; height: 110px; object-fit: cover; border-radius: 50%; border: 5px solid #ffffff; position: absolute; top: -55px; left: 50%; transform: translateX(-50%); background-color: #fff; }
+        
+        /* ADMIN DASHBOARD & TABS */
+        #admin-section { display: none; }
+        .admin-header { background: #112255; color: white; padding: 20px 0 0 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .nav-tabs { border-bottom: none; justify-content: flex-start; padding-left: 20px; margin-top: 20px; gap: 5px;}
+        .nav-tabs .nav-link { color: rgba(255,255,255,0.6); border: none; font-weight: 600; padding: 15px 30px; border-radius: 15px 15px 0 0; transition: 0.3s; font-size: 16px;}
+        .nav-tabs .nav-link:hover { color: rgba(255,255,255,1); }
+        .nav-tabs .nav-link.active { color: #112255; background-color: #f4f7f6; font-weight: 700; box-shadow: 0 -4px 10px rgba(0,0,0,0.05);}
+        
+        .filter-card { background-color: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #e9ecef; }
+        .card-table { box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 15px; border: none; overflow: hidden; background: #fff; }
+        
+        /* PREVIEW CONTAINER */
+        .preview-wrapper { width: 100%; overflow-x: auto; background-color: #e0e5ec; padding: 20px 0; border-radius: 15px; display: flex; justify-content: center; transition: all 0.5s ease; }
+        .cms-container { background: #fff; border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; max-width: 1920px; min-height: 1080px; margin: 0 auto; }
+        .cms-container.mobile-view { max-width: 414px !important; aspect-ratio: 1080/2340; border: 15px solid #222 !important; border-radius: 35px !important; padding: 15px !important; overflow-y: auto; overflow-x: hidden; height: 897px; min-height: auto; }
+
+        .editable-block { position: relative; border: 2px dashed transparent; transition: all 0.3s; padding: 10px; border-radius: 10px; }
+        .editable-block:hover { border-color: #f15a3a; background: rgba(241, 90, 58, 0.05); cursor: pointer; }
+        .edit-btn-overlay { position: absolute; top: -15px; right: -15px; background: #f15a3a; color: white; width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 100;}
+        .editable-block:hover .edit-btn-overlay { display: flex; }
+
+        .editable-block-blue { position: relative; border: 3px dashed transparent; transition: all 0.3s; padding: 15px; border-radius: 20px; }
+        .editable-block-blue:hover { border-color: #007bff; cursor: pointer; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.1); }
+        .edit-btn-overlay-blue { position: absolute; top: -15px; right: -15px; background: #007bff; color: white; width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 100;}
+        .editable-block-blue:hover .edit-btn-overlay-blue { display: flex; }
+
+        .cms-card-wrapper { position: relative; border: 2px dashed #ccc; border-radius: 20px; transition: 0.3s; background: #fff;}
+        .cms-card-wrapper:hover { border-color: #f15a3a; }
+        .cms-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 5px; z-index: 100; }
+        .cms-card-wrapper:hover .cms-actions { display: flex; }
+        .cms-hero { background: #e0e5ec; padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px; font-weight: bold; color: #112255;}
+        .cms-logo-img { width: 80px; height: 80px; border-radius: 50%; object-fit: contain; border: 2px solid #ccc; background: white;}
+        
+        .drag-item { padding: 20px 15px; cursor: grab; margin-bottom: 15px; text-align: center; border-radius: 12px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .drag-item:active { cursor: grabbing; }
+        .drag-item:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); filter: brightness(1.1); }
+        
+        .drop-zone { min-height: 60px; border: 3px dashed #007bff; margin: 20px 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #007bff; transition: all 0.3s ease; background: rgba(0, 123, 255, 0.05); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; cursor: crosshair;}
+        .drop-zone.mini-drop { min-height: 40px; margin: 10px 0; border: 2px dashed #ff9800; color: #ff9800; background: rgba(255, 152, 0, 0.05); font-size: 13px; }
+        .drop-zone.dragover { background: #e0f7fa; border-color: #00d5ff; color: #007bff; min-height: 120px; font-size: 18px; transform: scale(1.02); box-shadow: 0 10px 20px rgba(0,213,255,0.2); z-index: 10;}
+
+        .section-master { position: relative; border: 2px dashed #00d5ff; border-radius: 20px; padding: 25px 20px; margin-bottom: 0px; transition: all 0.3s; background: #fff; }
+        .section-master:hover { box-shadow: 0 10px 25px rgba(0,213,255,0.15); }
+        .section-master-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px dashed #e0e5ec; }
+        .sm-title { font-weight: 800; font-size: 18px; color: #112255; margin: 0; }
+        .sm-toolbar { position: absolute; top: -15px; left: 20px; background: #112255; color: white; padding: 4px 15px; border-radius: 50px; font-size: 12px; font-weight: bold; display: flex; gap: 10px; z-index: 10;}
+        .sm-toolbar button { background: none; border: none; color: white; padding: 0; font-size: 12px; font-weight: bold; }
+        .sm-toolbar button:hover { color: #00d5ff; }
+        .is-hidden-section { opacity: 0.4; filter: grayscale(40%); border-color: #ccc; }
+        .is-hidden-section::after { content: "KHỐI ĐANG BỊ ẨN"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: bold; color: #ff0000; z-index: 5; background: rgba(255,255,255,0.8); padding: 10px 20px; border-radius: 10px; pointer-events: none;}
+
+        .course-card { border-radius: 20px; padding: 0 0 35px 0; height: 100%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); overflow: hidden; display: flex; flex-direction: column; border-top-style: solid; border-top-width: 5px;}
+        .course-card-img { width: 100%; height: 150px; object-fit: cover; border-radius: 20px 20px 0 0; margin-bottom: 25px; }
+        .icon-box { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; position: absolute; top: 125px; left: 20px; z-index: 2; }
+        .course-title, .course-desc { padding: 0 20px; }
+        .course-title { font-weight: 700; font-size: 18px; margin-bottom: 10px; margin-top: 10px; color:#112255;}
+        .course-desc { color: #475569; font-size: 14px; line-height: 1.6; }
+        .ep-card { border-radius: 20px; padding: 15px; height: 100%; display: flex; flex-direction: column; }
+        .ep-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .ep-title { font-weight: 700; font-size: 16px; margin: 0; padding-right: 10px; }
+        .ep-age-badge { padding: 4px 10px; border-radius: 8px; text-align: center; min-width: 60px; display: flex; flex-direction: column; align-items: center; }
+        .ep-age-badge span { font-size: 11px; line-height: 1; } .ep-age-badge strong { font-size: 16px; margin: 2px 0; }
+        .ep-img { width: 100%; border-radius: 12px; margin-bottom: 15px; object-fit: cover; aspect-ratio: 4/3; }
+        .ep-desc { font-size: 13px; line-height: 1.5; margin-bottom: 15px; flex-grow: 1;}
+
+        /* STYLES CHO KHỐI GIÁO VIÊN VÀ SWIPER */
+        .teacherSwiper { width: 100%; padding-bottom: 50px !important; }
+        .teacherSwiper .swiper-slide { height: auto; display: flex; }
+        .teacherSwiper .swiper-pagination-bullet { width: 25px; height: 6px; border-radius: 4px; background: #ccc; opacity: 1; transition: all 0.3s ease; }
+        .teacherSwiper .swiper-pagination-bullet-active { background: #00d5ff; width: 45px; }
+        
+        .teacher-card { border: 4px solid #00d5ff !important; border-radius: 15px !important; position: relative; background: #fff; overflow: hidden; height: 100%; display: flex; flex-direction: column; padding: 0 !important; transition: 0.3s; width: 100%; }
+        .teacher-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,213,255,0.2); }
+        .teacher-badge { position: absolute; top: 0; right: 25px; background: #e31837; color: white; padding: 8px 12px; border-radius: 0 0 10px 10px; text-align: center; z-index: 2; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .teacher-badge span { font-size: 26px; display: block; font-weight: 800; line-height: 1; margin-bottom: 2px;}
+        .teacher-badge small { font-size: 9px; text-transform: lowercase; font-weight: bold; line-height: 1.1; display: block; }
+        .teacher-img { width: 100%; height: 280px; object-fit: contain; object-position: bottom; background: #fdfdfd; }
+        .teacher-info { background: #00d5ff; color: #112255; padding: 15px 10px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .teacher-role { font-size: 14px; margin-bottom: 3px; font-weight: 500; }
+        .teacher-name { font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 0; color: #112255; }
+
+        /* STYLES CHO KHỐI HÌNH ẢNH HOẠT ĐỘNG */
+        .activitySwiper { width: 100%; padding: 0 40px; padding-bottom: 30px !important; }
+        .activitySwiper .swiper-slide { height: auto; display: flex; justify-content: center;}
+        .activity-slide-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .activity-slide-text { font-style: italic; text-align: center; margin-top: 15px; color: #333; font-size: 15px; font-weight: 500;}
+        .activitySwiper .swiper-button-next, .activitySwiper .swiper-button-prev { background: rgba(255,255,255,0.8); width: 40px; height: 40px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .activitySwiper .swiper-button-next:after, .activitySwiper .swiper-button-prev:after { font-size: 20px; font-weight: bold; }
+
+        .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: none; justify-content: center; align-items: center; z-index: 10; }
+        
+        .editor-toolbar button { padding: 4px 8px; font-size: 14px; }
+        #swal-cb-content:focus, #swal-detail-content:focus { outline: 2px solid #00d5ff; }
+
+        /* FULLSCREEN EDITOR STYLES */
+        .fullscreen-editor { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 99999 !important; background: #f4f7f6 !important; padding: 20px !important; display: flex !important; flex-direction: column !important; box-sizing: border-box !important; }
+        .fullscreen-editor > label { font-size: 18px !important; margin-bottom: 15px !important; color: #112255 !important; }
+        .fullscreen-editor #swal-detail-content { flex-grow: 1 !important; max-height: none !important; height: 100% !important; font-size: 16px !important; padding: 30px !important; border-radius: 12px !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
+        .fullscreen-editor .editor-toolbar { padding: 12px !important; border-radius: 12px !important; margin-bottom: 15px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        /* FORM CONFIG MODAL STYLES */
+        .form-config-modal .modal-content { background: #1a233a; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); border: none; }
+        .form-config-modal .modal-title { color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .form-config-modal .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+        .form-config-modal .config-list-item { background: #ffffff; border-radius: 12px; padding: 12px 15px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .form-config-modal .config-list-item:hover { transform: translateY(-2px); }
+        .form-config-modal .config-list-item span { font-size: 15px; font-weight: 500; color: #333; }
+        .form-config-modal .btn-submit-config { background: #fa8f64; color: white; font-weight: 700; border-radius: 15px; padding: 14px; font-size: 16px; transition: 0.3s; margin-top: 15px;}
+        .form-config-modal .btn-submit-config:hover { background: #f07b4e; color: white; }
+    </style>
+</head>
+<body>
+
+    <section id="login-section">
+        <div class="login-card">
+            <img src="https://media.leloipt.edu.vn/Media/30_TH1041/Images/footer-logo-leloi83f2a8da-5-e.png" class="logo-img">
+            <h2 class="mt-4 fw-bold" style="color: #112255;">Quản Trị Viên</h2>
+            <form id="loginForm" class="mt-4">
+                <div class="form-floating mb-3"><input type="text" class="form-control" id="admin_user" required><label>Tài khoản</label></div>
+                <div class="form-floating mb-3"><input type="password" class="form-control" id="admin_password" required><label>Mật khẩu</label></div>
+                <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold">ĐĂNG NHẬP</button>
+            </form>
+            <div class="loading-overlay" id="login-loading"><div class="spinner-border text-primary"></div></div>
+        </div>
+    </section>
+
+    <div class="offcanvas offcanvas-start shadow-lg border-0" data-bs-backdrop="false" data-bs-scroll="true" tabindex="-1" id="toolSidebar" style="width: 330px; z-index: 1060;">
+        <div class="offcanvas-header bg-white border-bottom">
+            <h5 class="offcanvas-title fw-bold" style="color: #112255;"><i class="bi bi-grid-1x2"></i> Công Cụ Web</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body bg-white">
+            <div class="alert alert-info border-0 py-2 small fw-bold">
+                <i class="bi bi-info-circle"></i> Có thể <b>Kéo Thả</b> khối sang bên phải HOẶC <b>Bấm Trực Tiếp</b> vào khối để thêm (dành cho Điện thoại).
+            </div>
+            
+            <div class="drag-item" draggable="true" ondragstart="dragBlock(event, 'box-text')" onclick="window.addBlockClick('box-text')" style="background-color: #112255; color: white;">
+                <i class="bi bi-card-text fs-4 d-block mb-1"></i> Hộp Văn Bản<br><small class="fw-normal">(Kéo thả hoặc Bấm)</small>
+            </div>
+            <div class="drag-item" draggable="true" ondragstart="dragBlock(event, 'tech-list')" onclick="window.addBlockClick('tech-list')" style="background-color: #eef2f5; border: 2px dashed #f15a3a; color: #f15a3a;">
+                <i class="bi bi-card-checklist fs-4 d-block mb-1"></i> Khối Thông Tin 1<br><small class="fw-normal">(Kéo thả hoặc Bấm)</small>
+            </div>
+            <div class="drag-item" draggable="true" ondragstart="dragBlock(event, 'english-list')" onclick="window.addBlockClick('english-list')" style="background-color: #eef2f5; border: 2px dashed #00d5ff; color: #008eb3;">
+                <i class="bi bi-book fs-4 d-block mb-1"></i> Khối Thông Tin 2<br><small class="fw-normal">(Kéo thả hoặc Bấm)</small>
+            </div>
+            <div class="drag-item" draggable="true" ondragstart="dragBlock(event, 'teacher-list')" onclick="window.addBlockClick('teacher-list')" style="background-color: #eef2f5; border: 2px dashed #00d5ff; color: #008eb3;">
+                <i class="bi bi-person-video3 fs-4 d-block mb-1"></i> Khối Giáo Viên (Slide)<br><small class="fw-normal">(Kéo thả hoặc Bấm)</small>
+            </div>
+        </div>
+    </div>
+
+    <button id="btn-hamburger" class="btn btn-primary position-fixed shadow-lg d-none" style="bottom: 30px; left: 30px; z-index: 1050; border-radius: 50px; padding: 12px 25px; font-weight: bold;" data-bs-toggle="offcanvas" data-bs-target="#toolSidebar">
+        <i class="bi bi-list fs-5 me-1"></i> THÊM KHỐI
+    </button>
+
+    <section id="admin-section">
+        <div class="admin-header">
+            <div class="container-fluid position-relative">
+                <h2 class="text-center fw-bold m-0 pb-3">HỆ THỐNG QUẢN LÝ</h2>
+                <button id="btnLogout" class="btn btn-outline-light btn-sm position-absolute" style="top: 0px; right: 20px;"><i class="bi bi-box-arrow-right"></i> Thoát</button>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#dataTab">Dữ Liệu Đăng Ký</button></li>
+                    <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cmsTab">Page Builder (Sửa Web)</button></li>
+                    <li class="nav-item ms-auto me-3 pt-1">
+                        <button class="btn btn-sm text-white fw-bold d-flex align-items-center gap-2" style="background-color: #fa8f64; border-radius: 12px; padding: 8px 15px; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" data-bs-toggle="modal" data-bs-target="#formConfigModal">
+                            <i class="bi bi-ui-checks-grid"></i> Sửa Form Đăng Ký
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content py-4 px-3" id="myTabContent">
+            
+            <div class="tab-pane fade show active" id="dataTab">
+                <div class="container-fluid">
+                    <div class="filter-card row align-items-end">
+                        <div class="col-md-3"><label class="small fw-bold">Lọc Khóa Học / Độ tuổi</label>
+                            <select id="filterAge" class="form-select"><option value="all">Tất cả</option></select>
+                        </div>
+                        <div class="col-md-3"><label class="small fw-bold">Lọc Ngày</label><input type="date" id="filterDate" class="form-control"></div>
+                        <div class="col-md-4"><button id="btnFilter" class="btn btn-primary me-2">Lọc</button><button id="btnClearFilter" class="btn btn-secondary">Bỏ lọc</button></div>
+                        <div class="col-md-2 text-end"><span class="badge bg-success p-2" id="totalCount">Tổng: 0</span></div>
+                    </div>
+                    <div class="card-table"><div class="table-responsive"><table class="table table-hover mb-0">
+                        <thead><tr><th>STT</th><th>Phụ Huynh</th><th>SĐT</th><th>Độ Tuổi</th><th>Khóa Học</th><th>Ghi Chú</th><th>Thời Gian</th><th class="text-center">Tác Vụ</th></tr></thead>
+                        <tbody id="data-body"></tbody>
+                    </table></div></div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="cmsTab">
+                <div class="container-fluid px-4">
+
+                    <div class="row justify-content-center">
+                        <div class="col-md-12">
+                            <div class="preview-wrapper">
+                                <div class="cms-container" id="preview-container">
+                                    <div class="alert alert-info border-0"><i class="bi bi-info-circle-fill"></i> Mở <b>[Thêm Khối]</b> góc dưới trái để kéo thả (hoặc click) chèn các vùng nội dung mới. Click vào các tiêu đề để đổi màu và Icon.</div>
+                                    
+                                    <div class="section-master" id="wrap_header">
+                                        <div class="sm-toolbar"><button onclick="cmsToggleVis('header')"><i class="bi bi-eye"></i> Ẩn/Hiện Khối</button></div>
+                                        <div class="row align-items-center mb-4 border-bottom pb-3">
+                                            <div class="col-md-2 text-center editable-block" onclick="cmsEdit('logo', 'image', 'Đổi Logo Header (Link ảnh)')"><img id="p_logo" src="" class="cms-logo-img"><div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></div>
+                                            <div class="col-md-10 editable-block" onclick="cmsEdit('site_title', 'text', 'Tên Website (Cạnh Logo)')"><h3 id="p_site_title" class="fw-bold text-primary mb-0">Đang tải...</h3><div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></div>
+                                        </div>
+                                        <div class="editable-block cms-hero" onclick="cmsEdit('hero', 'hero', 'Cập nhật Ảnh bìa Slide')"><i class="bi bi-images fs-1 d-block mb-2"></i> Click để Sửa Ảnh Nền Slide<div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></div>
+                                    </div>
+
+                                    <div class="section-master mt-4" id="wrap_activity" style="border-color: #f15a3a; background: #fff;">
+                                        <div class="sm-toolbar" style="background: #f15a3a;"><button onclick="cmsToggleVis('activity')"><i class="bi bi-eye"></i> Ẩn/Hiện Hoạt Động</button></div>
+                                        <div class="text-center mb-4 editable-block" onclick="cmsEditActivityTitle()">
+                                            <h3 id="p_activity_title" class="fw-bold" style="color: #112255; text-transform: uppercase;">...</h3>
+                                            <div style="width: 50px; height: 3px; background-color: #f15a3a; margin: 10px auto;"></div>
+                                            <div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div>
+                                        </div>
+                                        <div class="position-relative p-2">
+                                            <div class="text-center mb-3"><button class="btn btn-sm btn-outline-primary fw-bold" onclick="cmsAddActivitySlide()"><i class="bi bi-plus-circle"></i> Quản lý Ảnh Hoạt Động</button></div>
+                                            <div class="swiper activitySwiper">
+                                                <div class="swiper-wrapper" id="cms_activity_render"></div>
+                                                <div class="swiper-button-next" style="color: #f15a3a;"></div>
+                                                <div class="swiper-button-prev" style="color: #f15a3a;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="section-master mt-4" id="wrap_teacher_global" style="border-color: #00d5ff; background: #fff;">
+                                        <div class="sm-toolbar" style="background: #00d5ff; color: #112255;"><button onclick="cmsToggleVis('teacher')"><i class="bi bi-eye"></i> Ẩn/Hiện Giảng Viên</button></div>
+                                        <div class="section-master-header" style="border-bottom-color: #00d5ff;">
+                                            <h5 class="sm-title editable-block p-1 m-0" onclick="cmsEditTeacherTitle(null)" style="color:#00d5ff;">
+                                                <i class="bi bi-person-video3" id="p_teacher_icon_global"></i> <span id="p_teacher_title_global">Đội Ngũ Giảng Viên</span>
+                                                <div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div>
+                                            </h5>
+                                            <button class="btn btn-sm btn-outline-info text-dark fw-bold" onclick="cmsAddTeacherCard(null)"><i class="bi bi-plus-circle"></i> Quản lý Giáo Viên</button>
+                                        </div>
+                                        <div class="p-3 rounded-4" style="background-color: transparent;">
+                                            <div class="swiper teacherSwiper globalTeacherSwiper">
+                                                <div class="swiper-wrapper" id="cms_global_teacher_render"></div>
+                                                <div class="swiper-pagination"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="drop-zone" ondrop="dropHandler(event, 'pos-top')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondragenter="allowDrop(event)"><i class="bi bi-download fs-4 me-2"></i> Kéo thả khối vào đây (Khu Vực 1)</div>
+                                    <div id="render_pos_top"></div>
+
+                                    <div class="section-master" id="wrap_intro">
+                                        <div class="sm-toolbar"><button onclick="cmsToggleVis('intro')"><i class="bi bi-eye"></i> Ẩn/Hiện Khối</button></div>
+                                        <div class="text-center mb-4 p-3 rounded-4 editable-block" id="cms_intro_bg_preview" onclick="cmsEdit('intro_bg_color', 'color', 'Đổi màu nền Khu vực Khám phá')" style="background-color: transparent;">
+                                            <div onclick="cmsEdit('sec1_title', 'text', 'Tiêu đề Khám Phá'); event.stopPropagation();" class="editable-block"><h2 id="p_sec1_title" class="fw-bold">...</h2><div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></div>
+                                            <div onclick="cmsEdit('sec1_desc', 'text', 'Mô tả Khám Phá'); event.stopPropagation();" class="editable-block"><p id="p_sec1_desc" class="text-muted">... </p><div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="drop-zone" ondrop="dropHandler(event, 'pos-mid1')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondragenter="allowDrop(event)"><i class="bi bi-download fs-4 me-2"></i> Kéo thả khối vào đây (Khu Vực 2)</div>
+                                    <div id="render_pos_mid1"></div>
+
+                                    <div class="drop-zone" ondrop="dropHandler(event, 'pos-mid2')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondragenter="allowDrop(event)"><i class="bi bi-download fs-4 me-2"></i> Kéo thả khối vào đây (Khu Vực 3)</div>
+                                    <div id="render_pos_mid2"></div>
+
+                                    <div class="drop-zone" ondrop="dropHandler(event, 'pos-bottom')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondragenter="allowDrop(event)"><i class="bi bi-download fs-4 me-2"></i> Kéo thả khối vào đây (Khu Vực 4)</div>
+                                    <div id="render_pos_bottom"></div>
+
+                                    <div class="section-master p-4 mt-5 shadow-sm" style="background-color: #ffffff; border-color: #e0e5ec;" id="wrap_footer">
+                                        <div class="sm-toolbar bg-secondary"><button onclick="cmsToggleVis('footer')"><i class="bi bi-eye"></i> Ẩn/Hiện Footer</button></div>
+                                        <div class="editable-block" onclick="cmsEditFooter()">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-8 text-start">
+                                                    <img id="p_footer_logo" src="" style="height: 65px; object-fit: contain; margin-bottom: 18px;">
+                                                    <h5 id="p_footer_name" class="fw-bold mb-2 text-uppercase" style="color: #112255;">...</h5>
+                                                    <p id="p_footer_license" class="mb-1 small" style="color: #64748b;">...</p>
+                                                    <p id="p_footer_address" class="mb-3 small" style="color: #64748b;">...</p>
+                                                    <div class="pt-3" style="border-top: 1px solid #e0e5ec;">
+                                                        <p class="mb-0 small fw-bold" style="color: #333;"><i class="bi bi-shield-lock-fill text-success"></i> <span id="p_footer_privacy">...</span></p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 text-end">
+                                                    <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 15px;">
+                                                        <iframe id="p_footer_map" src="" width="100%" height="150px" frameborder="0" style="border:0;"></iframe>
+                                                    </div>
+                                                    <button class="btn w-100 fw-bold rounded-pill" style="background-color: #00d5ff; color: #112255; text-transform: uppercase; padding: 14px 25px;"><i class="bi bi-headset"></i> Tư vấn hỗ trợ</button>
+                                                </div>
+                                            </div>
+                                            <div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered"><div class="modal-content">
+            <div class="modal-header bg-light"><h5 class="modal-title fw-bold text-primary">Sửa Ghi Chú Khách</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <input type="hidden" id="edit_id"> 
+                <div class="mb-3"><label>Tên khách</label><input type="text" class="form-control" id="edit_name"></div>
+                <div class="mb-3"><label>SĐT</label><input type="text" class="form-control" id="edit_phone"></div>
+                <div class="mb-3"><label>Ghi chú</label><textarea class="form-control" id="edit_note" rows="3"></textarea></div>
+            </div>
+            <div class="modal-footer border-0"><button type="button" class="btn btn-primary w-100" id="btnSaveEdit">Lưu Ghi Chú</button></div>
+        </div></div>
+    </div>
+
+    <div class="modal fade form-config-modal" id="formConfigModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-header border-0 pb-0 pt-4 px-4 position-relative">
+                    <h4 class="modal-title w-100 text-center fs-5">ĐĂNG KÝ THÔNG TIN (CẤU HÌNH)</h4>
+                    <button type="button" class="btn-close position-absolute" style="top: 20px; right: 20px;" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body px-4 py-4">
+                    <div class="mb-4">
+                        <label class="text-white mb-2 fw-bold" style="font-size: 14px;">Độ tuổi (Tùy chọn hiển thị)</label>
+                        <div id="render_age_options" class="mb-3" style="max-height: 200px; overflow-y: auto;"></div>
+                        <div class="input-group shadow-sm">
+                            <input type="text" id="new_age_input" class="form-control border-0" style="padding: 12px 15px;" placeholder="Nhập thêm độ tuổi mới...">
+                            <button class="btn btn-light text-primary fw-bold px-3" onclick="window.addAgeOption()">Thêm</button>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="text-white mb-2 fw-bold" style="font-size: 14px;">Khóa học đăng ký (Tùy chọn hiển thị)</label>
+                        <div id="render_course_options" class="mb-3" style="max-height: 250px; overflow-y: auto;"></div>
+                        <div class="input-group shadow-sm">
+                            <input type="text" id="new_course_input" class="form-control border-0" style="padding: 12px 15px;" placeholder="Nhập thêm khóa học mới...">
+                            <button class="btn btn-light text-primary fw-bold px-3" onclick="window.addCourseOption()">Thêm</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn w-100 btn-submit-config text-uppercase" onclick="window.saveFormConfig()">Lưu Cấu Hình Tùy Chọn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, onValue, get, child, update, remove } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyA85V7th40ettZccP5or_tUNBE5_LRF1wU", authDomain: "test-web1-b1795.firebaseapp.com", databaseURL: "https://test-web1-b1795-default-rtdb.firebaseio.com", projectId: "test-web1-b1795" };
+        const app = initializeApp(firebaseConfig); const db = getDatabase(app);
+
+        window.cmsFormConfig = { ages: [], courses: [] };
+
+        if (localStorage.getItem('isAdminLogged') === 'true') { document.getElementById('login-section').style.display = 'none'; document.getElementById('admin-section').style.display = 'block'; document.getElementById('btn-hamburger').classList.remove('d-none'); loadData(); }
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); const u = document.getElementById('admin_user').value; const p = document.getElementById('admin_password').value; document.getElementById('login-loading').style.display = 'flex';
+            try { const snap = await get(child(ref(db), `admin`));
+                if (snap.exists() && snap.val().tk === u && snap.val().mk === p) { localStorage.setItem('isAdminLogged', 'true'); document.getElementById('login-section').style.display = 'none'; document.getElementById('admin-section').style.display = 'block'; document.getElementById('btn-hamburger').classList.remove('d-none'); loadData(); } 
+                else { Swal.fire({ icon: 'error', title: 'Sai tài khoản/mật khẩu' }); document.getElementById('login-loading').style.display = 'none'; }
+            } catch (err) { Swal.fire({ icon: 'error', title: 'Lỗi mạng' }); document.getElementById('login-loading').style.display = 'none'; }
+        });
+        document.getElementById('btnLogout').addEventListener('click', () => { localStorage.removeItem('isAdminLogged'); location.reload(); });
+
+        let allRecs = []; let globalData = {}; const tbody = document.getElementById('data-body');
+        function loadData() { onValue(ref(db, 'registrations'), (snap) => { allRecs = []; globalData = {}; if (snap.exists()) { snap.forEach((c) => { let i = c.val(); i.id = c.key; allRecs.push(i); globalData[i.id] = i; }); allRecs.reverse(); } applyFilters(); }); }
+        function applyFilters() { const age = document.getElementById('filterAge').value; const d = document.getElementById('filterDate').value; let fd = allRecs.filter(i => { let mAge = (age==='all'||i.ageGroup===age); let mDate = true; if(d&&i.timestamp){ const dObj = new Date(i.timestamp); const str = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,'0')}-${String(dObj.getDate()).padStart(2,'0')}`; mDate = (str===d); } return mAge&&mDate; }); document.getElementById('totalCount').innerText = `Tổng: ${fd.length}`; draw(fd); }
+        function draw(arr) { tbody.innerHTML=''; if(arr.length===0){ tbody.innerHTML='<tr><td colspan="8" class="text-center py-4">Trống.</td></tr>'; return; } arr.forEach((i, idx) => { tbody.innerHTML+=`<tr><td>${idx+1}</td><td>${i.parentName||''}</td><td>${i.phone||''}</td><td><span class="badge bg-info text-dark">${i.ageGroup||''}</span></td><td><span class="badge bg-primary text-white">${i.course||'Chưa chọn'}</span></td><td class="note-cell">${i.note||'<i class="text-muted">Trống</i>'}</td><td>${i.timestamp?new Date(i.timestamp).toLocaleString('vi-VN'):''}</td><td class="text-center"><button class="btn btn-sm btn-primary" onclick="window.oEdit('${i.id}')"><i class="bi bi-pencil"></i></button> <button class="btn btn-sm btn-danger" onclick="window.dRec('${i.id}')"><i class="bi bi-trash"></i></button></td></tr>`; }); }
+        let eMod = new bootstrap.Modal(document.getElementById('editModal')); window.oEdit = (id) => { const d=globalData[id]; document.getElementById('edit_id').value=id; document.getElementById('edit_name').value=d.parentName; document.getElementById('edit_phone').value=d.phone; document.getElementById('edit_note').value=d.note||''; eMod.show(); }; document.getElementById('btnSaveEdit').addEventListener('click', async () => { const id=document.getElementById('edit_id').value; await update(ref(db, `registrations/${id}`),{parentName:document.getElementById('edit_name').value, phone:document.getElementById('edit_phone').value, note:document.getElementById('edit_note').value}); eMod.hide(); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); }); window.dRec = async (id) => { Swal.fire({title:'Xóa vĩnh viễn?', icon:'warning', showCancelButton:true}).then(async (r)=>{ if(r.isConfirmed){ await remove(ref(db, `registrations/${id}`)); Swal.fire('Đã xóa', '', 'success'); } }); }; document.getElementById('btnFilter').addEventListener('click', applyFilters); document.getElementById('btnClearFilter').addEventListener('click', ()=>{ document.getElementById('filterAge').value='all'; document.getElementById('filterDate').value=''; applyFilters(); });
+
+        window.renderFormConfigOptions = () => {
+            let agesHtml = ''; (window.cmsFormConfig.ages || []).forEach((age, i) => { agesHtml += `<div class="config-list-item"><span>${age}</span><button class="btn btn-sm btn-outline-danger py-1 px-2 border-0" onclick="window.delAgeOption(${i})"><i class="bi bi-trash"></i></button></div>`; }); document.getElementById('render_age_options').innerHTML = agesHtml;
+            let coursesHtml = ''; (window.cmsFormConfig.courses || []).forEach((course, i) => { coursesHtml += `<div class="config-list-item"><span>${course}</span><button class="btn btn-sm btn-outline-danger py-1 px-2 border-0" onclick="window.delCourseOption(${i})"><i class="bi bi-trash"></i></button></div>`; }); document.getElementById('render_course_options').innerHTML = coursesHtml;
+        };
+        window.updateFilterAgeDropdown = () => { let select = document.getElementById('filterAge'); let currentVal = select.value; let html = `<option value="all">Tất cả</option>`; (window.cmsFormConfig.ages || []).forEach(a => { html += `<option value="${a}">${a}</option>`; }); select.innerHTML = html; select.value = currentVal; };
+        window.addAgeOption = () => { let val = document.getElementById('new_age_input').value.trim(); if(val) { if(!window.cmsFormConfig.ages) window.cmsFormConfig.ages = []; window.cmsFormConfig.ages.push(val); document.getElementById('new_age_input').value = ''; window.renderFormConfigOptions(); } };
+        window.delAgeOption = (i) => { window.cmsFormConfig.ages.splice(i, 1); window.renderFormConfigOptions(); };
+        window.addCourseOption = () => { let val = document.getElementById('new_course_input').value.trim(); if(val) { if(!window.cmsFormConfig.courses) window.cmsFormConfig.courses = []; window.cmsFormConfig.courses.push(val); document.getElementById('new_course_input').value = ''; window.renderFormConfigOptions(); } };
+        window.delCourseOption = (i) => { window.cmsFormConfig.courses.splice(i, 1); window.renderFormConfigOptions(); };
+        window.saveFormConfig = async () => { await update(ref(db, 'pageContent/form_config'), window.cmsFormConfig); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu Tùy chọn Form!', showConfirmButton:false, timer:2000}); let fMod = bootstrap.Modal.getInstance(document.getElementById('formConfigModal')); if(fMod) fMod.hide(); };
+
+        let cmsData = {};
+        onValue(ref(db, 'pageContent'), (snap) => {
+            if(snap.exists()) {
+                cmsData = snap.val();
+                
+                if (!cmsData.form_config) { 
+                    cmsData.form_config = { ages: ["Mẫu giáo (4-6 tuổi)", "Tiểu học (6-11 tuổi)", "Cấp 2 (11-15 tuổi)", "Khác"], courses: ["Khối Thông Tin 1: Ứng Dụng AI", "Khối Thông Tin 1: Kỹ Sư ROBOCON", "Khối Thông Tin 1: Lập Trình MINECRAFT", "Khối Thông Tin 2 Mẫu Giáo", "Khối Thông Tin 2 Tiểu Học", "Khối Thông Tin 2 Cấp 2", "Chưa quyết định (Cần tư vấn thêm)"] };
+                    update(ref(db, 'pageContent'), { form_config: cmsData.form_config }); 
+                }
+                window.cmsFormConfig = cmsData.form_config;
+                window.renderFormConfigOptions();
+                window.updateFilterAgeDropdown();
+
+                if (!cmsData.custom_blocks) { cmsData.custom_blocks = []; }
+
+                // CẤU HÌNH DATA CHO KHỐI HÌNH ẢNH HOẠT ĐỘNG
+                if (!cmsData.activity_data) {
+                    cmsData.activity_data = { title: "HÌNH ẢNH HOẠT ĐỘNG", slides: [{ img: "https://via.placeholder.com/1200x600?text=Activity+Image", text: "Nội dung hình ảnh hoạt động..." }] };
+                    update(ref(db, 'pageContent'), { activity_data: cmsData.activity_data });
+                }
+
+                // CẤU HÌNH KHÔI PHỤC DATA GIÁO VIÊN CŨ CHUẨN XÁC
+                if (!cmsData.teacher_data) {
+                    cmsData.teacher_data = { title: "ĐỘI NGŨ GIẢNG VIÊN", icon: "bi-person-video3", color: "#00d5ff", cards: [] };
+                    update(ref(db, 'pageContent'), { teacher_data: cmsData.teacher_data });
+                }
+
+                if (!cmsData.visibility) { cmsData.visibility = { header: true, activity: true, teacher: true, intro: true, contact: true, footer: true }; update(ref(db, 'pageContent'), { visibility: cmsData.visibility }); }
+                else { 
+                    let updatedVis = false;
+                    if(cmsData.visibility.activity === undefined) { cmsData.visibility.activity = true; updatedVis = true; }
+                    if(cmsData.visibility.teacher === undefined) { cmsData.visibility.teacher = true; updatedVis = true; }
+                    if(updatedVis) update(ref(db, 'pageContent/visibility'), cmsData.visibility); 
+                }
+
+                if (!cmsData.footer_data) { cmsData.footer_data = { logo: "https://media.leloipt.edu.vn/Media/30_TH1041/Images/footer-logo-leloi83f2a8da-5-e.png", name: "CÔNG TY CỔ PHẦN QUỐC TẾ ANH VĂN HỘI VIỆT MỸ", license: "Giấy chứng nhận doanh nghiệp số: 0313548147", address: "Trụ Sở Chính Tại 189 Nguyễn Thị Minh Khai, Phường Bến Thành, TP. Hồ Chí Minh", privacy: "Chính sách bảo vệ dữ liệu cá nhân", map_lat: "10.768820", map_lng: "106.688320", map_w: "100%", map_h: "150px" }; update(ref(db, 'pageContent'), { footer_data: cmsData.footer_data }); }
+
+                const applyVis = (id, key) => { let el = document.getElementById(id); if(el) { if(!cmsData.visibility[key]) el.classList.add('is-hidden-section'); else el.classList.remove('is-hidden-section'); } };
+                applyVis('wrap_header', 'header'); applyVis('wrap_activity', 'activity'); applyVis('wrap_teacher_global', 'teacher'); applyVis('wrap_intro', 'intro'); applyVis('wrap_footer', 'footer');
+
+                const setT = (id) => { if(document.getElementById('p_'+id)) document.getElementById('p_'+id).innerHTML = cmsData[id]||'...'; }; const setI = (id) => { if(document.getElementById('p_'+id)) document.getElementById('p_'+id).src = cmsData[id]||''; };
+                setI('logo'); setT('site_title'); setT('sec1_title'); setT('sec1_desc');
+                
+                if(cmsData.intro_bg_color) document.getElementById('cms_intro_bg_preview').style.backgroundColor = cmsData.intro_bg_color; else document.getElementById('cms_intro_bg_preview').style.backgroundColor = 'transparent';
+
+                // RENDER KHỐI HÌNH ẢNH HOẠT ĐỘNG
+                document.getElementById('p_activity_title').innerText = cmsData.activity_data.title || "HÌNH ẢNH HOẠT ĐỘNG";
+                let actHTML = '';
+                if(cmsData.activity_data.slides) {
+                    cmsData.activity_data.slides.forEach((s, i) => {
+                        actHTML += `<div class="swiper-slide"><div class="position-relative w-100" onclick="event.stopPropagation()">
+                            <div class="cms-actions" style="top: 15px; right: 15px; z-index: 10;"><button onclick="cmsEditActivitySlide(${i})" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Sửa</button></div>
+                            <img src="${s.img || 'https://via.placeholder.com/1200x600'}" class="activity-slide-img">
+                            <p class="activity-slide-text">${s.text || 'Nội dung...'}</p>
+                        </div></div>`;
+                    });
+                }
+                document.getElementById('cms_activity_render').innerHTML = actHTML;
+
+                // RENDER KHỐI GIÁO VIÊN TOÀN CỤC BỊ ẨN MẤT
+                document.getElementById('p_teacher_title_global').innerText = cmsData.teacher_data.title || "ĐỘI NGŨ GIẢNG VIÊN";
+                let gtbColor = cmsData.teacher_data.color || '#00d5ff';
+                let gtbIcon = cmsData.teacher_data.icon || 'bi-person-video3';
+                let wg = document.getElementById('wrap_teacher_global');
+                if(wg) {
+                    wg.style.borderColor = gtbColor;
+                    let st = wg.querySelector('.sm-toolbar'); if(st) st.style.background = gtbColor;
+                    let ei = document.getElementById('p_teacher_icon_global'); if(ei) ei.className = `bi ${gtbIcon}`;
+                    let eh = wg.querySelector('.editable-block'); if(eh) eh.style.color = gtbColor;
+                }
+
+                let globalTeacherHTML = '';
+                if(cmsData.teacher_data.cards) {
+                    cmsData.teacher_data.cards.forEach((c, cIndex) => {
+                        let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience || '0'}</span><small>năm<br>kinh nghiệm</small></div>`; 
+                        globalTeacherHTML += `<div class="swiper-slide"><div class="cms-card-wrapper teacher-card" onclick="event.stopPropagation();" style="border-color: ${c.bgColor||'#00d5ff'} !important;"><div class="cms-actions"><button onclick="event.stopPropagation(); cmsEditTeacherCard(${cIndex}, null)" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Sửa</button><button onclick="event.stopPropagation(); cmsDeleteTeacherCard(${cIndex}, null)" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button></div>${badgeHTML}<img src="${c.img || 'https://via.placeholder.com/400x500?text=Teacher'}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role || 'Chức vụ'}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name || 'TÊN GIÁO VIÊN'}</h4></div></div></div>`;
+                    });
+                }
+                document.getElementById('cms_global_teacher_render').innerHTML = globalTeacherHTML;
+
+
+                let renderTop = '', renderMid1 = '', renderMid2 = '', renderBottom = '';
+                cmsData.custom_blocks.forEach((block, bIndex) => {
+                    let isHidClass = block.isHidden ? 'is-hidden-section' : '';
+                    let masterToolbar = `<div class="sm-toolbar bg-success" style="z-index: 100;"><button onclick="cmsToggleVisBlock(${bIndex}); event.stopPropagation();"><i class="bi bi-eye"></i> ${block.isHidden ? 'Hiện Lại' : 'Ẩn Khối'}</button> <span class="mx-1">|</span> <button onclick="cmsDeleteBlock(${bIndex}); event.stopPropagation();"><i class="bi bi-trash"></i> Xóa Khối</button></div>`;
+                    let dbHTML = '';
+                    
+                    if(block.type === 'text' || !block.type) { 
+                        let textToolbar = `<div class="sm-toolbar bg-success" style="z-index: 100;"><button onclick="cmsToggleVisBlock(${bIndex}); event.stopPropagation();"><i class="bi bi-eye"></i> ${block.isHidden ? 'Hiện Lại' : 'Ẩn Khối'}</button> <span class="mx-1">|</span> <button onclick="cmsEditCustomBlock(${bIndex}); event.stopPropagation();"><i class="bi bi-pencil"></i> Sửa Box</button> <span class="mx-1">|</span> <button onclick="cmsDeleteBlock(${bIndex}); event.stopPropagation();"><i class="bi bi-trash"></i> Xóa Khối</button></div>`;
+                        let bgStyle = block.isTransparent ? 'transparent' : (block.bgColor || '#e0f2fe');
+                        let shadowStyle = block.hasShadow === false ? 'none' : '0 5px 15px rgba(0,0,0,0.05)';
+                        let borderStyle = (block.isTransparent && block.hasShadow === false) ? '1px dashed #ccc' : '2px dashed transparent';
+                        dbHTML = `<div class="section-master ${isHidClass} editable-block" style="background-color: ${bgStyle}; color: ${block.textColor}; padding: 30px; box-shadow: ${shadowStyle}; border: ${borderStyle}" onclick="cmsEditCustomBlock(${bIndex})">${textToolbar}<div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div>${block.content}</div>`; 
+                    } 
+                    else if(block.type === 'tech') { 
+                        let innerCards = ''; if(block.cards) { block.cards.forEach((c, cIndex) => { 
+                            let detailBtnHtml = c.has_detail ? `<button type="button" class="btn btn-sm w-100 fw-bold mt-2" style="background-color: ${c.detail_bg || '#f15a3a'}; color: ${c.detail_color || '#ffffff'}; font-family: ${c.detail_font || 'Inter'}, sans-serif; font-size: ${c.detail_size || '14'}px; border-radius: 50px;">${c.detail_text || 'Xem chi tiết'}</button>` : '';
+                            innerCards += `<div class="col-md-4"><div class="cms-card-wrapper course-card" onclick="event.stopPropagation();" style="border-top-color: ${c.color};"><div class="cms-actions"><button onclick="event.stopPropagation(); cmsEditCard('tech', ${cIndex}, ${bIndex})" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Sửa</button><button onclick="event.stopPropagation(); cmsDeleteCard('tech', ${cIndex}, ${bIndex})" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button></div><img src="${c.img || 'https://via.placeholder.com/800x400'}" class="course-card-img"><div class="icon-box" style="background: ${c.color}20; color: ${c.color};"><i class="bi ${c.icon || 'bi-star'}"></i></div><h3 class="course-title">${c.title || 'Tiêu đề thẻ'}</h3><p class="course-desc flex-grow-1">${c.desc || 'Mô tả ngắn gọn...'}</p><div class="px-3 pb-2 mt-auto"><button type="button" class="btn btn-sm w-100 fw-bold" style="background-color: ${c.color || '#112255'}; color: white; border-radius: 50px; padding: 8px;">TƯ VẤN NGAY</button>${detailBtnHtml}</div></div></div>`; 
+                        }); } 
+                        let bColor = block.color || '#f15a3a'; let bIcon = block.icon || 'bi-card-checklist'; let bBg = block.bgColor || 'transparent';
+                        dbHTML = `<div class="section-master ${isHidClass}" style="border-color:${bColor};">${masterToolbar}<div class="section-master-header" style="border-bottom-color: ${bColor};"><h5 class="sm-title editable-block p-1 m-0" onclick="cmsEditBlockTitle(${bIndex})" style="color:${bColor};"><i class="bi ${bIcon}"></i> ${block.title||'Khối Thông Tin 1'}</h5><button class="btn btn-sm btn-outline-danger" onclick="cmsAddCard('tech', ${bIndex})"><i class="bi bi-plus-circle"></i> Thêm Thẻ Mới</button></div><div class="p-3 rounded-4" style="background-color: ${bBg};"><div class="row g-4 justify-content-center">${innerCards}</div></div></div>`; 
+                    }
+                    else if(block.type === 'english') { 
+                        let innerCards = ''; if(block.cards) { block.cards.forEach((c, cIndex) => { 
+                            let detailBtnHtml = c.has_detail ? `<button type="button" class="btn btn-sm w-100 fw-bold mt-2" style="background-color: ${c.detail_bg || '#112255'}; color: ${c.detail_color || '#ffffff'}; font-family: ${c.detail_font || 'Inter'}, sans-serif; font-size: ${c.detail_size || '14'}px; border-radius: 50px;">${c.detail_text || 'Xem chi tiết'}</button>` : '';
+                            innerCards += `<div class="col-md-4"><div class="cms-card-wrapper ep-card" onclick="event.stopPropagation();" style="background-color: ${c.bg_color || '#ffffff'};"><div class="cms-actions"><button onclick="event.stopPropagation(); cmsEditCard('english', ${cIndex}, ${bIndex})" class="btn btn-sm btn-dark"><i class="bi bi-pencil"></i> Sửa</button><button onclick="event.stopPropagation(); cmsDeleteCard('english', ${cIndex}, ${bIndex})" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button></div><div class="ep-header"><h3 class="ep-title" style="color: ${c.text_color || '#000000'};">${c.title || 'Tiêu đề thẻ'}</h3><div class="ep-age-badge" style="background-color: ${c.text_color || '#000000'}; color: #fff;"><span>Từ</span><strong>${c.age || '0'}</strong><span>tuổi</span></div></div><img src="${c.img || 'https://via.placeholder.com/800x600'}" class="ep-img"><p class="ep-desc" style="color: ${c.text_color || '#000000'};">${c.desc || 'Mô tả chi tiết lớp học...'}</p><div class="mt-auto pt-2 w-100"><button type="button" class="btn btn-sm w-100 fw-bold" style="background-color: ${c.text_color || '#112255'}; color: white; border-radius: 50px; padding: 8px;">TƯ VẤN NGAY</button>${detailBtnHtml}</div></div></div>`; 
+                        }); } 
+                        let bColor = block.color || '#112255'; let bIcon = block.icon || 'bi-book'; let bBg = block.bgColor || '#00d5ff';
+                        dbHTML = `<div class="section-master ${isHidClass}" style="border-color:${bColor};">${masterToolbar}<div class="section-master-header" style="border-bottom-color: ${bColor};"><h5 class="sm-title editable-block p-1 m-0" onclick="cmsEditBlockTitle(${bIndex})" style="color:${bColor};"><i class="bi ${bIcon}"></i> ${block.title||'Khối Thông Tin 2'}<div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></h5><button class="btn btn-sm btn-outline-info text-dark fw-bold" onclick="cmsAddCard('english', ${bIndex})"><i class="bi bi-plus-circle"></i> Thêm Lớp Mới</button></div><div class="p-4 rounded-4 editable-block-blue" style="background-color: ${bBg};" onclick="cmsEditBlockTitle(${bIndex})"><div class="edit-btn-overlay-blue"><i class="bi bi-palette"></i></div><div class="row g-4 justify-content-center">${innerCards}</div></div></div>`; 
+                    }
+                    else if(block.type === 'teacher') {
+                        let tbColor = block.color || '#00d5ff'; let tbIcon = block.icon || 'bi-person-video3';
+                        let innerCards = ''; if(block.cards) { block.cards.forEach((c, cIndex) => { let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience || '0'}</span><small>năm<br>kinh nghiệm</small></div>`; innerCards += `<div class="swiper-slide"><div class="cms-card-wrapper teacher-card" onclick="event.stopPropagation();" style="border-color: ${c.bgColor||'#00d5ff'} !important;"><div class="cms-actions"><button onclick="event.stopPropagation(); cmsEditTeacherCard(${cIndex}, ${bIndex})" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Sửa</button><button onclick="event.stopPropagation(); cmsDeleteTeacherCard(${cIndex}, ${bIndex})" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button></div>${badgeHTML}<img src="${c.img || 'https://via.placeholder.com/400x500?text=Teacher'}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role || 'Chức vụ'}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name || 'TÊN GIÁO VIÊN'}</h4></div></div></div>`; }); }
+                        dbHTML = `<div class="section-master ${isHidClass}" style="border-color:${tbColor};">${masterToolbar}<div class="section-master-header" style="border-bottom-color: ${tbColor};"><h5 class="sm-title editable-block p-1 m-0" onclick="cmsEditTeacherTitle(${bIndex})" style="color:${tbColor};"><i class="bi ${tbIcon}"></i> ${block.title||'Đội Ngũ Giảng Viên'}<div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></h5><button class="btn btn-sm btn-outline-info text-dark fw-bold" onclick="cmsAddTeacherCard(${bIndex})"><i class="bi bi-plus-circle"></i> Quản lý Giáo Viên</button></div><div class="p-3 rounded-4" style="background-color: transparent;"><div class="swiper teacherSwiper-${bIndex} teacherSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div></div>`;
+                    }
+
+                    let dropZoneHtml = `<div class="drop-zone mini-drop" ondrop="window.dropHandlerBetween(event, ${bIndex})" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondragenter="allowDrop(event)"><i class="bi bi-arrow-down-circle"></i> Thả khối mới vào giữa đây</div>`;
+                    if(block.pos === 'pos-top') { renderTop += dbHTML + dropZoneHtml; }
+                    else if(block.pos === 'pos-mid1') { renderMid1 += dbHTML + dropZoneHtml; }
+                    else if(block.pos === 'pos-mid2') { renderMid2 += dbHTML + dropZoneHtml; }
+                    else { renderBottom += dbHTML + dropZoneHtml; }
+                }); 
+                document.getElementById('render_pos_top').innerHTML = renderTop;
+                document.getElementById('render_pos_mid1').innerHTML = renderMid1;
+                document.getElementById('render_pos_mid2').innerHTML = renderMid2;
+                document.getElementById('render_pos_bottom').innerHTML = renderBottom;
+
+                // TẢI LẠI SWIPER JS CHO TẤT CẢ CÁC SLIDES CÓ TRÊN TRANG (Tạo độ trễ nhẹ để HTML render xong)
+                // CHÚ Ý: Bổ sung observer: true, observeParents: true để khắc phục lỗi Bootstrap ẩn Tabs làm Slider không lên hình
+                setTimeout(() => {
+                    if (window.activitySwiperInstance) window.activitySwiperInstance.destroy(true, true);
+                    window.activitySwiperInstance = new Swiper('.activitySwiper', { slidesPerView: 1, spaceBetween: 20, observer: true, observeParents: true, autoplay: { delay: 2000, disableOnInteraction: false }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } });
+
+                    if (window.globalTeacherSwiperInstance) window.globalTeacherSwiperInstance.destroy(true, true);
+                    window.globalTeacherSwiperInstance = new Swiper('.globalTeacherSwiper', { slidesPerView: 1, spaceBetween: 20, observer: true, observeParents: true, autoplay: { delay: 2000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } });
+
+                    cmsData.custom_blocks.forEach((block, bIndex) => {
+                        if(block.type === 'teacher') {
+                            if(window[`teacherSwiperInstance_${bIndex}`]) window[`teacherSwiperInstance_${bIndex}`].destroy(true, true);
+                            window[`teacherSwiperInstance_${bIndex}`] = new Swiper(`.teacherSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, observer: true, observeParents: true, autoplay: { delay: 2000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } });
+                        }
+                    });
+                }, 100);
+
+                if(cmsData.footer_data) {
+                    if(document.getElementById('p_footer_logo')) document.getElementById('p_footer_logo').src = cmsData.footer_data.logo || '';
+                    if(document.getElementById('p_footer_name')) document.getElementById('p_footer_name').innerHTML = cmsData.footer_data.name || '';
+                    if(document.getElementById('p_footer_license')) document.getElementById('p_footer_license').innerHTML = cmsData.footer_data.license || '';
+                    if(document.getElementById('p_footer_address')) document.getElementById('p_footer_address').innerHTML = cmsData.footer_data.address || '';
+                    if(document.getElementById('p_footer_privacy')) document.getElementById('p_footer_privacy').innerHTML = cmsData.footer_data.privacy || '';
+                    if(document.getElementById('p_footer_map')) { document.getElementById('p_footer_map').src = `https://maps.google.com/maps?q=${cmsData.footer_data.map_lat},${cmsData.footer_data.map_lng}&t=k&z=16&output=embed`; document.getElementById('p_footer_map').style.width = cmsData.footer_data.map_w || '100%'; document.getElementById('p_footer_map').style.height = cmsData.footer_data.map_h || '150px'; }
+                }
+            }
+        });
+
+        // XỬ LÝ KHỐI HÌNH ẢNH HOẠT ĐỘNG
+        window.cmsEditActivityTitle = async () => {
+            const { value: title } = await Swal.fire({ title: 'Sửa Tiêu Đề', input: 'text', inputValue: cmsData.activity_data.title });
+            if(title) { cmsData.activity_data.title = title; await update(ref(db, 'pageContent/activity_data'), cmsData.activity_data); }
+        };
+        
+        window.swalDelAct = async (idx) => {
+            if(confirm('Bạn có chắc chắn muốn xóa ảnh này?')) {
+                cmsData.activity_data.slides.splice(idx, 1);
+                await update(ref(db, 'pageContent/activity_data'), cmsData.activity_data);
+                let newList = '';
+                cmsData.activity_data.slides.forEach((s, i) => {
+                    newList += `<tr><td>${i+1}</td><td class="text-start"><img src="${s.img}" style="width:30px; height:30px; object-fit:cover;" class="me-1 border rounded"><span class="small">${s.text ? s.text.substring(0, 20)+'...' : ''}</span></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelAct(${i})"><i class="bi bi-trash"></i></button></td></tr>`;
+                });
+                document.getElementById('swal-act-tbody').innerHTML = newList;
+            }
+        };
+
+        window.cmsAddActivitySlide = async () => {
+            let listHTML = '';
+            if(cmsData.activity_data.slides) {
+                cmsData.activity_data.slides.forEach((s, i) => {
+                    listHTML += `<tr><td>${i+1}</td><td class="text-start"><img src="${s.img}" style="width:30px; height:30px; object-fit:cover;" class="me-1 border rounded"><span class="small">${s.text ? s.text.substring(0, 20)+'...' : ''}</span></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelAct(${i})"><i class="bi bi-trash"></i></button></td></tr>`;
+                });
+            }
+
+            let leftCol = `
+                <div class="text-start pe-2">
+                    <div class="text-center mb-2 d-none" id="preview-act-add-wrapper">
+                        <img id="preview-act-add-img" src="" style="max-height: 100px; border-radius: 8px; object-fit: cover;">
+                    </div>
+                    <label class="fw-bold mb-1 small">Link Ảnh HOẶC Tải ảnh từ máy:</label>
+                    <input id="swal-img-act-add" class="form-control form-control-sm mb-2" placeholder="Dán link ảnh...">
+                    <input id="swal-img-file-act-add" type="file" class="form-control form-control-sm mb-2" accept="image/*" onchange="encodeImageFileAsURLActAdd(this)">
+                    <input type="hidden" id="swal-img-b64-act-add" value="">
+                    <label class="fw-bold mb-1 small">Nội dung (chữ in nghiêng):</label>
+                    <textarea id="swal-text-act-add" class="form-control form-control-sm" style="height:80px;" placeholder="Nhập nội dung..."></textarea>
+                </div>
+            `;
+            
+            let rightCol = `
+                <div class="text-start ps-2" style="max-height: 300px; overflow-y: auto;">
+                    <label class="fw-bold mb-2 text-primary small">Dữ liệu hiện tại:</label>
+                    <table class="table table-sm table-bordered table-hover">
+                        <thead class="table-light"><tr><th style="width:40px;">STT</th><th>Nội dung</th><th style="width:40px;">Xóa</th></tr></thead>
+                        <tbody id="swal-act-tbody">${listHTML}</tbody>
+                    </table>
+                </div>
+            `;
+            
+            let htmlFull = `<div class="row m-0"><div class="col-md-6 border-end p-0">${leftCol}</div><div class="col-md-6 p-0">${rightCol}</div></div>`;
+
+            const { value: vals } = await Swal.fire({
+                title: 'Quản Lý Ảnh Hoạt Động', width: '800px', html: htmlFull,
+                showCancelButton: true, confirmButtonText: 'Thêm mới', cancelButtonText: 'Đóng',
+                preConfirm: () => {
+                    let b64 = document.getElementById('swal-img-b64-act-add').value;
+                    let url = document.getElementById('swal-img-act-add').value;
+                    let finalImg = b64 ? b64 : url;
+                    if (!finalImg) { Swal.showValidationMessage('Vui lòng chọn ảnh từ máy hoặc dán link ảnh!'); return false; }
+                    return { img: finalImg, text: document.getElementById('swal-text-act-add').value };
+                }
+            });
+            
+            if(vals) {
+                if(!cmsData.activity_data.slides) cmsData.activity_data.slides = [];
+                cmsData.activity_data.slides.push(vals);
+                await update(ref(db, 'pageContent/activity_data'), cmsData.activity_data);
+                Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã thêm thành công!', showConfirmButton:false, timer:2000});
+            }
+        };
+
+        window.cmsEditActivitySlide = async (i) => {
+            let slide = cmsData.activity_data.slides[i];
+            let imgHtml = `
+                <div class="text-center mb-3">
+                    <label class="fw-bold d-block mb-2 text-primary">Ảnh hiện tại:</label>
+                    <img id="preview-act-img" src="${slide.img}" style="max-height: 120px; border-radius: 8px; object-fit: cover;">
+                </div>
+                <div class="mb-2 text-start mt-3"><label class="fw-bold">Thay thế (Dán Link HOẶC Tải ảnh mới):</label></div>
+                <input id="swal-img-act" class="swal2-input mt-0 mb-2" placeholder="Dán link ảnh..." value="${slide.img || ''}">
+                <input id="swal-img-file-act" type="file" class="form-control w-75 mx-auto mb-3" accept="image/*" onchange="encodeImageFileAsURLAct(this)">
+                <input type="hidden" id="swal-img-b64-act" value="">`;
+            const { value: vals } = await Swal.fire({
+                title: 'Sửa Ảnh & Nội Dung',
+                html: `${imgHtml}<div class="text-start mt-3"><label class="fw-bold">Nội dung (chữ in nghiêng):</label></div><textarea id="swal-text-act" class="swal2-textarea mt-0" placeholder="Nhập nội dung...">${slide.text || ''}</textarea>`,
+                showCancelButton: true, confirmButtonText: 'Lưu thay đổi',
+                preConfirm: () => {
+                    let b64 = document.getElementById('swal-img-b64-act').value; let url = document.getElementById('swal-img-act').value;
+                    return { img: b64 ? b64 : url, text: document.getElementById('swal-text-act').value };
+                }
+            });
+            if(vals) { cmsData.activity_data.slides[i] = vals; await update(ref(db, 'pageContent/activity_data'), cmsData.activity_data); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); }
+        };
+
+        window.encodeImageFileAsURLAct = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { document.getElementById('swal-img-b64-act').value = reader.result; document.getElementById('swal-img-act').value = ''; if(document.getElementById('preview-act-img')) document.getElementById('preview-act-img').src = reader.result; }; reader.readAsDataURL(file); };
+        window.encodeImageFileAsURLActAdd = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { document.getElementById('swal-img-b64-act-add').value = reader.result; document.getElementById('swal-img-act-add').value = ''; if(document.getElementById('preview-act-add-wrapper')) { document.getElementById('preview-act-add-wrapper').classList.remove('d-none'); document.getElementById('preview-act-add-img').src = reader.result; } }; reader.readAsDataURL(file); };
+
+        window.cmsToggleVis = async (key) => { let cur = cmsData.visibility ? cmsData.visibility[key] : true; await update(ref(db, 'pageContent/visibility'), { [key]: !cur }); };
+        window.cmsToggleVisBlock = async (bIndex) => { cmsData.custom_blocks[bIndex].isHidden = !cmsData.custom_blocks[bIndex].isHidden; await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); };
+        window.cmsDeleteBlock = async (bIndex) => { Swal.fire({title:'Xóa vĩnh viễn khối này?', icon:'warning', showCancelButton:true}).then(async (r)=>{ if(r.isConfirmed) { cmsData.custom_blocks.splice(bIndex, 1); await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); } }); };
+        
+        window.cmsEditBlockTitle = async (bIndex) => { 
+            let block = cmsData.custom_blocks[bIndex];
+            let htmlForm = `<input id="swal-bt-title" class="swal2-input mt-0 mb-3" placeholder="Nhập tiêu đề..." value="${block.title||''}">`;
+            
+            if(block.type === 'tech' || block.type === 'english') {
+                let iconsArr = ['bi-card-checklist', 'bi-robot', 'bi-controller', 'bi-laptop', 'bi-book', 'bi-brush', 'bi-code', 'bi-globe', 'bi-lightning', 'bi-palette', 'bi-rocket', 'bi-star'];
+                let currentIcon = block.icon || (block.type==='tech'?'bi-card-checklist':'bi-book');
+                htmlForm += `<div class="mb-2 text-start mt-3"><label class="fw-bold">Chọn Icon cho Tiêu đề:</label></div><div id="icon-picker" class="d-flex flex-wrap gap-2 mb-3 justify-content-center p-2 rounded bg-light border">` + iconsArr.map(i => `<i class="bi ${i} fs-3 p-2 border rounded bg-white icon-option ${currentIcon === i ? 'border-primary border-3' : ''}" style="cursor:pointer;" onclick="selectIcon('${i}', event)"></i>`).join('') + `</div><input type="hidden" id="swal-icon" value="${currentIcon}">`;
+                htmlForm += `<div class="mt-3 text-start px-2"><label class="fw-bold">Màu sắc Tiêu đề / Viền khối:</label><input type="color" id="swal-bt-color" value="${block.color || (block.type==='tech'?'#f15a3a':'#112255')}" class="form-control form-control-color w-100"></div>`;
+                htmlForm += `<div class="mt-3 text-start px-2"><label class="fw-bold">Màu nền toàn khối:</label><input type="color" id="swal-bt-bg" value="${block.bgColor || (block.type==='tech'?'transparent':'#00d5ff')}" class="form-control form-control-color w-100"></div>`;
+            }
+
+            const { value: vals } = await Swal.fire({ 
+                title: 'Đổi Thuộc Tính Khối', html: htmlForm, showCancelButton: true,
+                preConfirm: () => {
+                    let res = { title: document.getElementById('swal-bt-title').value };
+                    if(document.getElementById('swal-icon')) res.icon = document.getElementById('swal-icon').value;
+                    if(document.getElementById('swal-bt-color')) res.color = document.getElementById('swal-bt-color').value;
+                    if(document.getElementById('swal-bt-bg')) res.bgColor = document.getElementById('swal-bt-bg').value;
+                    return res;
+                }
+            }); 
+            if (vals) { cmsData.custom_blocks[bIndex].title = vals.title; if(vals.icon) cmsData.custom_blocks[bIndex].icon = vals.icon; if(vals.color) cmsData.custom_blocks[bIndex].color = vals.color; if(vals.bgColor) cmsData.custom_blocks[bIndex].bgColor = vals.bgColor; await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); } 
+        };
+
+        window.encodeImageFileAsURL = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { if(document.getElementById('swal-img-b64')) document.getElementById('swal-img-b64').value = reader.result; if(document.getElementById('swal-img')) { document.getElementById('swal-img').value = ''; } if(document.getElementById('swal-f-logo')) document.getElementById('swal-f-logo').value = ''; }; reader.readAsDataURL(file); }
+        window.encodeImageFileAsURLTeacher = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { if(document.getElementById('swal-img-b64-teacher')) document.getElementById('swal-img-b64-teacher').value = reader.result; if(document.getElementById('swal-img-teacher')) { document.getElementById('swal-img-teacher').value = ''; } if(document.getElementById('preview-teacher-img')) document.getElementById('preview-teacher-img').src = reader.result; }; reader.readAsDataURL(file); }
+        window.encodeImageFileAsURLTeacherAdd = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { if(document.getElementById('swal-img-b64-teacher-add')) document.getElementById('swal-img-b64-teacher-add').value = reader.result; if(document.getElementById('swal-img-teacher-add')) { document.getElementById('swal-img-teacher-add').value = ''; } if(document.getElementById('preview-teacher-add-wrapper')) { document.getElementById('preview-teacher-add-wrapper').classList.remove('d-none'); document.getElementById('preview-teacher-add-img').src = reader.result; } }; reader.readAsDataURL(file); }
+        
+        window.selectIcon = function(iconClass, event) { document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('border-primary', 'border-3')); event.currentTarget.classList.add('border-primary', 'border-3'); document.getElementById('swal-icon').value = iconClass; }
+
+        window.allowDrop = (ev) => { ev.preventDefault(); ev.currentTarget.classList.add('dragover'); };
+        window.dragLeave = (ev) => { ev.currentTarget.classList.remove('dragover'); };
+        window.dragBlock = (ev, type) => { ev.dataTransfer.setData("text/plain", type); };
+        
+        window.createNewBlockObj = (type, dropPos) => {
+            let newBlock = { id: Date.now(), isHidden: false, pos: dropPos || 'pos-bottom' };
+            if (type === "box-text") { 
+                newBlock = { ...newBlock, type: 'text', content: "<div class='text-center'><h2 style='color: #112255; font-weight: 800; font-size: 32px; margin-bottom: 15px;'>Tiêu Đề Box Mới</h2><p style='font-size: 18px; color: #64748b; max-width: 800px; margin: 0 auto; line-height: 1.6;'>Đây là nội dung văn bản. Nhấn Sửa Box ở thanh công cụ xanh phía trên để sử dụng trình soạn thảo.</p></div>", bgColor: "#ffffff", textColor: "#333333", isTransparent: true, hasShadow: false }; 
+            } 
+            else if (type === "tech-list") { newBlock = { ...newBlock, type: 'tech', title: 'Khối Thông Tin 1', color: '#f15a3a', icon: 'bi-card-checklist', cards: [{ img: "", title: "", desc: "", color: "#00d5ff", icon: "bi-robot", has_detail: false }] }; } 
+            else if (type === "english-list") { newBlock = { ...newBlock, type: 'english', title: 'Khối Thông Tin 2', color: '#112255', icon: 'bi-book', bgColor: "#00d5ff", cards: [{ img: "", title: "", age: "", desc: "", bg_color: "#ffffff", text_color: "#233066", has_detail: false }] }; }
+            else if (type === "teacher-list") { newBlock = { ...newBlock, type: 'teacher', title: 'Đội Ngũ Giảng Viên Mới', icon: 'bi-person-video3', color: '#00d5ff', cards: [{ img: "", name: "", role: "", experience: "", hideExperience: false, nameColor: "#112255", roleColor: "#112255", bgColor: "#00d5ff" }] }; }
+            return newBlock;
+        };
+
+        window.processAddBlock = async (type, dropPos) => {
+            if(!cmsData.custom_blocks) cmsData.custom_blocks = [];
+            var myOffcanvas = document.getElementById('toolSidebar'); var bsOffcanvas = bootstrap.Offcanvas.getInstance(myOffcanvas); if (bsOffcanvas) bsOffcanvas.hide();
+
+            if(type) { 
+                let newBlock = window.createNewBlockObj(type, dropPos);
+                let firstIndex = cmsData.custom_blocks.findIndex(b => b.pos === (dropPos || 'pos-bottom'));
+                if(firstIndex !== -1) { cmsData.custom_blocks.splice(firstIndex, 0, newBlock); } else { cmsData.custom_blocks.push(newBlock); }
+                await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); 
+                Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã thêm khối mới!', showConfirmButton:false, timer:2000}); 
+            }
+        };
+
+        window.addBlockClick = async (type) => {
+            const { value: dropPos } = await Swal.fire({
+                title: 'Chọn khu vực chèn khối',
+                input: 'select',
+                inputOptions: { 'pos-top': 'Khu vực 1: Dưới Ảnh Bìa', 'pos-mid1': 'Khu vực 2: Dưới Khám phá', 'pos-mid2': 'Khu vực 3: Dưới Khối TT1', 'pos-bottom': 'Khu vực 4: Dưới Khối TT2' },
+                inputPlaceholder: 'Bấm chọn vùng...', showCancelButton: true, confirmButtonText: 'Chèn khối'
+            });
+            if (dropPos) { await window.processAddBlock(type, dropPos); }
+        };
+
+        window.dropHandler = async (ev, dropPos) => {
+            ev.preventDefault(); ev.currentTarget.classList.remove('dragover');
+            let type = ev.dataTransfer.getData("text/plain");
+            if(type) await window.processAddBlock(type, dropPos);
+        };
+
+        window.dropHandlerBetween = async (ev, bIndex) => {
+            ev.preventDefault(); ev.currentTarget.classList.remove('dragover');
+            let type = ev.dataTransfer.getData("text/plain");
+            if(type) {
+                var myOffcanvas = document.getElementById('toolSidebar'); var bsOffcanvas = bootstrap.Offcanvas.getInstance(myOffcanvas); if (bsOffcanvas) bsOffcanvas.hide();
+                let pos = cmsData.custom_blocks[bIndex].pos;
+                let newBlock = window.createNewBlockObj(type, pos);
+                cmsData.custom_blocks.splice(bIndex + 1, 0, newBlock);
+                await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks });
+                Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã chèn khối vào giữa!', showConfirmButton:false, timer:2000});
+            }
+        };
+
+        window.cmsAddCard = async (type, blockIndex) => { 
+            let newCard = type === 'tech' ? 
+            { img: "", title: "", desc: "", color: "#000000", icon: "bi-star", has_detail: false } : 
+            { img: "", title: "", age: "", desc: "", bg_color: "#ffffff", text_color: "#000000", has_detail: false }; 
+            
+            if(blockIndex !== null) { 
+                if(!cmsData.custom_blocks[blockIndex].cards) cmsData.custom_blocks[blockIndex].cards = []; 
+                cmsData.custom_blocks[blockIndex].cards.push(newCard); 
+                await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); 
+            } 
+        };
+        
+        window.cmsDeleteCard = async (type, index, blockIndex) => { Swal.fire({ title: 'Xóa thẻ này?', icon: 'warning', showCancelButton: true }).then(async (r) => { if(r.isConfirmed) { if(blockIndex !== null) { cmsData.custom_blocks[blockIndex].cards.splice(index, 1); await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); } } }); };
+        
+        /* CÁC HÀM XỬ LÝ EDITOR CHO NÚT CHI TIẾT */
+        window.applyFontSizeDetail = (size) => { document.execCommand("fontSize", false, "7"); let fontElements = document.getElementById('swal-detail-content').getElementsByTagName("font"); for (let i = 0; i < fontElements.length; ++i) { if (fontElements[i].size == "7") { fontElements[i].removeAttribute("size"); fontElements[i].style.fontSize = size; } } };
+        
+        window.toggleDetailFullscreen = () => {
+            const container = document.getElementById('detail-editor-container');
+            const editor = document.getElementById('swal-detail-content');
+            if(container.classList.contains('fullscreen-editor')) {
+                container.classList.remove('fullscreen-editor');
+                editor.style.maxHeight = '300px';
+                editor.style.minHeight = '150px';
+            } else {
+                container.classList.add('fullscreen-editor');
+                editor.style.maxHeight = 'none';
+                editor.style.minHeight = '60vh';
+            }
+        };
+
+        window.insertDetailImage = async () => {
+            const { value: url } = await Swal.fire({ title: 'Chèn ảnh', input: 'url', inputPlaceholder: 'Dán link ảnh vào đây...', showCancelButton: true });
+            if (url) {
+                document.getElementById('swal-detail-content').focus();
+                const imgHtml = `<div style="text-align: center; margin: 15px 0;"><img src="${url}" style="max-width: 100%; border-radius: 8px;" class="detail-editable-img" title="Click đúp để thêm ghi chú"></div><p><br></p>`;
+                document.execCommand('insertHTML', false, imgHtml);
+            }
+        };
+
+        window.handleDetailImgDblClick = async (e) => {
+            if(e.target.tagName === 'IMG') {
+                const { value: caption } = await Swal.fire({ title: 'Thêm ghi chú ảnh', input: 'text', inputPlaceholder: 'Nhập nội dung ghi chú (sẽ in nghiêng)...', showCancelButton: true });
+                if (caption) {
+                    let parent = e.target.parentElement;
+                    let existingCap = parent.querySelector('i.img-caption');
+                    if (existingCap) existingCap.remove();
+                    let capHtml = document.createElement('i');
+                    capHtml.className = 'img-caption d-block mt-2 text-muted';
+                    capHtml.innerText = caption;
+                    if(parent.tagName === 'DIV') {
+                        parent.appendChild(capHtml);
+                    } else {
+                        let wrapper = document.createElement('div');
+                        wrapper.style.textAlign = 'center'; wrapper.style.margin = '15px 0';
+                        parent.insertBefore(wrapper, e.target);
+                        wrapper.appendChild(e.target); wrapper.appendChild(capHtml);
+                    }
+                }
+            }
+        };
+
+        window.cmsEditCard = async (type, index, blockIndex) => { 
+            let card = {}; 
+            if (blockIndex !== null) card = cmsData.custom_blocks[blockIndex].cards[index]; 
+            
+            let imgInputHtml = `<div class="mb-2 text-start mt-3"><label class="fw-bold">Link Ảnh HOẶC Tải ảnh tự có:</label></div><input id="swal-img" class="swal2-input mt-0 mb-2" placeholder="Dán link ảnh..." value="${card.img || ''}"><input id="swal-img-file" type="file" class="form-control w-75 mx-auto" accept="image/*" onchange="encodeImageFileAsURL(this)"><input type="hidden" id="swal-img-b64" value="">`; 
+            
+            let detailConfigHtml = `
+                <hr class="mt-4 mb-3" style="border-top: 2px dashed #ccc;">
+                <h6 class="fw-bold text-primary text-start"><i class="bi bi-window-stack"></i> CẤU HÌNH NÚT "XEM CHI TIẾT"</h6>
+                <div class="form-check form-switch text-start mb-3">
+                    <input class="form-check-input" type="checkbox" id="swal-has-detail" ${card.has_detail ? 'checked' : ''}>
+                    <label class="form-check-label fw-bold text-danger" for="swal-has-detail">Bật nút "Xem chi tiết" cho thẻ này</label>
+                </div>
+                <div class="row g-2 text-start p-3 bg-light border rounded">
+                    <div class="col-md-6">
+                        <label class="small fw-bold">Tên nút:</label>
+                        <input type="text" id="swal-detail-text" class="form-control form-control-sm" value="${card.detail_text || 'XEM CHI TIẾT'}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="small fw-bold">Font chữ (VD: Inter):</label>
+                        <input type="text" id="swal-detail-font" class="form-control form-control-sm" value="${card.detail_font || 'Inter'}">
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <label class="small fw-bold">Cỡ chữ (px):</label>
+                        <input type="number" id="swal-detail-size" class="form-control form-control-sm" value="${card.detail_size || 14}">
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <label class="small fw-bold">Màu nền nút:</label>
+                        <input type="color" id="swal-detail-bg" class="form-control form-control-color form-control-sm w-100 p-0" value="${card.detail_bg || (type === 'tech' ? '#f15a3a' : '#112255')}">
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <label class="small fw-bold">Màu chữ nút:</label>
+                        <input type="color" id="swal-detail-color" class="form-control form-control-color form-control-sm w-100 p-0" value="${card.detail_color || '#ffffff'}">
+                    </div>
+                    <div class="col-12 mt-3" id="detail-editor-container">
+                        <label class="small fw-bold">Nội dung Popup chi tiết (Soạn thảo như Word):</label>
+                        <div class="editor-toolbar bg-white border p-1 mb-1 d-flex gap-1 flex-wrap rounded align-items-center">
+                            <button type="button" class="btn btn-sm btn-outline-dark fw-bold" onmousedown="event.preventDefault();" onclick="document.execCommand('bold', false, '');" title="In đậm">B</button>
+                            <button type="button" class="btn btn-sm btn-outline-dark fst-italic" onmousedown="event.preventDefault();" onclick="document.execCommand('italic', false, '');" title="In nghiêng">I</button>
+                            <button type="button" class="btn btn-sm btn-outline-dark text-decoration-underline" onmousedown="event.preventDefault();" onclick="document.execCommand('underline', false, '');" title="Gạch chân">U</button>
+                            <div class="vr mx-1"></div>
+                            <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('justifyLeft', false, '');" title="Căn trái"><i class="bi bi-text-left"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('justifyCenter', false, '');" title="Căn giữa"><i class="bi bi-text-center"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('insertUnorderedList', false, '');" title="Danh sách"><i class="bi bi-list-ul"></i></button>
+                            <div class="vr mx-1"></div>
+                            <input type="color" class="form-control form-control-color form-control-sm p-0 border-0" style="width:25px; height:25px;" onmousedown="event.preventDefault();" onchange="document.execCommand('foreColor', false, this.value);" title="Đổi màu chữ">
+                            <select class="form-select form-select-sm w-auto" style="max-width: 100px; font-size: 12px; padding: 2px 5px;" onchange="window.applyFontSizeDetail(this.value); this.selectedIndex=0;" title="Đổi cỡ chữ"><option value="">Cỡ...</option><option value="14px">14px</option><option value="16px">16px</option><option value="18px">18px</option><option value="20px">20px</option><option value="24px">24px</option></select>
+                            <div class="vr mx-1"></div>
+                            <button type="button" class="btn btn-sm btn-outline-success" onmousedown="event.preventDefault();" onclick="window.insertDetailImage()" title="Chèn ảnh"><i class="bi bi-image"></i> Thêm Ảnh</button>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onmousedown="event.preventDefault();" onclick="document.execCommand('removeFormat', false, '');" title="Xóa định dạng"><i class="bi bi-eraser"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-primary ms-auto fw-bold" onmousedown="event.preventDefault();" onclick="window.toggleDetailFullscreen()" title="Mở Full Màn Hình"><i class="bi bi-arrows-fullscreen"></i> Mở Full</button>
+                        </div>
+                        <div id="swal-detail-content" contenteditable="true" class="form-control text-start bg-white" ondblclick="window.handleDetailImgDblClick(event)" style="min-height: 150px; max-height: 300px; overflow-y: auto; border: 1px solid #ccc; font-size: 14px; line-height: 1.6;">${card.detail_content || ''}</div>
+                    </div>
+                </div>
+            `;
+
+            let htmlForm = ''; 
+            if(type === 'tech') { 
+                let iconsArr = ['bi-cpu', 'bi-robot', 'bi-controller', 'bi-laptop', 'bi-book', 'bi-brush', 'bi-code', 'bi-globe', 'bi-lightning', 'bi-palette', 'bi-rocket', 'bi-star']; 
+                let iconGrid = `<div class="mb-2 text-start mt-3"><label class="fw-bold">Chọn Icon cho thẻ:</label></div><div id="icon-picker" class="d-flex flex-wrap gap-2 mb-3 justify-content-center p-2 rounded bg-light border">` + iconsArr.map(i => `<i class="bi ${i} fs-3 p-2 border rounded bg-white icon-option ${card.icon === i ? 'border-primary border-3' : ''}" style="cursor:pointer;" onclick="selectIcon('${i}', event)"></i>`).join('') + `</div><input type="hidden" id="swal-icon" value="${card.icon || 'bi-cpu'}">`; 
+                htmlForm = `<input id="swal-title" class="swal2-input mt-0" placeholder="Tiêu đề (Vd: Khóa học mới)" value="${card.title || ''}"><textarea id="swal-desc" class="swal2-textarea" placeholder="Nhập mô tả chi tiết...">${card.desc || ''}</textarea>${imgInputHtml}${iconGrid}<div class="mt-3 text-start px-4"><label class="fw-bold">Màu chủ đạo thẻ:</label><input type="color" id="swal-color" value="${card.color || '#000000'}" class="form-control form-control-color w-100"></div>${detailConfigHtml}`; 
+            } else { 
+                htmlForm = `<input id="swal-title" class="swal2-input mt-0" placeholder="Tiêu đề (Vd: Tiếng anh trẻ em)" value="${card.title || ''}"><input id="swal-age" class="swal2-input" placeholder="Độ tuổi (vd: 4-6)" value="${card.age || ''}"><textarea id="swal-desc" class="swal2-textarea" placeholder="Nhập mô tả chi tiết...">${card.desc || ''}</textarea>${imgInputHtml}<div class="row mt-3"><div class="col-6 text-start"><label class="fw-bold">Màu nền thẻ:</label><input type="color" id="swal-bgcolor" value="${card.bg_color || '#ffffff'}" class="form-control form-control-color w-100"></div><div class="col-6 text-start"><label class="fw-bold">Màu chữ chung:</label><input type="color" id="swal-textcolor" value="${card.text_color || '#000000'}" class="form-control form-control-color w-100"></div></div>${detailConfigHtml}`; 
+            } 
+            const { value: vals } = await Swal.fire({ 
+                title: 'Tùy Chỉnh Thẻ (Card)', 
+                html: `<div style="max-height: 70vh; overflow-y: auto; overflow-x: hidden; padding: 5px;">${htmlForm}</div>`, 
+                focusConfirm: false, 
+                showCancelButton: true, 
+                confirmButtonText: 'Lưu thay đổi',
+                width: '800px',
+                preConfirm: () => { 
+                    let b64 = document.getElementById('swal-img-b64').value; 
+                    let url = document.getElementById('swal-img').value; 
+                    let finalImg = b64 ? b64 : url; 
+
+                    let detailData = {
+                        has_detail: document.getElementById('swal-has-detail').checked,
+                        detail_text: document.getElementById('swal-detail-text').value,
+                        detail_font: document.getElementById('swal-detail-font').value,
+                        detail_size: document.getElementById('swal-detail-size').value,
+                        detail_bg: document.getElementById('swal-detail-bg').value,
+                        detail_color: document.getElementById('swal-detail-color').value,
+                        detail_content: document.getElementById('swal-detail-content').innerHTML,
+                    };
+
+                    if(type === 'tech') return { title: document.getElementById('swal-title').value, desc: document.getElementById('swal-desc').value, img: finalImg, icon: document.getElementById('swal-icon').value, color: document.getElementById('swal-color').value, ...detailData }; 
+                    else return { title: document.getElementById('swal-title').value, age: document.getElementById('swal-age').value, desc: document.getElementById('swal-desc').value, img: finalImg, bg_color: document.getElementById('swal-bgcolor').value, text_color: document.getElementById('swal-textcolor').value, ...detailData }; 
+                } 
+            }); 
+            if (vals) { if(blockIndex !== null) { cmsData.custom_blocks[blockIndex].cards[index] = vals; await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); } Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); } 
+        };
+        
+        window.cmsEditTeacherTitle = async (bIndex = null) => {
+            let tConf = bIndex !== null ? cmsData.custom_blocks[bIndex] : (cmsData.teacher_data || { title: "Đội Ngũ Giảng Viên", icon: "bi-person-video3", color: "#00d5ff" });
+            let iconsArr = ['bi-person-video3', 'bi-people-fill', 'bi-mortarboard-fill', 'bi-award-fill', 'bi-star-fill', 'bi-gem', 'bi-heart-fill', 'bi-lightning-charge-fill'];
+            let iconGrid = `<div id="icon-picker" class="d-flex flex-wrap gap-2 mb-3 justify-content-center p-2 rounded bg-light border">` + iconsArr.map(i => `<i class="bi ${i} fs-3 p-2 border rounded bg-white icon-option ${tConf.icon === i ? 'border-primary border-3' : ''}" style="cursor:pointer;" onclick="selectIcon('${i}', event)"></i>`).join('') + `</div><input type="hidden" id="swal-icon" value="${tConf.icon}">`;
+
+            const { value: vals } = await Swal.fire({
+                title: 'Tùy chỉnh Khối Giảng Viên',
+                html: `<div class="text-start fw-bold mb-2">Tiêu đề khối:</div><input id="swal-t-title-main" class="swal2-input mt-0 mb-3" placeholder="Nhập tiêu đề..." value="${tConf.title || ''}">
+                    <div class="text-start fw-bold mb-2">Chọn Icon:</div>${iconGrid}
+                    <div class="text-start fw-bold mb-2">Màu sắc chủ đạo:</div><input type="color" id="swal-t-colormain" value="${tConf.color || '#00d5ff'}" class="form-control form-control-color w-100">`,
+                showCancelButton: true, confirmButtonText: 'Lưu thay đổi',
+                preConfirm: () => { return { title: document.getElementById('swal-t-title-main').value, icon: document.getElementById('swal-icon').value, color: document.getElementById('swal-t-colormain').value } }
+            });
+            if (vals) {
+                if (bIndex !== null) { 
+                    cmsData.custom_blocks[bIndex].title = vals.title; cmsData.custom_blocks[bIndex].icon = vals.icon; cmsData.custom_blocks[bIndex].color = vals.color; 
+                    await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); 
+                } else {
+                    if (!cmsData.teacher_data) cmsData.teacher_data = {};
+                    cmsData.teacher_data.title = vals.title; cmsData.teacher_data.icon = vals.icon; cmsData.teacher_data.color = vals.color;
+                    await update(ref(db, 'pageContent/teacher_data'), cmsData.teacher_data);
+                }
+                Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã cập nhật tiêu đề!', showConfirmButton:false, timer:2000});
+            }
+        };
+
+        window.cmsDeleteTeacherCard = async (index, bIndex = null) => {
+            Swal.fire({title: 'Xóa giáo viên này?', icon: 'warning', showCancelButton: true}).then(async (r) => {
+                if (r.isConfirmed) {
+                    if (bIndex !== null) {
+                        cmsData.custom_blocks[bIndex].cards.splice(index, 1);
+                        await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks });
+                    } else {
+                        cmsData.teacher_data.cards.splice(index, 1);
+                        await update(ref(db, 'pageContent/teacher_data'), cmsData.teacher_data);
+                    }
+                    Swal.fire('Đã xóa', '', 'success');
+                }
+            });
+        };
+
+        window.swalDelTeacher = async (idx, bIdx) => {
+            if(confirm('Bạn có chắc chắn xóa giáo viên này?')) {
+                let cards = [];
+                if (bIdx !== null) {
+                    cmsData.custom_blocks[bIdx].cards.splice(idx, 1);
+                    await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks });
+                    cards = cmsData.custom_blocks[bIdx].cards;
+                } else {
+                    cmsData.teacher_data.cards.splice(idx, 1);
+                    await update(ref(db, 'pageContent/teacher_data'), cmsData.teacher_data);
+                    cards = cmsData.teacher_data.cards;
+                }
+                
+                let newList = '';
+                cards.forEach((c, i) => {
+                    newList += `<tr><td>${i+1}</td><td class="text-start"><img src="${c.img || 'https://via.placeholder.com/150'}" style="width:30px; height:30px; object-fit:cover; background:#f4f4f4;" class="me-1 border rounded"><span class="small">${c.name || 'Tên giáo viên'}</span></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelTeacher(${i}, ${bIdx})"><i class="bi bi-trash"></i></button></td></tr>`;
+                });
+                document.getElementById('swal-teacher-tbody').innerHTML = newList;
+            }
+        };
+
+        window.cmsAddTeacherCard = async (bIndex = null) => {
+            let cards = bIndex !== null ? (cmsData.custom_blocks[bIndex].cards || []) : (cmsData.teacher_data && cmsData.teacher_data.cards ? cmsData.teacher_data.cards : []);
+            let listHTML = '';
+            cards.forEach((c, i) => {
+                listHTML += `<tr><td>${i+1}</td><td class="text-start"><img src="${c.img || 'https://via.placeholder.com/150'}" style="width:30px; height:30px; object-fit:cover; background:#f4f4f4;" class="me-1 border rounded"><span class="small">${c.name || 'Tên giáo viên'}</span></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelTeacher(${i}, ${bIndex})"><i class="bi bi-trash"></i></button></td></tr>`;
+            });
+
+            let leftCol = `
+                <div class="text-start pe-2">
+                    <div class="text-center mb-2 d-none" id="preview-teacher-add-wrapper">
+                        <img id="preview-teacher-add-img" src="" style="max-height: 80px; border-radius: 8px; object-fit: contain; background: #f4f4f4;">
+                    </div>
+                    <label class="fw-bold mb-1 small">Link Ảnh HOẶC Tải ảnh từ máy:</label>
+                    <input id="swal-img-teacher-add" class="form-control form-control-sm mb-1" placeholder="Dán link ảnh...">
+                    <input id="swal-img-file-teacher-add" type="file" class="form-control form-control-sm mb-2" accept="image/*" onchange="encodeImageFileAsURLTeacherAdd(this)">
+                    <input type="hidden" id="swal-img-b64-teacher-add" value="">
+                    
+                    <input id="swal-t-name-add" class="form-control form-control-sm mb-2" placeholder="Tên Giáo Viên (vd: NGUYỄN VĂN A)">
+                    <div class="row g-1 mb-2 text-start">
+                        <div class="col-4"><label class="fw-bold small" style="font-size:11px;">Màu tên:</label><input type="color" id="swal-t-namecol-add" value="#112255" class="form-control form-control-color form-control-sm w-100 p-0"></div>
+                        <div class="col-4"><label class="fw-bold small" style="font-size:11px;">Màu chức vụ:</label><input type="color" id="swal-t-rolecol-add" value="#112255" class="form-control form-control-color form-control-sm w-100 p-0"></div>
+                        <div class="col-4"><label class="fw-bold small" style="font-size:11px;">Nền dưới:</label><input type="color" id="swal-t-bgcol-add" value="#00d5ff" class="form-control form-control-color form-control-sm w-100 p-0"></div>
+                    </div>
+                    <input id="swal-t-role-add" class="form-control form-control-sm mb-2" placeholder="Chức vụ (vd: Giáo viên)">
+                    <input id="swal-t-exp-add" class="form-control form-control-sm mb-2" placeholder="Số năm kinh nghiệm (vd: 8)">
+                    <div class="form-check form-switch text-start">
+                        <input class="form-check-input" type="checkbox" id="swal-t-hideexp-add">
+                        <label class="form-check-label fw-bold small text-danger" for="swal-t-hideexp-add">Ẩn khung đỏ Kinh nghiệm</label>
+                    </div>
+                </div>
+            `;
+
+            let rightCol = `
+                <div class="text-start ps-2" style="max-height: 400px; overflow-y: auto;">
+                    <label class="fw-bold mb-2 text-primary small">Dữ liệu hiện tại:</label>
+                    <table class="table table-sm table-bordered table-hover">
+                        <thead class="table-light"><tr><th style="width:40px;">STT</th><th>Giáo viên</th><th style="width:40px;">Xóa</th></tr></thead>
+                        <tbody id="swal-teacher-tbody">${listHTML}</tbody>
+                    </table>
+                </div>
+            `;
+
+            let htmlForm = `<div class="row m-0"><div class="col-md-6 border-end p-0">${leftCol}</div><div class="col-md-6 p-0">${rightCol}</div></div>`;
+
+            const { value: vals } = await Swal.fire({
+                title: 'Quản Lý Giáo Viên', width: '900px', html: htmlForm, focusConfirm: false, showCancelButton: true, confirmButtonText: 'Thêm mới', cancelButtonText: 'Đóng',
+                preConfirm: () => {
+                    let b64 = document.getElementById('swal-img-b64-teacher-add').value; 
+                    let url = document.getElementById('swal-img-teacher-add').value; 
+                    let finalImg = b64 ? b64 : (url ? url : "");
+                    
+                    let inputName = document.getElementById('swal-t-name-add').value;
+                    let inputRole = document.getElementById('swal-t-role-add').value;
+                    
+                    if(!inputName && !b64 && !url) {
+                        Swal.showValidationMessage('Vui lòng nhập Tên hoặc chọn ảnh để thêm mới!'); 
+                        return false; 
+                    }
+                    
+                    return { 
+                        name: inputName || '', 
+                        role: inputRole || '', 
+                        experience: document.getElementById('swal-t-exp-add').value || '', 
+                        img: finalImg, 
+                        hideExperience: document.getElementById('swal-t-hideexp-add').checked, 
+                        nameColor: document.getElementById('swal-t-namecol-add').value, 
+                        roleColor: document.getElementById('swal-t-rolecol-add').value, 
+                        bgColor: document.getElementById('swal-t-bgcol-add').value 
+                    };
+                }
+            });
+
+            if(vals) {
+                if (bIndex !== null) {
+                    if (!cmsData.custom_blocks[bIndex].cards) cmsData.custom_blocks[bIndex].cards = [];
+                    cmsData.custom_blocks[bIndex].cards.push(vals);
+                    await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks });
+                } else {
+                    if (!cmsData.teacher_data) cmsData.teacher_data = { cards: [] };
+                    if (!cmsData.teacher_data.cards) cmsData.teacher_data.cards = [];
+                    cmsData.teacher_data.cards.push(vals);
+                    await update(ref(db, 'pageContent/teacher_data'), cmsData.teacher_data);
+                }
+                Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã thêm giáo viên!', showConfirmButton:false, timer:2000});
+            }
+        };
+        
+        window.cmsEditTeacherCard = async (index, bIndex = null) => {
+            let card = bIndex !== null ? cmsData.custom_blocks[bIndex].cards[index] : (cmsData.teacher_data.cards[index] || {});
+            let imgInputHtml = `
+                <div class="text-center mb-3 mt-3">
+                    <label class="fw-bold d-block mb-2 text-primary">Ảnh hiện tại:</label>
+                    <img id="preview-teacher-img" src="${card.img || 'https://via.placeholder.com/150'}" style="max-height: 120px; border-radius: 8px; object-fit: contain; background: #f4f4f4;">
+                </div>
+                <div class="mb-2 text-start mt-3"><label class="fw-bold fs-6">Thay thế (Link Ảnh HOẶC Tải tệp mới):</label></div>
+                <input id="swal-img-teacher" class="swal2-input mt-0 mb-2" placeholder="Dán link ảnh..." value="${card.img || ''}">
+                <input id="swal-img-file-teacher" type="file" class="form-control w-75 mx-auto mb-3" accept="image/*" onchange="encodeImageFileAsURLTeacher(this)">
+                <input type="hidden" id="swal-img-b64-teacher" value="">`;
+            
+            let htmlForm = `
+                            <input id="swal-t-name" class="swal2-input mt-0" placeholder="Tên Giáo Viên (Vd: NGUYỄN VĂN A)" value="${card.name || ''}">
+                            <div class="row px-4 mt-2 mb-2 text-start">
+                                <div class="col-6"><label class="fw-bold fs-6">Màu tên:</label><input type="color" id="swal-t-namecol" value="${card.nameColor || '#112255'}" class="form-control form-control-color w-100"></div>
+                                <div class="col-6"><label class="fw-bold fs-6">Màu chức vụ:</label><input type="color" id="swal-t-rolecol" value="${card.roleColor || '#112255'}" class="form-control form-control-color w-100"></div>
+                                <div class="col-12 mt-2"><label class="fw-bold fs-6">Màu nền khung dưới:</label><input type="color" id="swal-t-bgcol" value="${card.bgColor || '#00d5ff'}" class="form-control form-control-color w-100"></div>
+                            </div>
+                            <input id="swal-t-role" class="swal2-input" placeholder="Chức vụ (vd: Giáo viên)" value="${card.role || ''}">
+                            <input id="swal-t-exp" class="swal2-input" placeholder="Số năm kinh nghiệm (vd: 8)" value="${card.experience || ''}">
+                            <div class="form-check form-switch text-start px-4 mt-2 mb-2">
+                                <input class="form-check-input" type="checkbox" id="swal-t-hideexp" ${card.hideExperience ? 'checked' : ''} style="margin-left: -2em;">
+                                <label class="form-check-label fw-bold ms-2 text-danger" for="swal-t-hideexp">Ẩn khung đỏ Kinh nghiệm</label>
+                            </div>
+                            ${imgInputHtml}`;
+
+            const { value: vals } = await Swal.fire({
+                title: 'Sửa Giáo Viên', html: htmlForm, focusConfirm: false, showCancelButton: true, confirmButtonText: 'Lưu thay đổi',
+                preConfirm: () => {
+                    let b64 = document.getElementById('swal-img-b64-teacher').value; let url = document.getElementById('swal-img-teacher').value; let finalImg = b64 ? b64 : url;
+                    return { name: document.getElementById('swal-t-name').value, role: document.getElementById('swal-t-role').value, experience: document.getElementById('swal-t-exp').value, img: finalImg, hideExperience: document.getElementById('swal-t-hideexp').checked, nameColor: document.getElementById('swal-t-namecol').value, roleColor: document.getElementById('swal-t-rolecol').value, bgColor: document.getElementById('swal-t-bgcol').value };
+                }
+            });
+            if (vals) {
+                if (bIndex !== null) { 
+                    cmsData.custom_blocks[bIndex].cards[index] = vals; 
+                    await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); 
+                } else {
+                    cmsData.teacher_data.cards[index] = vals;
+                    await update(ref(db, 'pageContent/teacher_data'), cmsData.teacher_data);
+                }
+                Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu thông tin!', showConfirmButton:false, timer:2000});
+            }
+        };
+
+        window.toggleBoxTextStyles = () => { let isTrans = document.getElementById('swal-cb-transparent').checked; let hasShadow = document.getElementById('swal-cb-shadow').checked; let bgPicker = document.getElementById('swal-cb-bg'); let contentBox = document.getElementById('swal-cb-content'); contentBox.style.backgroundColor = isTrans ? 'transparent' : bgPicker.value; contentBox.style.boxShadow = hasShadow ? '0 5px 15px rgba(0,0,0,0.1)' : 'none'; };
+        window.applyFontSize = (size) => { document.execCommand("fontSize", false, "7"); let fontElements = document.getElementById('swal-cb-content').getElementsByTagName("font"); for (let i = 0; i < fontElements.length; ++i) { if (fontElements[i].size == "7") { fontElements[i].removeAttribute("size"); fontElements[i].style.fontSize = size; } } };
+
+        window.cmsEditCustomBlock = async (index) => { 
+            let block = cmsData.custom_blocks[index]; 
+            const { value: vals } = await Swal.fire({ 
+                title: 'Trình Soạn Thảo Box Text', width: '800px',
+                html: `
+                    <div class="mb-2 text-start"><label class="fw-bold text-primary"><i class="bi bi-magic"></i> Bôi đen vùng chữ bạn muốn chỉnh sửa, sau đó bấm công cụ.</label></div>
+                    <div class="editor-toolbar bg-light border p-2 mb-2 d-flex gap-2 flex-wrap rounded align-items-center">
+                        <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('justifyLeft', false, '');" title="Căn trái"><i class="bi bi-text-left"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('justifyCenter', false, '');" title="Căn giữa"><i class="bi bi-text-center"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('justifyRight', false, '');" title="Căn phải"><i class="bi bi-text-right"></i></button>
+                        <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('justifyFull', false, '');" title="Căn đều"><i class="bi bi-justify"></i></button>
+                        <div class="vr mx-1"></div>
+                        <button type="button" class="btn btn-sm btn-outline-dark fw-bold" onmousedown="event.preventDefault();" onclick="document.execCommand('bold', false, '');" title="In đậm">B</button>
+                        <button type="button" class="btn btn-sm btn-outline-dark fst-italic" onmousedown="event.preventDefault();" onclick="document.execCommand('italic', false, '');" title="In nghiêng">I</button>
+                        <button type="button" class="btn btn-sm btn-outline-dark text-decoration-underline" onmousedown="event.preventDefault();" onclick="document.execCommand('underline', false, '');" title="Gạch chân">U</button>
+                        <div class="vr mx-1"></div>
+                        <input type="color" class="form-control form-control-color form-control-sm p-0 border-0" style="width:30px; height:30px;" onmousedown="event.preventDefault();" onchange="document.execCommand('foreColor', false, this.value);" title="Đổi màu chữ đang chọn">
+                        <div class="vr mx-1"></div>
+                        <select class="form-select form-select-sm w-auto" onchange="window.applyFontSize(this.value); this.selectedIndex=0;" title="Đổi cỡ chữ"><option value="">Cỡ chữ...</option><option value="12px">Nhỏ (12px)</option><option value="16px">Bình thường (16px)</option><option value="20px">Vừa (20px)</option><option value="24px">Lớn (24px)</option><option value="32px">Rất lớn (32px)</option><option value="48px">Khổng lồ (48px)</option></select>
+                        <button type="button" class="btn btn-sm btn-outline-danger ms-auto" onmousedown="event.preventDefault();" onclick="document.execCommand('removeFormat', false, '');" title="Xóa định dạng chữ"><i class="bi bi-eraser"></i> Xóa Đ.Dạng</button>
+                    </div>
+                    <div class="row align-items-center mb-3 p-3 bg-light rounded border">
+                        <div class="col-6 text-start"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="swal-cb-transparent" ${block.isTransparent ? 'checked' : ''} onchange="toggleBoxTextStyles()"><label class="form-check-label fw-bold">Dùng nền trang (Trong suốt)</label></div></div>
+                        <div class="col-6 text-start"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="swal-cb-shadow" ${block.hasShadow !== false ? 'checked' : ''} onchange="toggleBoxTextStyles()"><label class="form-check-label fw-bold">Nổi khối (Đổ bóng)</label></div></div>
+                    </div>
+                    <div id="swal-cb-content" contenteditable="true" class="form-control mb-3 text-start" onpaste="event.preventDefault(); document.execCommand('insertText', false, event.clipboardData.getData('text/plain'));" style="min-height: 250px; max-height: 400px; overflow-y: auto; background-color: ${block.isTransparent ? 'transparent' : block.bgColor}; color: ${block.textColor}; box-shadow: ${block.hasShadow !== false ? '0 5px 15px rgba(0,0,0,0.1)' : 'none'}; border: 2px dashed #ccc; padding: 20px;">${block.content}</div>
+                    <div class="row">
+                        <div class="col-6 text-start"><label class="fw-bold">Màu nền hộp (nếu không bật nền trong):</label><input type="color" id="swal-cb-bg" value="${block.bgColor}" class="form-control form-control-color w-100" onchange="toggleBoxTextStyles()"></div>
+                        <div class="col-6 text-start"><label class="fw-bold">Màu chữ chung (mặc định):</label><input type="color" id="swal-cb-text" value="${block.textColor}" class="form-control form-control-color w-100" onchange="document.getElementById('swal-cb-content').style.color = this.value"></div>
+                    </div>
+                `, 
+                showCancelButton: true, confirmButtonText: 'Lưu thay đổi', 
+                preConfirm: () => { return { ...block, content: document.getElementById('swal-cb-content').innerHTML, bgColor: document.getElementById('swal-cb-bg').value, textColor: document.getElementById('swal-cb-text').value, isTransparent: document.getElementById('swal-cb-transparent').checked, hasShadow: document.getElementById('swal-cb-shadow').checked } } 
+            }); 
+            if(vals) { cmsData.custom_blocks[index] = vals; await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); } 
+        };
+
+        window.cmsEdit = async (key, type, titleText) => { 
+            if(type === 'hero') { 
+                let images = cmsData.hero_images || [];
+                if(images.length === 0) {
+                    if(cmsData.hero_bg_1) images.push(cmsData.hero_bg_1);
+                    if(cmsData.hero_bg_2) images.push(cmsData.hero_bg_2);
+                    if(cmsData.hero_bg_3) images.push(cmsData.hero_bg_3);
+                }
+                if(images.length === 0) images = [""];
+
+                let htmlContent = `<div id="swal-hero-container">`;
+                images.forEach((img, i) => {
+                    htmlContent += `<div class="d-flex mb-2 input-group-hero align-items-center"><input class="swal2-input m-0 w-100 hero-img-input" placeholder="Link Ảnh" value="${img||''}"><button class="btn btn-danger ms-2 mt-0" style="height: 40px; border-radius: 5px;" onclick="this.parentElement.remove()"><i class="bi bi-trash"></i></button></div>`;
+                });
+                htmlContent += `</div><button class="btn btn-sm btn-success mt-2 fw-bold" onclick="addHeroInput()">+ Thêm Ảnh</button>`;
+
+                window.addHeroInput = () => {
+                    const container = document.getElementById('swal-hero-container');
+                    const div = document.createElement('div');
+                    div.className = 'd-flex mb-2 input-group-hero align-items-center';
+                    div.innerHTML = `<input class="swal2-input m-0 w-100 hero-img-input" placeholder="Link Ảnh mới"><button class="btn btn-danger ms-2 mt-0" style="height: 40px; border-radius: 5px;" onclick="this.parentElement.remove()"><i class="bi bi-trash"></i></button>`;
+                    container.appendChild(div);
+                };
+
+                const { value: fv } = await Swal.fire({
+                    title: titleText,
+                    html: htmlContent,
+                    showCancelButton: true,
+                    confirmButtonText: 'Lưu thay đổi',
+                    cancelButtonText: 'Hủy',
+                    preConfirm: () => {
+                        const inputs = document.querySelectorAll('.hero-img-input');
+                        return Array.from(inputs).map(input => input.value).filter(val => val.trim() !== '');
+                    }
+                });
+
+                if (fv) {
+                    let updateObj = { hero_images: fv };
+                    updateObj.hero_bg_1 = fv[0] || '';
+                    updateObj.hero_bg_2 = fv[1] || '';
+                    updateObj.hero_bg_3 = fv[2] || '';
+                    await update(ref(db, 'pageContent'), updateObj);
+                }
+            } else { 
+                let inputType = type === 'image' ? 'url' : (type === 'text' ? 'textarea' : 'color'); 
+                const { value: newVal } = await Swal.fire({ title: titleText, input: inputType, inputValue: cmsData[key] || '', showCancelButton: true }); 
+                if (newVal !== undefined && newVal !== cmsData[key]) { let obj = {}; obj[key] = newVal; await update(ref(db, 'pageContent'), obj); } 
+            } 
+        };
+        
+        window.cmsEditFooter = async () => { 
+            let f = cmsData.footer_data || {}; 
+            const { value: vals } = await Swal.fire({ title: 'Tùy Chỉnh Nội Dung Footer', html: `<div class="text-start" style="max-height: 60vh; overflow-y: auto; overflow-x: hidden; padding-right: 10px;"> <label class="fw-bold mt-2">Logo Footer (Link HOẶC Tải ảnh từ máy):</label> <input id="swal-f-logo" class="swal2-input mt-0 mb-2 w-100" placeholder="Link ảnh..." value="${f.logo||''}"> <input type="file" class="form-control mb-3" accept="image/*" onchange="encodeImageFileAsURL(this)"> <input type="hidden" id="swal-img-b64" value=""> <label class="fw-bold">Tên Công Ty (Viết Hoa):</label> <input id="swal-f-name" class="swal2-input mt-0 mb-3 w-100" value="${f.name||''}"> <label class="fw-bold">Giấy phép ĐKKD:</label> <input id="swal-f-license" class="swal2-input mt-0 mb-3 w-100" value="${f.license||''}"> <label class="fw-bold">Địa chỉ & SĐT:</label> <textarea id="swal-f-address" class="swal2-textarea mt-0 mb-3 w-100">${f.address||''}</textarea> <label class="fw-bold">Tên Chính sách bảo mật:</label> <input id="swal-f-privacy" class="swal2-input mt-0 mb-3 w-100" value="${f.privacy||''}"> <hr> <h5 class="fw-bold text-primary mt-3"><i class="bi bi-geo-alt-fill"></i> Tọa Độ Bản Đồ Vệ Tinh</h5> <div class="row g-2"> <div class="col-6"><label class="fw-bold small">Vĩ độ (Lat):</label><input id="swal-f-lat" class="form-control" value="${f.map_lat||''}"></div> <div class="col-6"><label class="fw-bold small">Kinh độ (Lng):</label><input id="swal-f-lng" class="form-control" value="${f.map_lng||''}"></div> <div class="col-6 mt-3"><label class="fw-bold small">Chiều ngang (Width):</label><input id="swal-f-w" class="form-control" value="${f.map_w||'100%'}"></div> <div class="col-6 mt-3"><label class="fw-bold small">Chiều dọc (Height):</label><input id="swal-f-h" class="form-control" value="${f.map_h||'150px'}"></div> </div> </div>`, showCancelButton: true, confirmButtonText: 'Lưu thay đổi', width: '700px', preConfirm: () => { let b64 = document.getElementById('swal-img-b64').value; let url = document.getElementById('swal-f-logo').value; return { logo: b64 ? b64 : url, name: document.getElementById('swal-f-name').value, license: document.getElementById('swal-f-license').value, address: document.getElementById('swal-f-address').value, privacy: document.getElementById('swal-f-privacy').value, map_lat: document.getElementById('swal-f-lat').value, map_lng: document.getElementById('swal-f-lng').value, map_w: document.getElementById('swal-f-w').value, map_h: document.getElementById('swal-f-h').value } } }); 
+            if (vals) { cmsData.footer_data = vals; await update(ref(db, 'pageContent'), { footer_data: vals }); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu Footer thành công!', showConfirmButton:false, timer:2000}); } 
+        };
+    </script>
+</body>
+</html>
