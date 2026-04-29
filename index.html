@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -22,23 +23,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        if ('scrollRestoration' in history) {
-            history.scrollRestoration = 'manual';
-        }
+        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
         window.scrollTo(0, 0);
-        window.addEventListener('beforeunload', function () {
-            window.scrollTo(0, 0);
-        });
+        window.addEventListener('beforeunload', function () { window.scrollTo(0, 0); });
     </script>
 
     <style>
         :root { --primary-color: #f15a3a; --dark-blue: #112255; --gradient-btn: linear-gradient(135deg, #ff7e5f, #feb47b); --gradient-btn-hover: linear-gradient(135deg, #feb47b, #ff7e5f); }
+        html { scroll-behavior: smooth; }
         body { font-family: 'Inter', Arial, Helvetica, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; overflow-x: hidden; }
 
         #page-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #f8fafc; z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
@@ -49,11 +45,26 @@
         @keyframes spinRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        .main-header { position: fixed; top: 0; left: 0; width: 100%; height: 80px; background-color: #ffffff; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); display: flex; align-items: center; padding: 0 5%; z-index: 1000; }
+        .main-header { position: fixed; top: 0; left: 0; width: 100%; height: 80px; background-color: #ffffff; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); display: flex; align-items: center; padding: 0 5%; z-index: 1000; justify-content: space-between; }
+        .header-left { display: flex; align-items: center; }
         .header-logo { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #007bff; object-fit: contain; background-color: #fff; margin-right: 15px; padding: 2px; }
-        .header-title { font-size: 22px; font-weight: 700; color: var(--dark-blue); margin: 0; text-transform: uppercase; }
-        .hero-section { position: relative; width: 100%; aspect-ratio: 1920 / 800; margin-top: 80px; background-size: 100% 100%; background-position: center; background-repeat: no-repeat; display: flex; align-items: center; justify-content: center; transition: background-image 0.8s ease-in-out; }
+        .header-title { font-size: 20px; font-weight: 800; color: var(--dark-blue); margin: 0; text-transform: uppercase; letter-spacing: -0.5px; }
         
+        /* CẬP NHẬT CSS HEADER MENU */
+        .header-nav a { text-decoration: none; color: var(--dark-blue); font-weight: 700; font-size: 15px; padding: 8px 18px; border-radius: 50px; transition: 0.3s; border: 2px solid transparent; margin-left: 5px; }
+        .header-nav a:hover { background: rgba(17, 34, 85, 0.05); color: var(--primary-color); border-color: var(--primary-color); }
+        .btn-phone-menu { background: var(--primary-color) !important; color: white !important; border-color: var(--primary-color) !important; box-shadow: 0 4px 10px rgba(241, 90, 58, 0.3); }
+        .btn-phone-menu:hover { background: #d94e30 !important; transform: translateY(-2px); }
+        .menu-toggle-btn { background: transparent; border: none; color: var(--dark-blue); padding: 0; transition: 0.3s; }
+        .menu-toggle-btn:focus { box-shadow: none; outline: none; }
+        .menu-toggle-btn:active { transform: scale(0.9); }
+        
+        /* CSS MOBILE MENU OFFCANVAS */
+        .mobile-menu-link { display: block; padding: 12px 20px; font-size: 16px; font-weight: 700; color: var(--dark-blue); text-decoration: none; background: #f8fafc; border-radius: 12px; transition: 0.3s; }
+        .mobile-menu-link:hover { background: #e2e8f0; color: var(--primary-color); }
+        .mobile-menu-link.phone-link { background: #fff5f5; color: #e31837; border: 1px solid #fecaca; }
+
+        .hero-section { position: relative; width: 100%; aspect-ratio: 1920 / 800; margin-top: 80px; background-size: 100% 100%; background-position: center; background-repeat: no-repeat; display: flex; align-items: center; justify-content: center; transition: background-image 0.8s ease-in-out; }
         .hero-indicators { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 5; }
         .indicator-bar { width: 40px; height: 6px; background-color: rgba(255, 255, 255, 0.4); cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .indicator-bar:hover { background-color: rgba(255, 255, 255, 0.8); }
@@ -81,6 +92,15 @@
         .section-heading { text-align: center; margin-bottom: 60px; }
         .section-heading h2 { color: var(--dark-blue); font-weight: 800; font-size: 38px; margin-bottom: 15px; }
         .section-heading p { font-size: 18px; color: #64748b; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+
+        /* CSS LLC NEWS COVERFLOW */
+        .news-section { background-color: #f8fafc; padding: 60px 0; }
+        .newsSwiper { width: 100%; padding-top: 20px; padding-bottom: 50px; }
+        .newsSwiper .swiper-slide { background-position: center; background-size: cover; width: 800px; height: auto; display: flex; flex-direction: column; align-items: center; filter: brightness(0.6); transition: 0.4s; }
+        .newsSwiper .swiper-slide-active { filter: brightness(1); }
+        .news-img-card { width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); object-fit: contain; background: #fff; }
+        .newsSwiper .swiper-pagination-bullet { width: 15px; height: 15px; background: #cbd5e1; opacity: 1; margin: 0 8px !important; }
+        .newsSwiper .swiper-pagination-bullet-active { background: var(--dark-blue); width: 40px; border-radius: 10px; }
         
         .course-card { background: #ffffff; border-radius: 20px; padding: 0 0 25px 0; height: 100%; width: 100%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); transition: all 0.4s ease; position: relative; overflow: hidden; display: flex; flex-direction: column; }
         .course-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
@@ -153,13 +173,18 @@
         .techSwiper .swiper-pagination-bullet-active { background: var(--primary-color); width: 45px; }
         .englishSwiper .swiper-pagination-bullet-active { background: #112255; width: 45px; }
 
-        @media (max-width: 768px) {
-            .main-header { height: 70px; } .header-logo { width: 50px; height: 50px; } .header-title { font-size: 18px; }
+        @media (max-width: 991px) {
+            .main-header { height: 70px; } .header-logo { width: 50px; height: 50px; } .header-title { font-size: 15px; }
+            .header-nav { display: none; }
             .custom-text-box h1, .custom-text-box h2, .custom-text-box h3, .section-heading h2 { font-size: 32px !important; line-height: 1.3 !important; }
-            .hero-section { flex-direction: column; justify-content: flex-start; min-height: auto; aspect-ratio: 16/9; background-size: cover; margin-top: 70px; }
             
-            .btn-fixed-register { position: relative; bottom: auto; right: auto; width: 100%; max-width: 280px; margin: 0 auto 30px auto; padding: 12px 15px; font-size: 14px; z-index: 10; }
-            .btn-fixed-register i { font-size: 16px; }
+            .hero-section { flex-direction: column; justify-content: flex-start; min-height: auto; aspect-ratio: 1920 / 800; background-size: 100% 100%; margin-top: 70px; }
+            
+            #p_about_title { font-size: 28px !important; }
+            .newsSwiper .swiper-slide { width: 320px; }
+            
+            .btn-fixed-register { display: none !important; }
+            
             .f-support-btn { padding: 10px 15px; font-size: 13px; }
             .f-support-btn i { font-size: 15px; }
             
@@ -205,6 +230,73 @@
             transform: translateY(0);
             opacity: 1;
         }
+
+        /* --- STYLE CHO FORM ĐĂNG KÝ FOOTER --- */
+        @keyframes tiltShaking {
+          0% { transform: rotate(-3deg); }
+          10% { transform: rotate(5deg); }
+          20% { transform: rotate(-8deg); }
+          30% { transform: rotate(2deg); }
+          40% { transform: rotate(-5deg); }
+          50% { transform: rotate(-3deg); }
+          100% { transform: rotate(-3deg); }
+        }
+
+        .advice-highlight-wrapper {
+            position: relative;
+            display: inline-block;
+            animation: tiltShaking 2s infinite;
+        }
+
+        .advice-highlight {
+            background-color: #e31837; 
+            color: white;
+            padding: 5px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 800;
+            position: relative;
+            z-index: 2;
+        }
+
+        .advice-sparkle {
+            position: absolute;
+            top: -20px;
+            right: -35px;
+            width: 50px;
+            height: 50px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .contact-footer-input {
+            padding: 12px 20px !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+            border: none !important;
+            border-radius: 50px !important;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .contact-footer-input:focus {
+            background: #fff !important;
+            box-shadow: 0 0 15px rgba(255,255,255,0.5) !important;
+        }
+
+        .btn-submit-dark {
+            background-color: #233066 !important;
+            color: white !important;
+            border-radius: 50px !important;
+            padding: 14px !important;
+            font-weight: 700;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-submit-dark:hover {
+            background-color: #112255 !important;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -216,13 +308,49 @@
         <div class="loader-text">ĐANG TẢI DỮ LIỆU...</div>
     </div>
 
+    <!-- HEADER MENU & OFFCANVAS -->
     <header class="main-header" id="wrap_header">
-        <img id="cms_logo" src="https://media.leloipt.edu.vn/Media/30_TH1041/Images/footer-logo-leloi83f2a8da-5-e.png" alt="Logo" class="header-logo">
-        <h1 id="cms_site_title" class="header-title">Đang tải...</h1>
+        <div class="header-left">
+            <img id="cms_logo" src="https://media.leloipt.edu.vn/Media/30_TH1041/Images/footer-logo-leloi83f2a8da-5-e.png" alt="Logo" class="header-logo">
+            <h1 id="cms_site_title" class="header-title">Đang tải...</h1>
+        </div>
+        
+        <!-- Navbar Desktop -->
+        <nav class="header-nav d-none d-lg-flex" id="desktop_nav">
+            <!-- Render từ Firebase -->
+        </nav>
+        
+        <!-- Nút Hamburger Mobile -->
+        <button class="menu-toggle-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+            <i class="bi bi-list" style="font-size: 32px;"></i>
+        </button>
     </header>
+
+    <!-- Offcanvas Mobile Menu -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileMenu" style="width: 300px;">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold text-primary" id="mobileMenuLabel"><i class="bi bi-grid-fill"></i> DANH MỤC</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-flex flex-column gap-2" id="mobile_nav_render">
+            <!-- Render từ Firebase -->
+        </div>
+    </div>
 
     <section class="hero-section" id="wrap_hero" data-aos="fade-in" data-aos-duration="1000">
         <div class="hero-indicators" id="hero-indicators"></div>
+    </section>
+
+    <section id="wrap_news" class="news-section" data-aos="fade-up" style="display: none;">
+        <div class="container-fluid">
+            <div class="section-heading mb-4">
+                <h2 id="cms_news_title" style="color: #112255; font-weight: 800; font-size: 42px;">LLC NEWS</h2>
+            </div>
+            <div class="swiper newsSwiper">
+                <div class="swiper-wrapper" id="news_render"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
     </section>
 
     <section class="content-section">
@@ -232,6 +360,18 @@
             </button>
 
             <button id="backToTopBtn" title="Lên đầu trang"><i class="bi bi-arrow-up-short"></i></button>
+
+            <div id="wrap_about" class="mb-5 pt-5" data-aos="fade-up" style="display: none;">
+                <div class="row align-items-center p-4 p-md-5" id="cms_about_bg" style="border-radius: 20px;">
+                    <div class="col-md-5 text-center mb-4 mb-md-0">
+                        <img id="p_about_img" src="" class="w-100 rounded-4 shadow" style="object-fit: cover; max-height: 450px; aspect-ratio: 16/10;">
+                    </div>
+                    <div class="col-md-7 text-start ps-md-5">
+                        <h2 id="p_about_title" class="fw-bold mb-4" style="font-size: 36px; line-height: 1.3;">Đang tải...</h2>
+                        <div id="p_about_desc" style="font-size: 17px; line-height: 1.8;">Đang tải...</div>
+                    </div>
+                </div>
+            </div>
 
             <div id="wrap_activity" class="mb-5" data-aos="fade-up" style="display: none;">
                 <div class="section-heading mb-4">
@@ -293,6 +433,78 @@
         </div>
     </section>
 
+    <!-- FORM LIÊN HỆ DƯỚI CÙNG (FOOTER FORM) -->
+    <section id="wrap_contact_form" class="content-section" style="background-color: #f8fafc; border-top: 1px solid #e0e5ec;" data-aos="fade-up">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-uppercase" style="color: #112255;">
+                    ĐĂNG KÝ NHẬN 
+                    <span class="advice-highlight-wrapper">
+                        <span class="advice-highlight">TƯ VẤN NGAY</span>
+                        <svg class="advice-sparkle" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 10 30 L 25 35 L 20 10 L 35 30 L 55 15 L 45 40 L 60 50" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                        </svg>
+                    </span>
+                </h2>
+                <p class="text-muted">Vui lòng để lại thông tin phía dưới để được tư vấn miễn phí</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <div class="p-4 p-md-5" style="background-color: #4dc4e6; border-radius: 20px;">
+                        <form id="form_footer">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <input type="text" id="f_name" class="form-control contact-footer-input" placeholder="Họ Và Tên *" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="tel" id="f_phone" class="form-control contact-footer-input" placeholder="Điện thoại *" pattern="0[0-9]{9}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="f_study" class="form-select contact-footer-input" required>
+                                        <option value="" disabled selected>Hình thức học</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="email" id="f_email" class="form-control contact-footer-input" placeholder="Địa chỉ email">
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="f_city" class="form-select contact-footer-input" required>
+                                        <option value="" disabled selected>Tỉnh/ Thành phố *</option>
+                                    </select>
+                                </div>
+                                <!-- TRƯỜNG ĐỘ TUỔI THÊM VÀO ĐÚNG THEO YÊU CẦU -->
+                                <div class="col-md-6">
+                                    <select id="f_course" class="form-select contact-footer-input" required>
+                                        <option value="" disabled selected>Khóa học đăng ký *</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <select id="f_age" class="form-select contact-footer-input" required>
+                                        <option value="" disabled selected>Độ tuổi *</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 mt-4">
+                                    <button type="submit" class="btn btn-submit-dark w-100 text-uppercase">TƯ VẤN NGAY</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="p-4 h-100 d-flex flex-column justify-content-center gap-3" style="background-color: #4dc4e6; border-radius: 20px;">
+                        <a href="#" id="link_messenger" target="_blank" class="btn text-white fw-bold rounded-pill d-flex justify-content-between align-items-center" style="background-color: #2b3a70; padding: 15px 25px; text-decoration: none;">
+                            <span>NHẮN TIN NHANH</span> <i class="bi bi-messenger fs-4"></i>
+                        </a>
+                        <a href="tel:02873083333" id="link_phone" class="btn text-white fw-bold rounded-pill d-flex justify-content-between align-items-center" style="background-color: #e31837; padding: 15px 25px; text-decoration: none;">
+                            <span id="display_phone">028 7308 3333 (Phím 0)</span> <i class="bi bi-telephone-fill fs-4"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer class="main-footer" id="wrap_footer" data-aos="fade-up">
         <div class="footer-container">
             <div class="footer-left">
@@ -308,24 +520,35 @@
                 </div>
                 
                 <a href="https://www.facebook.com/profile.php?id=61585530223166" target="_blank" class="f-support-btn">
-                    <i class="bi bi-chat-dots"></i> Tư Vấn Qua facebook
+                    <i class="bi bi-chat-dots"></i> TƯ VẤN QUA FACEBOOK
                 </a>
 
             </div>
         </div>
     </footer>
 
+    <!-- MODAL POPUP FORM -->
     <div class="modal fade" id="registrationModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content custom-reg-modal">
                 <div class="modal-header border-0 pb-0"><button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button></div>
                 <div class="modal-body px-4 pb-4 pt-0">
                     <h4 class="text-uppercase mb-4 text-center fw-bold">Đăng ký thông tin</h4>
-                    <form id="form1">
-                        <div class="form-floating mb-3"><input type="text" class="form-control" id="parent_name" placeholder="Họ và Tên" required><label>Họ và Tên Phụ huynh</label></div>
-                        <div class="form-floating mb-3"><input type="tel" class="form-control" id="parent_phone" placeholder="SĐT" pattern="0[0-9]{9}" required><label>Số điện thoại</label></div>
-                        <div class="form-floating mb-3"><select class="form-select" id="program_code" required><option value="" disabled selected>Đang tải dữ liệu...</option></select><label>Độ tuổi</label></div>
-                        <div class="form-floating mb-3"><select class="form-select" id="course_code" required><option value="" disabled selected>Vui lòng chọn khóa học</option></select><label>Khóa học đăng ký</label></div>
+                    <form id="form_popup">
+                        <div class="form-floating mb-3"><input type="text" class="form-control" id="p_name" placeholder="Họ và Tên" required><label>Họ và Tên *</label></div>
+                        <div class="form-floating mb-3"><input type="tel" class="form-control" id="p_phone" placeholder="SĐT" pattern="0[0-9]{9}" required><label>Số điện thoại *</label></div>
+                        <div class="form-floating mb-3"><input type="email" class="form-control" id="p_email" placeholder="Email"><label>Địa chỉ Email</label></div>
+                        
+                        <div class="row g-2">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating"><select class="form-select" id="p_city" required><option value="" disabled selected>Chọn Tỉnh/Thành</option></select><label>Tỉnh/ Thành phố *</label></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-floating"><select class="form-select" id="p_age" required><option value="" disabled selected>Chọn độ tuổi</option></select><label>Độ tuổi *</label></div>
+                            </div>
+                        </div>
+
+                        <div class="form-floating mb-3"><select class="form-select" id="p_course" required><option value="" disabled selected>Khóa học đăng ký</option></select><label>Khóa học đăng ký *</label></div>
                         <div class="form-check mb-4 mt-2"><input class="form-check-input" type="checkbox" id="allow" checked required><label class="form-check-label">Tôi đồng ý nhận tư vấn chi tiết.</label></div>
                         <button type="submit" class="btn btn-submit text-uppercase">ĐĂNG KÝ THAM GIA</button>
                     </form>
@@ -334,6 +557,7 @@
         </div>
     </div>
 
+    <!-- MODAL HIỂN THỊ CHI TIẾT KHÓA HỌC -->
     <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
@@ -366,14 +590,11 @@
         
         window.showDetailModal = (encodedContent) => {
             const modalBody = document.getElementById('detailModalBody');
-            
             modalBody.style.opacity = '0';
             modalBody.style.transform = 'translateY(15px)';
             modalBody.innerHTML = decodeURIComponent(encodedContent);
-            
             let detailModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('detailModal'));
             detailModal.show();
-
             setTimeout(() => {
                 modalBody.style.transition = 'all 0.4s ease';
                 modalBody.style.opacity = '1';
@@ -399,169 +620,309 @@
             if(snapshot.exists()){
                 const data = snapshot.val();
                 
-                if (data.form_config) {
-                    const ageSelect = document.getElementById('program_code'); const courseSelect = document.getElementById('course_code');
-                    if (data.form_config.ages && ageSelect) { let ageHtml = '<option value="" disabled selected>Chọn độ tuổi của bé</option>'; data.form_config.ages.forEach(age => { ageHtml += `<option value="${age}">${age}</option>`; }); ageSelect.innerHTML = ageHtml; }
-                    if (data.form_config.courses && courseSelect) { let courseHtml = '<option value="" disabled selected>Vui lòng chọn khóa học</option>'; data.form_config.courses.forEach(course => { courseHtml += `<option value="${course}">${course}</option>`; }); courseSelect.innerHTML = courseHtml; }
-                }
-
-                if (data.visibility) {
-                    const applyVis = (elId, key) => { const el = document.getElementById(elId); if (el) el.style.display = data.visibility[key] ? '' : 'none'; };
-                    applyVis('wrap_header', 'header'); applyVis('wrap_hero', 'header'); applyVis('wrap_activity', 'activity'); 
-                    applyVis('wrap_intro', 'intro'); applyVis('wrap_global_tech', 'global_tech'); applyVis('wrap_global_english', 'global_english'); 
-                    applyVis('wrap_global_teacher', 'global_teacher'); applyVis('wrap_footer', 'footer');
-                }
-                
-                let fetchedBgs = [];
-                if(data.hero_bg_1 && data.hero_bg_1.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_1}')`);
-                if(data.hero_bg_2 && data.hero_bg_2.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_2}')`);
-                if(data.hero_bg_3 && data.hero_bg_3.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_3}')`);
-
-                if(fetchedBgs.length === 0) {
-                    heroSection.style.display = 'none'; 
-                } else {
-                    heroSection.style.display = 'flex'; 
-                    backgroundImages = fetchedBgs;
-                    currentIndex = 0;
-                    heroSection.style.backgroundImage = backgroundImages[currentIndex];
-                    updateIndicators();
-                }
-                
-                const updateHTML = (id, value) => { if(value && document.getElementById(id)) document.getElementById(id).innerHTML = value; };
-                const updateIMG = (id, value) => { if(value && document.getElementById(id)) document.getElementById(id).src = value; };
-
-                updateIMG('cms_logo', data.logo); updateIMG('loader_img', data.logo);
-                updateHTML('cms_site_title', data.site_title); updateHTML('cms_sec1_title', data.sec1_title); updateHTML('cms_sec1_desc', data.sec1_desc);
-
-                if(data.activity_data && document.getElementById('activity_render')) {
-                    document.getElementById('cms_activity_title').innerText = data.activity_data.title || "HÌNH ẢNH HOẠT ĐỘNG";
-                    let actHTML = '';
-                    if(data.activity_data.slides) {
-                        data.activity_data.slides.forEach(s => { actHTML += `<div class="swiper-slide"><div class="w-100"><img src="${s.img}" class="activity-slide-img"><p class="activity-slide-text">${s.text}</p></div></div>`; });
-                    }
-                    document.getElementById('activity_render').innerHTML = actHTML;
-                }
-
-                const techContainer = document.getElementById('tech_cards_container');
-                if(data.tech_cards && techContainer) {
-                    techContainer.innerHTML = '';
-                    data.tech_cards.forEach((card, index) => { 
-                        let btnDetail = card.has_detail ? `<div class="px-4 pb-3 mt-auto"><button type="button" class="btn w-100 btn-detail" style="background-color: ${card.detail_bg||'#f15a3a'}; color: ${card.detail_color||'#ffffff'}; font-size: ${card.detail_size||'14'}px; font-family: ${card.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(card.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${card.detail_text||'Xem chi tiết'}</button></div>` : '';
-                        techContainer.innerHTML += `<div class="swiper-slide"><div class="course-card"><div style="background-color: ${card.color}; height: 5px; width: 100%; position: absolute; top: 0; left: 0; z-index: 10;"></div><img src="${card.img}" class="course-card-img"><div class="icon-box" style="color: ${card.color}; border: 2px solid ${card.color}30;"><i class="bi ${card.icon}"></i></div><h3 class="course-title">${card.title}</h3><p class="course-desc">${card.desc}</p>${btnDetail}</div></div>`; 
-                    });
-                }
-
-                const englishContainer = document.getElementById('english_cards_container'); const englishSection = document.getElementById('wrap_global_english');
-                if(data.english_bg_color && englishSection) englishSection.style.backgroundColor = data.english_bg_color;
-                if(data.english_cards && englishContainer) {
-                    englishContainer.innerHTML = '';
-                    data.english_cards.forEach((card, index) => { 
-                        let btnDetail = card.has_detail ? `<button type="button" class="btn w-100 mt-2 btn-detail" style="background-color: ${card.detail_bg||'#112255'}; color: ${card.detail_color||'#ffffff'}; font-size: ${card.detail_size||'14'}px; font-family: ${card.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(card.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${card.detail_text||'Xem chi tiết'}</button>` : '';
-                        englishContainer.innerHTML += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${card.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${card.text_color || '#112255'};">${card.title}</h3><div class="ep-age-badge" style="background-color: ${card.text_color || '#112255'};"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${card.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${card.img}" class="ep-img"><p class="ep-desc" style="color: ${card.text_color || '#475569'};">${card.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: ${card.text_color || '#112255'}; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: ${card.text_color || '#112255'}; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
-                    });
-                }
-
-                if(data.teacher_config && document.getElementById('cms_teacher_title')) {
-                    const tc = data.teacher_config; document.getElementById('cms_teacher_title').innerHTML = `<i class="bi ${tc.icon}"></i> ${tc.title}`; document.getElementById('cms_teacher_title').style.color = tc.color;
-                }
-                if(data.teacher_cards && document.getElementById('global_teacher_render')) {
-                    let tHTML = '';
-                    data.teacher_cards.forEach((c) => {
-                        let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience}</span><small>năm<br>kinh nghiệm</small></div>`;
-                        tHTML += `<div class="swiper-slide"><div class="teacher-card" style="border-color: ${c.bgColor||'#00d5ff'} !important;">${badgeHTML}<img src="${c.img}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name}</h4></div></div></div>`;
-                    });
-                    document.getElementById('global_teacher_render').innerHTML = tHTML;
-                }
-
-                let renderTop = '', renderMid1 = '', renderMid2 = '', renderBottom = '';
-                if (data.custom_blocks) {
-                    data.custom_blocks.forEach((block, bIndex) => {
-                        if (block.isHidden) return;
-                        let dbHTML = '';
-                        if (block.type === 'text' || !block.type) { 
-                            let bgStyle = block.isTransparent ? 'transparent' : (block.bgColor || '#e0f2fe'); let shadowStyle = block.hasShadow === false ? 'none' : '0 5px 15px rgba(0,0,0,0.05)'; let padStyle = (block.isTransparent && block.hasShadow === false) ? '15px 0' : '30px';
-                            dbHTML = `<div class="custom-text-box" data-aos="fade-up" style="background-color: ${bgStyle}; color: ${block.textColor}; padding: ${padStyle}; border-radius: 20px; box-shadow: ${shadowStyle}; margin-bottom: 30px;">${block.content}</div>`; 
-                        } 
-                        else if (block.type === 'tech') { 
-                            let innerCards = ''; 
-                            if(block.cards) { 
-                                block.cards.forEach((c, i) => { 
-                                    let btnDetail = c.has_detail ? `<div class="px-4 pb-4 mt-auto"><button type="button" class="btn w-100 btn-detail" style="background-color: ${c.detail_bg||'#f15a3a'}; color: ${c.detail_color||'#ffffff'}; font-size: ${c.detail_size||'14'}px; font-family: ${c.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(c.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${c.detail_text||'Xem chi tiết'}</button></div>` : '';
-                                    innerCards += `<div class="swiper-slide"><div class="course-card"><div style="background-color: ${c.color}; height: 5px; width: 100%; position: absolute; top: 0; left: 0; z-index: 10;"></div><img src="${c.img}" class="course-card-img"><div class="icon-box" style="color: ${c.color}; border: 2px solid ${c.color}30;"><i class="bi ${c.icon}"></i></div><h3 class="course-title">${c.title}</h3><p class="course-desc">${c.desc}</p>${btnDetail}</div></div>`; 
-                                }); 
-                            } 
-                            let bColor = block.color || '#f15a3a'; let bIcon = block.icon || 'bi-card-checklist';
-                            dbHTML = `<div data-aos="fade-up" class="mb-5"><div class="section-heading mb-4" style="text-align: left;"><h2 style="color: ${bColor}; font-size: 32px;"><i class="bi ${bIcon}"></i> ${block.title || 'Khối Thông Tin 1'}</h2></div><div class="swiper customTechSwiper-${bIndex} techSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div>`; 
-                        }
-                        else if (block.type === 'english') { 
-                            let innerCards = ''; 
-                            if(block.cards) { 
-                                block.cards.forEach((c, i) => { 
-                                    let btnDetail = c.has_detail ? `<button type="button" class="btn w-100 mt-2 btn-detail" style="background-color: ${c.detail_bg||'#112255'}; color: ${c.detail_color||'#ffffff'}; font-size: ${c.detail_size||'14'}px; font-family: ${c.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(c.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${c.detail_text||'Xem chi tiết'}</button>` : '';
-                                    innerCards += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${c.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${c.text_color || '#112255'};">${c.title}</h3><div class="ep-age-badge" style="background-color: ${c.text_color || '#112255'};"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${c.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${c.img}" class="ep-img"><p class="ep-desc" style="color: ${c.text_color || '#475569'};">${c.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: ${c.text_color || '#112255'}; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: ${c.text_color || '#112255'}; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
-                                }); 
-                            } 
-                            let bColor = block.color || '#112255'; let bIcon = block.icon || 'bi-book'; let bBg = block.bgColor || '#00d5ff';
-                            dbHTML = `<div class="english-programs-section mb-5" style="background-color: ${bBg};" data-aos="fade-up"><div class="section-heading mb-4" style="margin-bottom: 30px; text-align: left; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px;"><h2 style="color: ${bColor}; font-size: 32px; margin-bottom: 0;"><i class="bi ${bIcon}"></i> ${block.title || 'Khối Thông Tin 2'}</h2></div><div class="swiper customEnglishSwiper-${bIndex} englishSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div>`; 
-                        }
-                        else if (block.type === 'teacher') {
-                            let tbColor = block.color || '#00d5ff'; let tbIcon = block.icon || 'bi-person-video3';
-                            let innerCards = ''; 
-                            if(block.cards) { 
-                                block.cards.forEach((c) => { 
-                                    let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience}</span><small>năm<br>kinh nghiệm</small></div>`; 
-                                    innerCards += `<div class="swiper-slide"><div class="teacher-card" style="border-color: ${c.bgColor||'#00d5ff'} !important;">${badgeHTML}<img src="${c.img}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name}</h4></div></div></div>`; 
-                                }); 
+                try {
+                    // --- CẤU HÌNH MENU HEADER ---
+                    if (data.header_menu) {
+                        let dNav = '';
+                        let mNav = '';
+                        data.header_menu.forEach(m => {
+                            if (m.type === 'phone') {
+                                let phoneNum = m.value.replace(/[^0-9]/g, '');
+                                dNav += `<a href="tel:${phoneNum}" class="btn-phone-menu"><i class="bi bi-telephone-fill"></i> ${m.name}</a>`;
+                                mNav += `<a href="tel:${phoneNum}" class="mobile-menu-link phone-link"><i class="bi bi-telephone-fill"></i> ${m.name}</a>`;
+                            } else {
+                                dNav += `<a href="${m.value}">${m.name}</a>`;
+                                mNav += `<a href="${m.value}" class="mobile-menu-link" onclick="bootstrap.Offcanvas.getInstance(document.getElementById('mobileMenu')).hide();">${m.name}</a>`;
                             }
-                            dbHTML = `<div class="mb-5" data-aos="fade-up"><div class="section-heading mb-4"><h2 style="color:${tbColor}; font-size: 32px;"><i class="bi ${tbIcon}"></i> ${block.title||'Đội Ngũ Giảng Viên'}</h2></div><div class="swiper customTeacherSwiper-${bIndex} teacherSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div>`;
+                        });
+                        if(document.getElementById('desktop_nav')) document.getElementById('desktop_nav').innerHTML = dNav;
+                        if(document.getElementById('mobile_nav_render')) document.getElementById('mobile_nav_render').innerHTML = mNav;
+                    }
+
+                    // --- CẤU HÌNH CÁC TÙY CHỌN TRONG FORM ---
+                    if (data.form_config) {
+                        const config = data.form_config;
+                        const renderOptions = (elId, list, defaultText) => {
+                            const el = document.getElementById(elId);
+                            if (!el) return;
+                            let html = `<option value="" disabled selected>${defaultText}</option>`;
+                            (list || []).forEach(item => { html += `<option value="${item}"> ${item}</option>`; });
+                            el.innerHTML = html;
+                        };
+
+                        // Đổ cho Popup
+                        renderOptions('p_age', config.ages, "Chọn độ tuổi");
+                        renderOptions('p_course', config.courses, "Khóa học đăng ký");
+                        renderOptions('p_city', config.cities, "Tỉnh/ Thành phố");
+
+                        // Đổ cho Footer Form
+                        renderOptions('f_study', config.studyModes, "Hình thức học");
+                        renderOptions('f_city', config.cities, "Tỉnh/ Thành phố");
+                        renderOptions('f_age', config.ages, "Độ tuổi *"); // Đã thêm Độ Tuổi
+                        renderOptions('f_course', config.courses, "Khóa học đăng ký *");
+                    }
+
+                    // CẬP NHẬT THÔNG TIN LIÊN HỆ TRONG KHỐI FOOTER FORM
+                    if (data.contact_data) {
+                        if(document.getElementById('display_phone')) document.getElementById('display_phone').innerText = data.contact_data.phone;
+                        if(document.getElementById('link_messenger')) document.getElementById('link_messenger').href = data.contact_data.messenger;
+                        if(document.getElementById('link_phone')) {
+                            let rawPhone = data.contact_data.phone.replace(/[^0-9]/g, '');
+                            document.getElementById('link_phone').href = "tel:" + rawPhone;
                         }
+                    }
 
-                        if(block.pos === 'pos-top') renderTop += dbHTML;
-                        else if(block.pos === 'pos-mid1') renderMid1 += dbHTML;
-                        else if(block.pos === 'pos-mid2') renderMid2 += dbHTML;
-                        else renderBottom += dbHTML;
-                    });
-                }
-                document.getElementById('render_pos_top').innerHTML = renderTop;
-                document.getElementById('render_pos_mid1').innerHTML = renderMid1;
-                document.getElementById('render_pos_mid2').innerHTML = renderMid2;
-                document.getElementById('render_pos_bottom').innerHTML = renderBottom;
-
-                if(data.footer_data) { 
-                    updateIMG('f_logo', data.footer_data.logo); updateHTML('f_name', data.footer_data.name); updateHTML('f_license', data.footer_data.license); updateHTML('f_address', data.footer_data.address); updateHTML('f_privacy', data.footer_data.privacy); 
-                    const mapEl = document.getElementById('f_map'); 
-                    if(mapEl && data.footer_data.map_lat && data.footer_data.map_lng) { mapEl.src = `https://maps.google.com/maps?q=${data.footer_data.map_lat},${data.footer_data.map_lng}&t=k&z=16&output=embed`; mapEl.style.width = data.footer_data.map_w || '100%'; mapEl.style.height = data.footer_data.map_h || '150px'; } 
-                }
-
-                setTimeout(() => { 
-                    if (window.activitySwiperInstance) window.activitySwiperInstance.destroy(true, true);
-                    window.activitySwiperInstance = new Swiper('.activitySwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 2000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } });
+                    // ẨN / HIỆN CÁC KHỐI
+                    if (data.visibility) {
+                        const applyVis = (elId, key) => { const el = document.getElementById(elId); if (el) el.style.display = data.visibility[key] ? '' : 'none'; };
+                        applyVis('wrap_header', 'header'); applyVis('wrap_hero', 'header'); 
+                        applyVis('wrap_news', 'news'); 
+                        applyVis('wrap_about', 'about'); 
+                        applyVis('wrap_activity', 'activity'); 
+                        applyVis('wrap_intro', 'intro'); applyVis('wrap_global_tech', 'global_tech'); applyVis('wrap_global_english', 'global_english'); 
+                        applyVis('wrap_global_teacher', 'global_teacher'); 
+                        applyVis('wrap_contact_form', 'contact_form'); 
+                        applyVis('wrap_footer', 'footer');
+                    }
                     
-                    if (window.globalTeacherSwiperInstance) window.globalTeacherSwiperInstance.destroy(true, true);
-                    window.globalTeacherSwiperInstance = new Swiper('.globalTeacherSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } });
+                    // SLIDE ẢNH BÌA
+                    let fetchedBgs = [];
+                    if(data.hero_bg_1 && data.hero_bg_1.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_1}')`);
+                    if(data.hero_bg_2 && data.hero_bg_2.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_2}')`);
+                    if(data.hero_bg_3 && data.hero_bg_3.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_3}')`);
 
-                    if (window.globalTechSwiperInstance) window.globalTechSwiperInstance.destroy(true, true);
-                    window.globalTechSwiperInstance = new Swiper('.globalTechSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3500, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+                    if(fetchedBgs.length === 0) {
+                        heroSection.style.display = 'none'; 
+                    } else {
+                        heroSection.style.display = 'flex'; 
+                        backgroundImages = fetchedBgs;
+                        currentIndex = 0;
+                        heroSection.style.backgroundImage = backgroundImages[currentIndex];
+                        updateIndicators();
+                    }
+                    
+                    const updateHTML = (id, value) => { if(value && document.getElementById(id)) document.getElementById(id).innerHTML = value; };
+                    const updateIMG = (id, value) => { if(value && document.getElementById(id)) document.getElementById(id).src = value; };
 
-                    if (window.globalEnglishSwiperInstance) window.globalEnglishSwiperInstance.destroy(true, true);
-                    window.globalEnglishSwiperInstance = new Swiper('.globalEnglishSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 4000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+                    // THÔNG TIN CHUNG
+                    updateIMG('cms_logo', data.logo); updateIMG('loader_img', data.logo);
+                    updateHTML('cms_site_title', data.site_title); updateHTML('cms_sec1_title', data.sec1_title); updateHTML('cms_sec1_desc', data.sec1_desc);
 
-                    if (data.custom_blocks) {
-                        data.custom_blocks.forEach((block, bIndex) => {
-                            if(block.type === 'teacher') {
-                                if(window[`customTeacherSwiper_${bIndex}`]) window[`customTeacherSwiper_${bIndex}`].destroy(true, true);
-                                window[`customTeacherSwiper_${bIndex}`] = new Swiper(`.customTeacherSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } });
-                            } else if (block.type === 'tech') {
-                                if(window[`customTechSwiper_${bIndex}`]) window[`customTechSwiper_${bIndex}`].destroy(true, true);
-                                window[`customTechSwiper_${bIndex}`] = new Swiper(`.customTechSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3500, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
-                            } else if (block.type === 'english') {
-                                if(window[`customEnglishSwiper_${bIndex}`]) window[`customEnglishSwiper_${bIndex}`].destroy(true, true);
-                                window[`customEnglishSwiper_${bIndex}`] = new Swiper(`.customEnglishSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 4000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+                    // KHỐI LLC NEWS (KHỐI MẶC ĐỊNH)
+                    if (data.news_data && document.getElementById('news_render')) {
+                        document.getElementById('cms_news_title').innerText = data.news_data.title || "LLC NEWS";
+                        let nHTML = '';
+                        if (data.news_data.slides) {
+                            data.news_data.slides.forEach(s => { 
+                                if(s) nHTML += `<div class="swiper-slide"><img src="${s.img || ''}" class="news-img-card" alt="News Image"></div>`; 
+                            });
+                        }
+                        document.getElementById('news_render').innerHTML = nHTML;
+                    }
+
+                    // KHỐI GIỚI THIỆU
+                    if (data.about_data && document.getElementById('wrap_about')) {
+                        updateIMG('p_about_img', data.about_data.img);
+                        updateHTML('p_about_title', data.about_data.title);
+                        updateHTML('p_about_desc', data.about_data.desc);
+                        const abTitle = document.getElementById('p_about_title'); if (abTitle) abTitle.style.color = data.about_data.titleColor || '#112255';
+                        const abDesc = document.getElementById('p_about_desc'); if (abDesc) abDesc.style.color = data.about_data.descColor || '#475569';
+                        const abBg = document.getElementById('cms_about_bg'); if (abBg) abBg.style.backgroundColor = data.about_data.bgColor || 'transparent';
+                    }
+
+                    // KHỐI HÌNH ẢNH HOẠT ĐỘNG
+                    if(data.activity_data && document.getElementById('activity_render')) {
+                        document.getElementById('cms_activity_title').innerText = data.activity_data.title || "HÌNH ẢNH HOẠT ĐỘNG";
+                        let actHTML = '';
+                        if(data.activity_data.slides) {
+                            data.activity_data.slides.forEach(s => { 
+                                if(s) actHTML += `<div class="swiper-slide"><div class="w-100"><img src="${s.img || ''}" class="activity-slide-img"><p class="activity-slide-text">${s.text || ''}</p></div></div>`; 
+                            });
+                        }
+                        document.getElementById('activity_render').innerHTML = actHTML;
+                    }
+
+                    // KHỐI THÔNG TIN 1 (TECH)
+                    const techContainer = document.getElementById('tech_cards_container');
+                    if(data.tech_cards && techContainer) {
+                        techContainer.innerHTML = '';
+                        data.tech_cards.forEach((card, index) => { 
+                            if(card) {
+                                let btnDetail = card.has_detail ? `<div class="px-4 pb-3 mt-auto"><button type="button" class="btn w-100 btn-detail" style="background-color: ${card.detail_bg||'#f15a3a'}; color: ${card.detail_color||'#ffffff'}; font-size: ${card.detail_size||'14'}px; font-family: ${card.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(card.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${card.detail_text||'Xem chi tiết'}</button></div>` : '';
+                                techContainer.innerHTML += `<div class="swiper-slide"><div class="course-card"><div style="background-color: ${card.color}; height: 5px; width: 100%; position: absolute; top: 0; left: 0; z-index: 10;"></div><img src="${card.img}" class="course-card-img"><div class="icon-box" style="color: ${card.color}; border: 2px solid ${card.color}30;"><i class="bi ${card.icon}"></i></div><h3 class="course-title">${card.title}</h3><p class="course-desc">${card.desc}</p>${btnDetail}</div></div>`; 
                             }
                         });
                     }
-                    AOS.refresh(); 
-                }, 300);
+
+                    // KHỐI THÔNG TIN 2 (ENGLISH)
+                    const englishContainer = document.getElementById('english_cards_container'); const englishSection = document.getElementById('wrap_global_english');
+                    if(data.english_bg_color && englishSection) englishSection.style.backgroundColor = data.english_bg_color;
+                    if(data.english_cards && englishContainer) {
+                        englishContainer.innerHTML = '';
+                        data.english_cards.forEach((card, index) => { 
+                            if(card) {
+                                let btnDetail = card.has_detail ? `<button type="button" class="btn w-100 mt-2 btn-detail" style="background-color: ${card.detail_bg||'#112255'}; color: ${card.detail_color||'#ffffff'}; font-size: ${card.detail_size||'14'}px; font-family: ${card.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(card.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${card.detail_text||'Xem chi tiết'}</button>` : '';
+                                englishContainer.innerHTML += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${card.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${card.text_color || '#112255'};">${card.title}</h3><div class="ep-age-badge" style="background-color: ${card.text_color || '#112255'};"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${card.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${card.img}" class="ep-img"><p class="ep-desc" style="color: ${card.text_color || '#475569'};">${card.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: ${card.text_color || '#112255'}; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: ${card.text_color || '#112255'}; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
+                            }
+                        });
+                    }
+
+                    // KHỐI GIÁO VIÊN
+                    if(data.teacher_config && document.getElementById('cms_teacher_title')) {
+                        const tc = data.teacher_config; document.getElementById('cms_teacher_title').innerHTML = `<i class="bi ${tc.icon}"></i> ${tc.title}`; document.getElementById('cms_teacher_title').style.color = tc.color;
+                    }
+                    if(data.teacher_cards && document.getElementById('global_teacher_render')) {
+                        let tHTML = '';
+                        data.teacher_cards.forEach((c) => {
+                            if(c) {
+                                let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience}</span><small>năm<br>kinh nghiệm</small></div>`;
+                                tHTML += `<div class="swiper-slide"><div class="teacher-card" style="border-color: ${c.bgColor||'#00d5ff'} !important;">${badgeHTML}<img src="${c.img}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name}</h4></div></div></div>`;
+                            }
+                        });
+                        document.getElementById('global_teacher_render').innerHTML = tHTML;
+                    }
+
+                    // RENDER CÁC KHỐI KÉO THẢ (CUSTOM BLOCKS BAO GỒM LLC NEWS)
+                    let renderTop = '', renderMid1 = '', renderMid2 = '', renderBottom = '';
+                    if (data.custom_blocks) {
+                        data.custom_blocks.forEach((block, bIndex) => {
+                            if (block && !block.isHidden) {
+                                let dbHTML = '';
+                                if (block.type === 'text' || !block.type) { 
+                                    let bgStyle = block.isTransparent ? 'transparent' : (block.bgColor || '#e0f2fe'); let shadowStyle = block.hasShadow === false ? 'none' : '0 5px 15px rgba(0,0,0,0.05)'; let padStyle = (block.isTransparent && block.hasShadow === false) ? '15px 0' : '30px';
+                                    dbHTML = `<div class="custom-text-box" data-aos="fade-up" style="background-color: ${bgStyle}; color: ${block.textColor}; padding: ${padStyle}; border-radius: 20px; box-shadow: ${shadowStyle}; margin-bottom: 30px;">${block.content}</div>`; 
+                                } 
+                                else if (block.type === 'tech') { 
+                                    let innerCards = ''; 
+                                    if(block.cards) { 
+                                        block.cards.forEach((c, i) => { 
+                                            if(c) {
+                                                let btnDetail = c.has_detail ? `<div class="px-4 pb-4 mt-auto"><button type="button" class="btn w-100 btn-detail" style="background-color: ${c.detail_bg||'#f15a3a'}; color: ${c.detail_color||'#ffffff'}; font-size: ${c.detail_size||'14'}px; font-family: ${c.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(c.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${c.detail_text||'Xem chi tiết'}</button></div>` : '';
+                                                innerCards += `<div class="swiper-slide"><div class="course-card"><div style="background-color: ${c.color}; height: 5px; width: 100%; position: absolute; top: 0; left: 0; z-index: 10;"></div><img src="${c.img}" class="course-card-img"><div class="icon-box" style="color: ${c.color}; border: 2px solid ${c.color}30;"><i class="bi ${c.icon}"></i></div><h3 class="course-title">${c.title}</h3><p class="course-desc">${c.desc}</p>${btnDetail}</div></div>`; 
+                                            }
+                                        }); 
+                                    } 
+                                    let bColor = block.color || '#f15a3a'; let bIcon = block.icon || 'bi-card-checklist';
+                                    dbHTML = `<div data-aos="fade-up" class="mb-5"><div class="section-heading mb-4" style="text-align: left;"><h2 style="color: ${bColor}; font-size: 32px;"><i class="bi ${bIcon}"></i> ${block.title || 'Khối Thông Tin 1'}</h2></div><div class="swiper customTechSwiper-${bIndex} techSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div>`; 
+                                }
+                                else if (block.type === 'english') { 
+                                    let innerCards = ''; 
+                                    if(block.cards) { 
+                                        block.cards.forEach((c, i) => { 
+                                            if(c) {
+                                                let btnDetail = c.has_detail ? `<button type="button" class="btn w-100 mt-2 btn-detail" style="background-color: ${c.detail_bg||'#112255'}; color: ${c.detail_color||'#ffffff'}; font-size: ${c.detail_size||'14'}px; font-family: ${c.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(c.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${c.detail_text||'Xem chi tiết'}</button>` : '';
+                                                innerCards += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${c.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${c.text_color || '#112255'};">${c.title}</h3><div class="ep-age-badge" style="background-color: ${c.text_color || '#112255'};"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${c.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${c.img}" class="ep-img"><p class="ep-desc" style="color: ${c.text_color || '#475569'};">${c.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: ${c.text_color || '#112255'}; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: ${c.text_color || '#112255'}; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
+                                            }
+                                        }); 
+                                    } 
+                                    let bColor = block.color || '#112255'; let bIcon = block.icon || 'bi-book'; let bBg = block.bgColor || '#00d5ff';
+                                    dbHTML = `<div class="english-programs-section mb-5" style="background-color: ${bBg};" data-aos="fade-up"><div class="section-heading mb-4" style="margin-bottom: 30px; text-align: left; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px;"><h2 style="color: ${bColor}; font-size: 32px; margin-bottom: 0;"><i class="bi ${bIcon}"></i> ${block.title || 'Khối Thông Tin 2'}</h2></div><div class="swiper customEnglishSwiper-${bIndex} englishSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div>`; 
+                                }
+                                else if (block.type === 'teacher') {
+                                    let tbColor = block.color || '#00d5ff'; let tbIcon = block.icon || 'bi-person-video3';
+                                    let innerCards = ''; 
+                                    if(block.cards) { 
+                                        block.cards.forEach((c) => { 
+                                            if(c) {
+                                                let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience}</span><small>năm<br>kinh nghiệm</small></div>`; 
+                                                innerCards += `<div class="swiper-slide"><div class="teacher-card" style="border-color: ${c.bgColor||'#00d5ff'} !important;">${badgeHTML}<img src="${c.img}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name}</h4></div></div></div>`; 
+                                            }
+                                        }); 
+                                    }
+                                    dbHTML = `<div class="mb-5" data-aos="fade-up"><div class="section-heading mb-4"><h2 style="color:${tbColor}; font-size: 32px;"><i class="bi ${tbIcon}"></i> ${block.title||'Đội Ngũ Giảng Viên'}</h2></div><div class="swiper customTeacherSwiper-${bIndex} teacherSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div>`;
+                                }
+                                else if (block.type === 'news') {
+                                    let nColor = block.color || '#ff9800';
+                                    let innerSlides = '';
+                                    if(block.slides) {
+                                        block.slides.forEach((s) => {
+                                            if(s) innerSlides += `<div class="swiper-slide"><img src="${s.img || ''}" class="news-img-card" alt="News Image"></div>`;
+                                        });
+                                    }
+                                    dbHTML = `<div class="news-section mb-5" data-aos="fade-up" style="background-color: transparent; padding: 0;">
+                                        <div class="section-heading mb-4">
+                                            <h2 style="color: ${nColor}; font-weight: 800; font-size: 38px; text-transform: uppercase;">${block.title || 'LLC NEWS'}</h2>
+                                            <div style="width: 60px; height: 4px; background-color: ${nColor}; margin: 0 auto; border-radius: 2px;"></div>
+                                        </div>
+                                        <div class="swiper customNewsSwiper-${bIndex} newsSwiper">
+                                            <div class="swiper-wrapper">${innerSlides}</div>
+                                            <div class="swiper-pagination"></div>
+                                        </div>
+                                    </div>`;
+                                }
+
+                                if(block.pos === 'pos-top') renderTop += dbHTML;
+                                else if(block.pos === 'pos-mid1') renderMid1 += dbHTML;
+                                else if(block.pos === 'pos-mid2') renderMid2 += dbHTML;
+                                else renderBottom += dbHTML;
+                            }
+                        });
+                    }
+                    document.getElementById('render_pos_top').innerHTML = renderTop;
+                    document.getElementById('render_pos_mid1').innerHTML = renderMid1;
+                    document.getElementById('render_pos_mid2').innerHTML = renderMid2;
+                    document.getElementById('render_pos_bottom').innerHTML = renderBottom;
+
+                    // FOOTER VÀ BẢN ĐỒ
+                    if(data.footer_data) { 
+                        updateIMG('f_logo', data.footer_data.logo); updateHTML('f_name', data.footer_data.name); updateHTML('f_license', data.footer_data.license); updateHTML('f_address', data.footer_data.address); updateHTML('f_privacy', data.footer_data.privacy); 
+                        const mapEl = document.getElementById('f_map'); 
+                        if(mapEl && data.footer_data.map_lat && data.footer_data.map_lng) { 
+mapEl.src = `https://maps.google.com/maps?q=${data.footer_data.map_lat},${data.footer_data.map_lng}&t=k&z=16&output=embed&iwloc=near`;                            mapEl.style.width = data.footer_data.map_w || '100%'; 
+                            mapEl.style.height = data.footer_data.map_h || '150px'; 
+                        } 
+                    }
+
+                    // CHẠY HIỆU ỨNG SWIPER SAU KHI RENDER HTML XONG
+                    setTimeout(() => { 
+                        if (window.newsSwiperInstance) window.newsSwiperInstance.destroy(true, true);
+                        window.newsSwiperInstance = new Swiper('.newsSwiper', { 
+                            effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto',
+                            autoplay: { delay: 3000, disableOnInteraction: false },
+                            coverflowEffect: { rotate: 20, stretch: 0, depth: 100, modifier: 1.5, slideShadows: false },
+                            pagination: { el: '.swiper-pagination', clickable: true }
+                        });
+
+                        if (window.activitySwiperInstance) window.activitySwiperInstance.destroy(true, true);
+                        window.activitySwiperInstance = new Swiper('.activitySwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 2000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } });
+                        
+                        if (window.globalTeacherSwiperInstance) window.globalTeacherSwiperInstance.destroy(true, true);
+                        window.globalTeacherSwiperInstance = new Swiper('.globalTeacherSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } });
+
+                        if (window.globalTechSwiperInstance) window.globalTechSwiperInstance.destroy(true, true);
+                        window.globalTechSwiperInstance = new Swiper('.globalTechSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3500, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+
+                        if (window.globalEnglishSwiperInstance) window.globalEnglishSwiperInstance.destroy(true, true);
+                        window.globalEnglishSwiperInstance = new Swiper('.globalEnglishSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 4000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+
+                        if (data.custom_blocks) {
+                            data.custom_blocks.forEach((block, bIndex) => {
+                                if(block && block.type === 'teacher') {
+                                    if(window[`customTeacherSwiper_${bIndex}`]) window[`customTeacherSwiper_${bIndex}`].destroy(true, true);
+                                    window[`customTeacherSwiper_${bIndex}`] = new Swiper(`.customTeacherSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } });
+                                } else if (block && block.type === 'tech') {
+                                    if(window[`customTechSwiper_${bIndex}`]) window[`customTechSwiper_${bIndex}`].destroy(true, true);
+                                    window[`customTechSwiper_${bIndex}`] = new Swiper(`.customTechSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3500, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+                                } else if (block && block.type === 'english') {
+                                    if(window[`customEnglishSwiper_${bIndex}`]) window[`customEnglishSwiper_${bIndex}`].destroy(true, true);
+                                    window[`customEnglishSwiper_${bIndex}`] = new Swiper(`.customEnglishSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 4000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+                                } else if (block && block.type === 'news') {
+                                    if(window[`customNewsSwiper_${bIndex}`]) window[`customNewsSwiper_${bIndex}`].destroy(true, true);
+                                    window[`customNewsSwiper_${bIndex}`] = new Swiper(`.customNewsSwiper-${bIndex}`, {
+                                        effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto',
+                                        autoplay: { delay: 3000, disableOnInteraction: false },
+                                        coverflowEffect: { rotate: 20, stretch: 0, depth: 100, modifier: 1.5, slideShadows: false },
+                                        pagination: { el: '.swiper-pagination', clickable: true }
+                                    });
+                                }
+                            });
+                        }
+                        AOS.refresh(); 
+                    }, 300);
+
+                } catch (error) {
+                    console.error("Đã xảy ra lỗi trong quá trình render giao diện từ Firebase:", error);
+                }
             }
         });
 
@@ -576,42 +937,141 @@
             }
         }, 3000);
 
-        // KHÚC DƯỚI NÀY ĐÃ ĐƯỢC CHỈNH SỬA - ĐẨY LÊN FIREBASE THAY VÌ GOOGLE SHEETS
-        document.getElementById('form1').addEventListener('submit', async function (e) {
-            e.preventDefault(); 
-            const name = document.getElementById('parent_name').value; 
-            const phone = document.getElementById('parent_phone').value; 
-            const ageGroup = document.getElementById('program_code').value; 
-            const courseGroup = document.getElementById('course_code').value; 
-            
+        // HÀM GỬI DỮ LIỆU ĐĂNG KÝ CHUNG
+        const submitRegistration = async (formData) => {
             document.getElementById('loading').style.display = 'flex';
-            try { 
-                // Sử dụng hàm push của Firebase để lưu dữ liệu vào bảng 'registrations'
+            try {
                 await push(ref(db, "registrations"), {
-                    parentName: name,
-                    phone: phone,
-                    ageGroup: ageGroup,
-                    course: courseGroup,
+                    ...formData,
                     timestamp: serverTimestamp()
                 });
+                document.getElementById('loading').style.display = 'none';
                 
-                document.getElementById('loading').style.display = 'none'; 
-                const regModal = bootstrap.Modal.getInstance(document.getElementById('registrationModal')); 
-                if (regModal) { regModal.hide(); } 
-                
-                Swal.fire({ 
-                    title: '✨ Thành công!', 
-                    html: `Chào <strong class="text-primary">${name}</strong>!<br>Chuyên viên sẽ gọi đến số <strong class="text-danger">${phone}</strong> để tư vấn.`, 
-                    icon: 'success' 
-                }); 
-                
-                this.reset(); 
-            } 
-            catch (error) { 
-                document.getElementById('loading').style.display = 'none'; 
-                Swal.fire({ title: 'Rất tiếc!', text: 'Lỗi kết nối.', icon: 'error' }); 
+                // Đóng modal nếu đang mở
+                const modalEl = document.getElementById('registrationModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                if (modal) modal.hide();
+
+                Swal.fire({
+                    title: '✨ Thành công!',
+                    html: `Cảm ơn phụ huynh <b>${formData.parentName}</b> với SĐT <b>${formData.phone}</b>, trung tâm sẽ liên hệ vào giây lát.`,
+                    icon: 'success'
+                });
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                Swal.fire('Lỗi!', 'Không thể gửi dữ liệu, vui lòng thử lại.', 'error');
             }
+        };
+
+        // Bắt sự kiện Form Popup
+        document.getElementById('form_popup').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                parentName: document.getElementById('p_name').value,
+                phone: document.getElementById('p_phone').value,
+                email: document.getElementById('p_email').value,
+                city: document.getElementById('p_city').value,
+                ageGroup: document.getElementById('p_age').value,
+                course: document.getElementById('p_course').value,
+                note: "Nguồn: Form Đăng Ký Qua Popup",
+                studyMode: "Đăng ký qua Popup"
+            };
+            submitRegistration(data);
+            this.reset();
         });
+
+        // Bắt sự kiện Form Footer
+        document.getElementById('form_footer').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const data = {
+                parentName: document.getElementById('f_name').value,
+                phone: document.getElementById('f_phone').value,
+                email: document.getElementById('f_email').value,
+                city: document.getElementById('f_city').value,
+                studyMode: document.getElementById('f_study').value,
+                course: document.getElementById('f_course').value,
+                ageGroup: document.getElementById('f_age').value,
+                note: "Nguồn: Form Đăng Ký Cuối Trang"
+            };
+            submitRegistration(data);
+            this.reset();
+        });
+
     </script>
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 </html>
