@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -27,13 +28,14 @@
         /* ADMIN DASHBOARD & TABS */
         #admin-section { display: none; }
         .admin-header { background: #112255; color: white; padding: 20px 0 0 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .nav-tabs { border-bottom: none; justify-content: flex-start; padding-left: 20px; margin-top: 20px; gap: 5px;}
+        .nav-tabs { border-bottom: none; justify-content: flex-start; padding-left: 20px; margin-top: 20px; gap: 5px; align-items: flex-end;}
         .nav-tabs .nav-link { color: rgba(255,255,255,0.6); border: none; font-weight: 600; padding: 15px 30px; border-radius: 15px 15px 0 0; transition: 0.3s; font-size: 16px;}
         .nav-tabs .nav-link:hover { color: rgba(255,255,255,1); }
         .nav-tabs .nav-link.active { color: #112255; background-color: #f4f7f6; font-weight: 700; box-shadow: 0 -4px 10px rgba(0,0,0,0.05);}
         
         .filter-card { background-color: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #e9ecef; }
         .card-table { box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 15px; border: none; overflow: hidden; background: #fff; }
+        .card-table table th { white-space: nowrap; }
         
         /* PREVIEW CONTAINER */
         .preview-wrapper { width: 100%; overflow-x: auto; background-color: #e0e5ec; padding: 20px 0; border-radius: 15px; display: flex; justify-content: center; transition: all 0.5s ease; }
@@ -105,13 +107,15 @@
         .teacher-role { font-size: 14px; margin-bottom: 3px; font-weight: 500; }
         .teacher-name { font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 0; color: #112255; }
 
-        /* STYLES CHO KHỐI HÌNH ẢNH HOẠT ĐỘNG */
+        /* STYLES CHO KHỐI HÌNH ẢNH HOẠT ĐỘNG & NEWS */
         .activitySwiper { width: 100%; padding: 0 40px; padding-bottom: 30px !important; }
         .activitySwiper .swiper-slide { height: auto; display: flex; justify-content: center;}
         .activity-slide-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .activity-slide-text { font-style: italic; text-align: center; margin-top: 15px; color: #333; font-size: 15px; font-weight: 500;}
         .activitySwiper .swiper-button-next, .activitySwiper .swiper-button-prev { background: rgba(255,255,255,0.8); width: 40px; height: 40px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .activitySwiper .swiper-button-next:after, .activitySwiper .swiper-button-prev:after { font-size: 20px; font-weight: bold; }
+
+        .newsSwiperPreview .swiper-slide { width: auto; height: auto; display: flex; justify-content: center; }
 
         .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: none; justify-content: center; align-items: center; z-index: 10; }
         
@@ -124,7 +128,7 @@
         .fullscreen-editor #swal-detail-content { flex-grow: 1 !important; max-height: none !important; height: 100% !important; font-size: 16px !important; padding: 30px !important; border-radius: 12px !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
         .fullscreen-editor .editor-toolbar { padding: 12px !important; border-radius: 12px !important; margin-bottom: 15px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* FORM CONFIG MODAL STYLES */
+        /* FORM & MENU CONFIG MODAL STYLES */
         .form-config-modal .modal-content { background: #1a233a; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); border: none; }
         .form-config-modal .modal-title { color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
         .form-config-modal .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
@@ -172,6 +176,9 @@
             <div class="drag-item" draggable="true" ondragstart="dragBlock(event, 'teacher-list')" onclick="window.addBlockClick('teacher-list')" style="background-color: #eef2f5; border: 2px dashed #00d5ff; color: #008eb3;">
                 <i class="bi bi-person-video3 fs-4 d-block mb-1"></i> Khối Giáo Viên (Slide)<br><small class="fw-normal">(Kéo thả hoặc Bấm)</small>
             </div>
+            <div class="drag-item" draggable="true" ondragstart="dragBlock(event, 'news-list')" onclick="window.addBlockClick('news-list')" style="background-color: #fff8e1; border: 2px dashed #ff9800; color: #f57c00;">
+                <i class="bi bi-newspaper fs-4 d-block mb-1"></i> Khối LLC NEWS<br><small class="fw-normal">(Kéo thả hoặc Bấm)</small>
+            </div>
         </div>
     </div>
 
@@ -184,11 +191,12 @@
             <div class="container-fluid position-relative">
                 <h2 class="text-center fw-bold m-0 pb-3">HỆ THỐNG QUẢN LÝ</h2>
                 <button id="btnLogout" class="btn btn-outline-light btn-sm position-absolute" style="top: 0px; right: 20px;"><i class="bi bi-box-arrow-right"></i> Thoát</button>
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                
+                <ul class="nav nav-tabs align-items-center pb-2" id="myTab" role="tablist">
                     <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#dataTab">Dữ Liệu Đăng Ký</button></li>
                     <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cmsTab">Page Builder (Sửa Web)</button></li>
-                    <li class="nav-item ms-auto me-3 pt-1">
-                        <button class="btn btn-sm text-white fw-bold d-flex align-items-center gap-2" style="background-color: #fa8f64; border-radius: 12px; padding: 8px 15px; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" data-bs-toggle="modal" data-bs-target="#formConfigModal">
+                    <li class="nav-item ms-2 pb-1">
+                        <button class="btn btn-sm text-white fw-bold d-flex align-items-center gap-2" style="background-color: #fa8f64; border-radius: 8px; padding: 10px 15px; font-size: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.15);" data-bs-toggle="modal" data-bs-target="#formConfigModal">
                             <i class="bi bi-ui-checks-grid"></i> Sửa Form Đăng Ký
                         </button>
                     </li>
@@ -213,9 +221,16 @@
                         <div class="col-md-2 text-end"><span class="badge bg-success p-2" id="totalCount">Tổng: 0</span></div>
                     </div>
                     <div class="card-table"><div class="table-responsive"><table class="table table-hover mb-0">
-                        <thead><tr>
+                        <thead class="table-light"><tr>
                             <th class="text-center" style="width: 40px;"><input type="checkbox" id="selectAllCheckbox" onchange="window.toggleSelectAll(this)"></th>
-                            <th>STT</th><th>Phụ Huynh</th><th>SĐT</th><th>Độ Tuổi</th><th>Khóa Học</th><th>Ghi Chú</th><th>Thời Gian</th><th class="text-center">Tác Vụ</th>
+                            <th>STT</th>
+                            <th>Khách Hàng</th>
+                            <th>Liên Hệ</th>
+                            <th>Khu Vực</th>
+                            <th>Thông Tin Đăng Ký</th>
+                            <th>Ghi Chú</th>
+                            <th>Thời Gian</th>
+                            <th class="text-center">Tác Vụ</th>
                         </tr></thead>
                         <tbody id="data-body"></tbody>
                     </table></div></div>
@@ -237,7 +252,45 @@
                                             <div class="col-md-2 text-center editable-block" onclick="cmsEdit('logo', 'image', 'Đổi Logo Header (Link ảnh)')"><img id="p_logo" src="" class="cms-logo-img"><div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></div>
                                             <div class="col-md-10 editable-block" onclick="cmsEdit('site_title', 'text', 'Tên Website (Cạnh Logo)')"><h3 id="p_site_title" class="fw-bold text-primary mb-0">Đang tải...</h3><div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></div>
                                         </div>
+                                        
+                                        <div class="editable-block mt-3 mb-4 pt-3 pb-3 text-center border rounded shadow-sm bg-light" onclick="window.openMenuModal()">
+                                            <div class="fw-bold mb-2 small text-uppercase" style="color: #f15a3a;"><i class="bi bi-menu-button-wide"></i> Quản lý Thanh Menu (Bấm vào đây để sửa)</div>
+                                            <div class="d-flex justify-content-center gap-2 flex-wrap" id="p_header_menu_render">
+                                                </div>
+                                            <div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div>
+                                        </div>
+
                                         <div class="editable-block cms-hero" onclick="cmsEdit('hero', 'hero', 'Cập nhật Ảnh bìa Slide')"><i class="bi bi-images fs-1 d-block mb-2"></i> Click để Sửa Ảnh Nền Slide<div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></div>
+                                    </div>
+
+                                    <div class="section-master mt-4" id="wrap_news" style="border-color: #ff9800; background: #f8fafc;">
+                                        <div class="sm-toolbar" style="background: #ff9800;"><button onclick="cmsToggleVis('news')"><i class="bi bi-eye"></i> Ẩn/Hiện LLC NEWS</button></div>
+                                        <div class="text-center mb-4 editable-block" onclick="cmsEditNewsTitle()">
+                                            <h3 id="p_news_title" class="fw-bold" style="color: #112255; text-transform: uppercase;">LLC NEWS</h3>
+                                            <div style="width: 50px; height: 3px; background-color: #ff9800; margin: 10px auto;"></div>
+                                            <div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div>
+                                        </div>
+                                        <div class="position-relative p-2">
+                                            <div class="text-center mb-3"><button class="btn btn-sm btn-outline-warning text-dark fw-bold" onclick="cmsAddNewsSlide()"><i class="bi bi-plus-circle"></i> Quản lý Ảnh LLC NEWS</button></div>
+                                            <div class="swiper newsSwiperPreview" style="padding-bottom: 30px;">
+                                                <div class="swiper-wrapper" id="cms_news_render"></div>
+                                                <div class="swiper-pagination"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="section-master mt-4" id="wrap_about" style="border-color: #28a745; background: #fff;">
+                                        <div class="sm-toolbar" style="background: #28a745;"><button onclick="cmsToggleVis('about')"><i class="bi bi-eye"></i> Ẩn/Hiện Khối Giới Thiệu (Ảnh & Chữ)</button></div>
+                                        <div class="row align-items-center p-3 editable-block" onclick="cmsEditAbout()" id="cms_about_bg" style="background-color: transparent; border-radius: 15px;">
+                                            <div class="col-md-5 text-center">
+                                                <img id="p_about_img" src="https://via.placeholder.com/600x400" class="w-100 rounded shadow" style="object-fit: cover;">
+                                            </div>
+                                            <div class="col-md-7 text-start mt-4 mt-md-0 ps-md-4">
+                                                <h2 id="p_about_title" class="fw-bold mb-3" style="color: #112255;">Đang tải...</h2>
+                                                <div id="p_about_desc" style="font-size: 16px; line-height: 1.6; color: #475569;">Đang tải...</div>
+                                            </div>
+                                            <div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div>
+                                        </div>
                                     </div>
 
                                     <div class="section-master mt-4" id="wrap_activity" style="border-color: #f15a3a; background: #fff;">
@@ -298,6 +351,38 @@
                                     <div class="drop-zone" ondrop="dropHandler(event, 'pos-bottom')" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondragenter="allowDrop(event)"><i class="bi bi-download fs-4 me-2"></i> Kéo thả khối vào đây (Khu Vực 4)</div>
                                     <div id="render_pos_bottom"></div>
 
+                                    <div class="section-master p-4 mt-5 shadow-sm" style="background-color: #ffffff; border-color: #4dc4e6;" id="wrap_contact_form">
+                                        <div class="sm-toolbar bg-info text-dark"><button onclick="cmsToggleVis('contact_form')"><i class="bi bi-eye"></i> Ẩn/Hiện Form Liên Hệ Cuối Trang</button></div>
+                                        <div class="editable-block" onclick="cmsEditContactForm()">
+                                            <div class="text-center mb-4">
+                                                <h3 class="fw-bold text-uppercase" style="color: #112255;">ĐĂNG KÝ NHẬN <span style="background-color: #e31837; color: white; padding: 5px 20px; border-radius: 50px; display: inline-block;">TƯ VẤN NGAY</span></h3>
+                                                <p class="text-muted mt-2" style="font-size: 15px;">Vui lòng để lại thông tin phía dưới để được tư vấn miễn phí</p>
+                                            </div>
+                                            <div class="row g-4 align-items-stretch">
+                                                <div class="col-md-8">
+                                                    <div class="p-4 h-100" style="background-color: #4dc4e6; border-radius: 15px;">
+                                                        <div class="row g-3">
+                                                            <div class="col-12"><input type="text" class="form-control rounded-pill border-0" placeholder="Họ Và Tên *" disabled style="padding: 12px 20px; background: rgba(255,255,255,0.7);"></div>
+                                                            <div class="col-md-6"><input type="text" class="form-control rounded-pill border-0" placeholder="Điện thoại *" disabled style="padding: 12px 20px; background: rgba(255,255,255,0.7);"></div>
+                                                            <div class="col-md-6"><select class="form-select rounded-pill border-0" disabled style="padding: 12px 20px; background: rgba(255,255,255,0.7);"><option>Hình thức học</option></select></div>
+                                                            <div class="col-md-6"><input type="text" class="form-control rounded-pill border-0" placeholder="Địa chỉ email" disabled style="padding: 12px 20px; background: rgba(255,255,255,0.7);"></div>
+                                                            <div class="col-md-6"><select class="form-select rounded-pill border-0" disabled style="padding: 12px 20px; background: rgba(255,255,255,0.7);"><option>Tỉnh/ Thành phố *</option></select></div>
+                                                            <div class="col-12"><select class="form-select rounded-pill border-0" disabled style="padding: 12px 20px; background: rgba(255,255,255,0.7);"><option>Khóa học *</option></select></div>
+                                                            <div class="col-12"><button class="btn w-100 fw-bold rounded-pill text-white mt-2" style="background-color: #233066; padding: 14px;" disabled>TƯ VẤN NGAY</button></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="p-4 h-100 d-flex flex-column justify-content-center gap-3" style="background-color: #4dc4e6; border-radius: 15px;">
+                                                        <button class="btn text-white fw-bold rounded-pill d-flex justify-content-between align-items-center" style="background-color: #2b3a70; padding: 12px 20px; font-size: 16px;" disabled><i class="bi bi-hand-index-thumb"></i> NHẮN TIN NHANH <i class="bi bi-messenger fs-4"></i></button>
+                                                        <button class="btn text-white fw-bold rounded-pill d-flex justify-content-between align-items-center" style="background-color: #e31837; padding: 12px 20px; font-size: 16px;" disabled><span id="p_contact_phone">028 7308 3333 (Phím 0)</span> <i class="bi bi-telephone-fill fs-4"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div>
+                                        </div>
+                                    </div>
+
                                     <div class="section-master p-4 mt-5 shadow-sm" style="background-color: #ffffff; border-color: #e0e5ec;" id="wrap_footer">
                                         <div class="sm-toolbar bg-secondary"><button onclick="cmsToggleVis('footer')"><i class="bi bi-eye"></i> Ẩn/Hiện Footer</button></div>
                                         <div class="editable-block" onclick="cmsEditFooter()">
@@ -336,39 +421,99 @@
             <div class="modal-header bg-light"><h5 class="modal-title fw-bold text-primary">Sửa Ghi Chú Khách</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
             <div class="modal-body">
                 <input type="hidden" id="edit_id"> 
-                <div class="mb-3"><label>Tên khách</label><input type="text" class="form-control" id="edit_name"></div>
-                <div class="mb-3"><label>SĐT</label><input type="text" class="form-control" id="edit_phone"></div>
-                <div class="mb-3"><label>Ghi chú</label><textarea class="form-control" id="edit_note" rows="3"></textarea></div>
+                <div class="row">
+                    <div class="col-md-6 mb-3"><label class="small fw-bold">Tên khách</label><input type="text" class="form-control" id="edit_name"></div>
+                    <div class="col-md-6 mb-3"><label class="small fw-bold">SĐT</label><input type="text" class="form-control" id="edit_phone"></div>
+                    <div class="col-md-6 mb-3"><label class="small fw-bold">Email</label><input type="email" class="form-control" id="edit_email"></div>
+                    <div class="col-md-6 mb-3"><label class="small fw-bold">Thành phố</label><input type="text" class="form-control" id="edit_city"></div>
+                    <div class="col-md-4 mb-3"><label class="small fw-bold">Độ tuổi</label><input type="text" class="form-control" id="edit_age"></div>
+                    <div class="col-md-4 mb-3"><label class="small fw-bold">Hình thức</label><input type="text" class="form-control" id="edit_study"></div>
+                    <div class="col-md-4 mb-3"><label class="small fw-bold">Khóa học</label><input type="text" class="form-control" id="edit_course"></div>
+                    <div class="col-12 mb-3"><label class="small fw-bold">Ghi chú</label><textarea class="form-control" id="edit_note" rows="3"></textarea></div>
+                </div>
             </div>
             <div class="modal-footer border-0"><button type="button" class="btn btn-primary w-100" id="btnSaveEdit">Lưu Ghi Chú</button></div>
         </div></div>
     </div>
 
     <div class="modal fade form-config-modal" id="formConfigModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content border-0">
                 <div class="modal-header border-0 pb-0 pt-4 px-4 position-relative">
-                    <h4 class="modal-title w-100 text-center fs-5">ĐĂNG KÝ THÔNG TIN (CẤU HÌNH)</h4>
+                    <h4 class="modal-title w-100 text-center fs-5">ĐĂNG KÝ THÔNG TIN (CẤU HÌNH TÙY CHỌN FORM)</h4>
                     <button type="button" class="btn-close position-absolute" style="top: 20px; right: 20px;" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body px-4 py-4">
-                    <div class="mb-4">
-                        <label class="text-white mb-2 fw-bold" style="font-size: 14px;">Độ tuổi (Tùy chọn hiển thị)</label>
-                        <div id="render_age_options" class="mb-3" style="max-height: 200px; overflow-y: auto;"></div>
-                        <div class="input-group shadow-sm">
-                            <input type="text" id="new_age_input" class="form-control border-0" style="padding: 12px 15px;" placeholder="Nhập thêm độ tuổi mới...">
-                            <button class="btn btn-light text-primary fw-bold px-3" onclick="window.addAgeOption()">Thêm</button>
+                    <div class="row">
+                        <div class="col-md-6 border-end pe-md-4">
+                            <div class="mb-4">
+                                <label class="text-white mb-2 fw-bold" style="font-size: 14px;">Độ tuổi</label>
+                                <div id="render_age_options" class="mb-3" style="max-height: 180px; overflow-y: auto;"></div>
+                                <div class="input-group shadow-sm">
+                                    <input type="text" id="new_age_input" class="form-control border-0" style="padding: 10px 15px;" placeholder="Thêm độ tuổi mới...">
+                                    <button class="btn btn-light text-primary fw-bold px-3" onclick="window.addAgeOption()">Thêm</button>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="text-white mb-2 fw-bold" style="font-size: 14px;">Khóa học đăng ký</label>
+                                <div id="render_course_options" class="mb-3" style="max-height: 180px; overflow-y: auto;"></div>
+                                <div class="input-group shadow-sm">
+                                    <input type="text" id="new_course_input" class="form-control border-0" style="padding: 10px 15px;" placeholder="Thêm khóa học mới...">
+                                    <button class="btn btn-light text-primary fw-bold px-3" onclick="window.addCourseOption()">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 ps-md-4">
+                            <div class="mb-4">
+                                <label class="text-white mb-2 fw-bold" style="font-size: 14px;">Hình thức học (Mới)</label>
+                                <div id="render_study_options" class="mb-3" style="max-height: 180px; overflow-y: auto;"></div>
+                                <div class="input-group shadow-sm">
+                                    <input type="text" id="new_study_input" class="form-control border-0" style="padding: 10px 15px;" placeholder="Thêm hình thức học...">
+                                    <button class="btn btn-light text-primary fw-bold px-3" onclick="window.addStudyOption()">Thêm</button>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="text-white mb-2 fw-bold" style="font-size: 14px;">Tỉnh/Thành phố (Mới)</label>
+                                <div id="render_city_options" class="mb-3" style="max-height: 180px; overflow-y: auto;"></div>
+                                <div class="input-group shadow-sm">
+                                    <input type="text" id="new_city_input" class="form-control border-0" style="padding: 10px 15px;" placeholder="Thêm thành phố...">
+                                    <button class="btn btn-light text-primary fw-bold px-3" onclick="window.addCityOption()">Thêm</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="mb-4">
-                        <label class="text-white mb-2 fw-bold" style="font-size: 14px;">Khóa học đăng ký (Tùy chọn hiển thị)</label>
-                        <div id="render_course_options" class="mb-3" style="max-height: 250px; overflow-y: auto;"></div>
-                        <div class="input-group shadow-sm">
-                            <input type="text" id="new_course_input" class="form-control border-0" style="padding: 12px 15px;" placeholder="Nhập thêm khóa học mới...">
-                            <button class="btn btn-light text-primary fw-bold px-3" onclick="window.addCourseOption()">Thêm</button>
+                    <button type="button" class="btn w-100 btn-submit-config text-uppercase mt-2" onclick="window.saveFormConfig()">Lưu Cấu Hình Tùy Chọn</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade form-config-modal" id="menuConfigModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0" style="background-color: #112255;">
+                <div class="modal-header border-0 pb-0 pt-4 px-4 position-relative">
+                    <h4 class="modal-title w-100 text-center fs-5 text-white"><i class="bi bi-list"></i> QUẢN LÝ MENU TRÊN CÙNG</h4>
+                    <button type="button" class="btn-close btn-close-white position-absolute" style="top: 20px; right: 20px;" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body px-4 py-4">
+                    <div class="row">
+                        <div class="col-md-7 border-end pe-md-4 border-secondary">
+                            <label class="text-white mb-2 fw-bold">Danh sách Menu hiện tại:</label>
+                            <div class="alert alert-dark border-0 py-2 small fw-bold mb-3"><i class="bi bi-info-circle"></i> Bấm "Lưu Cấu Hình" sau khi thêm hoặc xóa để áp dụng.</div>
+                            <div id="render_menu_options" class="mb-3 pe-2" style="max-height: 250px; overflow-y: auto;"></div>
+                        </div>
+                        <div class="col-md-5 ps-md-4">
+                            <label class="text-white mb-3 fw-bold">Thêm Menu Mới:</label>
+                            <input type="text" id="new_menu_name" class="form-control mb-3" placeholder="Tên hiển thị (VD: VỀ CHÚNG TÔI)">
+                            <select id="new_menu_type" class="form-select mb-3 fw-bold text-primary" onchange="window.toggleMenuType()">
+                                <option value="link">1. Chuyển hướng Link/Web</option>
+                                <option value="phone">2. Gọi Số Điện Thoại (Hotline)</option>
+                            </select>
+                            <input type="text" id="new_menu_val" class="form-control mb-3" placeholder="Nhập Link (VD: #wrap_about)">
+                            <button class="btn btn-info w-100 fw-bold" onclick="window.addMenuOption()"><i class="bi bi-plus-lg"></i> Thêm Vào Menu</button>
                         </div>
                     </div>
-                    <button type="button" class="btn w-100 btn-submit-config text-uppercase" onclick="window.saveFormConfig()">Lưu Cấu Hình Tùy Chọn</button>
+                    <button type="button" class="btn w-100 text-white text-uppercase mt-4 fw-bold" style="background-color: #e31837; padding: 14px;" onclick="window.saveMenuConfig()">LƯU CẤU HÌNH MENU</button>
                 </div>
             </div>
         </div>
@@ -384,7 +529,60 @@
         const firebaseConfig = { apiKey: "AIzaSyA85V7th40ettZccP5or_tUNBE5_LRF1wU", authDomain: "test-web1-b1795.firebaseapp.com", databaseURL: "https://test-web1-b1795-default-rtdb.firebaseio.com", projectId: "test-web1-b1795" };
         const app = initializeApp(firebaseConfig); const db = getDatabase(app);
 
-        window.cmsFormConfig = { ages: [], courses: [] };
+        // ==========================================
+        // CẤU HÌNH & HÀM UPLOAD ẢNH LÊN GITHUB
+        // ==========================================
+        window.GITHUB_CONFIG = {
+            TOKEN: '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',
+            OWNER: 'leloitrungtam-glitch',
+            REPO: 'leloi',
+            FOLDER: 'uploads',
+            BRANCH: 'main'
+        };
+
+        window.uploadImageToGitHub = async (file) => {
+            return new Promise((resolve, reject) => {
+                const safeFileName = file.name.replace(/[^a-zA-Z0-9.\-]/g, '_');
+                const fileName = `${Date.now()}_${safeFileName}`;
+                const filePath = window.GITHUB_CONFIG.FOLDER ? `${window.GITHUB_CONFIG.FOLDER}/${fileName}` : fileName;
+
+                const reader = new FileReader();
+                reader.onloadend = async function() {
+                    const base64Content = reader.result.split(',')[1];
+                    const url = `https://api.github.com/repos/${window.GITHUB_CONFIG.OWNER}/${window.GITHUB_CONFIG.REPO}/contents/${filePath}`;
+
+                    try {
+                        const response = await fetch(url, {
+                            method: 'PUT',
+                            headers: { 'Authorization': `token ${window.GITHUB_CONFIG.TOKEN}`, 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: `Auto upload image: ${fileName} from Admin Panel`, content: base64Content, branch: window.GITHUB_CONFIG.BRANCH })
+                        });
+
+                        if (response.ok) {
+                            const rawUrl = `https://raw.githubusercontent.com/${window.GITHUB_CONFIG.OWNER}/${window.GITHUB_CONFIG.REPO}/${window.GITHUB_CONFIG.BRANCH}/${filePath}`;
+                            resolve(rawUrl);
+                        } else {
+                            const errorData = await response.json(); reject(`Lỗi GitHub API: ${errorData.message}`);
+                        }
+                    } catch (error) { reject(`Lỗi kết nối mạng: ${error.message}`); }
+                };
+                reader.readAsDataURL(file);
+            });
+        };
+
+        window.handleSimpleUpload = async (element, targetInputId) => {
+            let file = element.files[0]; if(!file) return;
+            Swal.showLoading();
+            try {
+                let url = await window.uploadImageToGitHub(file);
+                document.getElementById(targetInputId).value = url;
+            } catch (err) { Swal.showValidationMessage(err); } finally { Swal.hideLoading(); }
+        };
+        
+        window.encodeImageFileAsURLAbout = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); document.getElementById('swal-img-b64-about').value = ''; document.getElementById('swal-about-img').value = url; if(document.getElementById('preview-about-img')) document.getElementById('preview-about-img').src = url; } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
+
+        window.cmsFormConfig = { ages: [], courses: [], studyModes: [], cities: [] };
+        window.cmsMenuConfig = [];
 
         if (localStorage.getItem('isAdminLogged') === 'true') { document.getElementById('login-section').style.display = 'none'; document.getElementById('admin-section').style.display = 'block'; document.getElementById('btn-hamburger').classList.remove('d-none'); loadData(); }
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -399,6 +597,7 @@
         let allRecs = []; let globalData = {}; const tbody = document.getElementById('data-body');
         function loadData() { onValue(ref(db, 'registrations'), (snap) => { allRecs = []; globalData = {}; if (snap.exists()) { snap.forEach((c) => { let i = c.val(); i.id = c.key; allRecs.push(i); globalData[i.id] = i; }); allRecs.reverse(); } applyFilters(); }); }
         function applyFilters() { const age = document.getElementById('filterAge').value; const d = document.getElementById('filterDate').value; let fd = allRecs.filter(i => { let mAge = (age==='all'||i.ageGroup===age); let mDate = true; if(d&&i.timestamp){ const dObj = new Date(i.timestamp); const str = `${dObj.getFullYear()}-${String(dObj.getMonth()+1).padStart(2,'0')}-${String(dObj.getDate()).padStart(2,'0')}`; mDate = (str===d); } return mAge&&mDate; }); document.getElementById('totalCount').innerText = `Tổng: ${fd.length}`; draw(fd); }
+        
         function draw(arr) { 
             tbody.innerHTML=''; 
             if(arr.length===0){ tbody.innerHTML='<tr><td colspan="9" class="text-center py-4">Trống.</td></tr>'; return; } 
@@ -406,15 +605,22 @@
                 tbody.innerHTML+=`<tr>
                     <td class="text-center"><input type="checkbox" class="row-checkbox" value="${i.id}"></td>
                     <td>${idx+1}</td>
-                    <td>${i.parentName||''}</td>
-                    <td>${i.phone||''}</td>
-                    <td><span class="badge bg-info text-dark">${i.ageGroup||''}</span></td>
-                    <td><span class="badge bg-primary text-white">${i.course||'Chưa chọn'}</span></td>
-                    <td class="note-cell">${i.note||'<i class="text-muted">Trống</i>'}</td>
-                    <td>${i.timestamp?new Date(i.timestamp).toLocaleString('vi-VN'):''}</td>
+                    <td><strong class="text-primary">${i.parentName||''}</strong></td>
+                    <td>
+                        <div class="mb-1"><i class="bi bi-telephone-fill text-danger"></i> ${i.phone||''}</div>
+                        <div><i class="bi bi-envelope-fill text-secondary"></i> <span class="small">${i.email||'<i class="text-muted">Không có</i>'}</span></div>
+                    </td>
+                    <td>${i.city||'<span class="text-muted small">Chưa chọn</span>'}</td>
+                    <td>
+                        <div class="mb-1"><span class="badge bg-primary w-100 text-start text-wrap"><i class="bi bi-book"></i> ${i.course||'Chưa chọn khóa'}</span></div>
+                        <div class="mb-1"><span class="badge bg-info text-dark w-100 text-start"><i class="bi bi-pc-display-horizontal"></i> ${i.studyMode||'Chưa chọn hình thức'}</span></div>
+                        <div><span class="badge bg-secondary w-100 text-start"><i class="bi bi-person-badge"></i> Tuổi: ${i.ageGroup||'Chưa rõ'}</span></div>
+                    </td>
+                    <td class="note-cell" style="max-width: 150px; white-space: pre-wrap; font-size: 13px;">${i.note||'<i class="text-muted">Trống</i>'}</td>
+                    <td class="small">${i.timestamp?new Date(i.timestamp).toLocaleString('vi-VN'):''}</td>
                     <td class="text-center">
-                        <button class="btn btn-sm btn-primary" onclick="window.oEdit('${i.id}')"><i class="bi bi-pencil"></i></button> 
-                        <button class="btn btn-sm btn-danger" onclick="window.dRec('${i.id}')"><i class="bi bi-trash"></i></button>
+                        <button class="btn btn-sm btn-primary mb-1 w-100" onclick="window.oEdit('${i.id}')"><i class="bi bi-pencil"></i></button> 
+                        <button class="btn btn-sm btn-danger w-100" onclick="window.dRec('${i.id}')"><i class="bi bi-trash"></i></button>
                     </td>
                 </tr>`; 
             }); 
@@ -433,7 +639,7 @@
             }
             Swal.fire({
                 title: `Xóa ${checked.length} dòng đã chọn?`, text: "Hành động này không thể hoàn tác!", icon: 'warning',
-                showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Xóa vĩnh viễn'
+                showCancelButton: true, confirmButtonColor: '#d33', cancelButtonColor: '#3085d6', confirmButtonText: 'Xóa vĩnh viễn', cancelButtonText: 'Hủy'
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     Swal.fire({title: 'Đang xóa...', allowOutsideClick: false, didOpen: () => {Swal.showLoading()}});
@@ -446,69 +652,239 @@
             });
         };
 
-        let eMod = new bootstrap.Modal(document.getElementById('editModal')); window.oEdit = (id) => { const d=globalData[id]; document.getElementById('edit_id').value=id; document.getElementById('edit_name').value=d.parentName; document.getElementById('edit_phone').value=d.phone; document.getElementById('edit_note').value=d.note||''; eMod.show(); }; document.getElementById('btnSaveEdit').addEventListener('click', async () => { const id=document.getElementById('edit_id').value; await update(ref(db, `registrations/${id}`),{parentName:document.getElementById('edit_name').value, phone:document.getElementById('edit_phone').value, note:document.getElementById('edit_note').value}); eMod.hide(); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); }); window.dRec = async (id) => { Swal.fire({title:'Xóa vĩnh viễn?', icon:'warning', showCancelButton:true}).then(async (r)=>{ if(r.isConfirmed){ await remove(ref(db, `registrations/${id}`)); Swal.fire('Đã xóa', '', 'success'); } }); }; document.getElementById('btnFilter').addEventListener('click', applyFilters); document.getElementById('btnClearFilter').addEventListener('click', ()=>{ document.getElementById('filterAge').value='all'; document.getElementById('filterDate').value=''; applyFilters(); });
+        let eMod = new bootstrap.Modal(document.getElementById('editModal')); 
+        window.oEdit = (id) => { 
+            const d=globalData[id]; 
+            document.getElementById('edit_id').value=id; 
+            document.getElementById('edit_name').value=d.parentName||''; 
+            document.getElementById('edit_phone').value=d.phone||''; 
+            document.getElementById('edit_email').value=d.email||''; 
+            document.getElementById('edit_city').value=d.city||''; 
+            document.getElementById('edit_age').value=d.ageGroup||''; 
+            document.getElementById('edit_study').value=d.studyMode||''; 
+            document.getElementById('edit_course').value=d.course||''; 
+            document.getElementById('edit_note').value=d.note||''; 
+            eMod.show(); 
+        }; 
+        
+        document.getElementById('btnSaveEdit').addEventListener('click', async () => { 
+            const id=document.getElementById('edit_id').value; 
+            await update(ref(db, `registrations/${id}`),{
+                parentName:document.getElementById('edit_name').value, 
+                phone:document.getElementById('edit_phone').value, 
+                email:document.getElementById('edit_email').value, 
+                city:document.getElementById('edit_city').value, 
+                ageGroup:document.getElementById('edit_age').value, 
+                studyMode:document.getElementById('edit_study').value, 
+                course:document.getElementById('edit_course').value, 
+                note:document.getElementById('edit_note').value
+            }); 
+            eMod.hide(); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); 
+        }); 
+        
+        window.dRec = async (id) => { Swal.fire({title:'Xóa vĩnh viễn?', icon:'warning', showCancelButton:true, confirmButtonText: 'Đồng ý', cancelButtonText: 'Hủy'}).then(async (r)=>{ if(r.isConfirmed){ await remove(ref(db, `registrations/${id}`)); Swal.fire('Đã xóa', '', 'success'); } }); }; document.getElementById('btnFilter').addEventListener('click', applyFilters); document.getElementById('btnClearFilter').addEventListener('click', ()=>{ document.getElementById('filterAge').value='all'; document.getElementById('filterDate').value=''; applyFilters(); });
 
         window.renderFormConfigOptions = () => {
             let agesHtml = ''; (window.cmsFormConfig.ages || []).forEach((age, i) => { agesHtml += `<div class="config-list-item"><span>${age}</span><button class="btn btn-sm btn-outline-danger py-1 px-2 border-0" onclick="window.delAgeOption(${i})"><i class="bi bi-trash"></i></button></div>`; }); document.getElementById('render_age_options').innerHTML = agesHtml;
             let coursesHtml = ''; (window.cmsFormConfig.courses || []).forEach((course, i) => { coursesHtml += `<div class="config-list-item"><span>${course}</span><button class="btn btn-sm btn-outline-danger py-1 px-2 border-0" onclick="window.delCourseOption(${i})"><i class="bi bi-trash"></i></button></div>`; }); document.getElementById('render_course_options').innerHTML = coursesHtml;
+            let studyHtml = ''; (window.cmsFormConfig.studyModes || []).forEach((item, i) => { studyHtml += `<div class="config-list-item"><span>${item}</span><button class="btn btn-sm btn-outline-danger py-1 px-2 border-0" onclick="window.delStudyOption(${i})"><i class="bi bi-trash"></i></button></div>`; }); document.getElementById('render_study_options').innerHTML = studyHtml;
+            let cityHtml = ''; (window.cmsFormConfig.cities || []).forEach((item, i) => { cityHtml += `<div class="config-list-item"><span>${item}</span><button class="btn btn-sm btn-outline-danger py-1 px-2 border-0" onclick="window.delCityOption(${i})"><i class="bi bi-trash"></i></button></div>`; }); document.getElementById('render_city_options').innerHTML = cityHtml;
         };
         window.updateFilterAgeDropdown = () => { let select = document.getElementById('filterAge'); let currentVal = select.value; let html = `<option value="all">Tất cả</option>`; (window.cmsFormConfig.ages || []).forEach(a => { html += `<option value="${a}">${a}</option>`; }); select.innerHTML = html; select.value = currentVal; };
+        
         window.addAgeOption = () => { let val = document.getElementById('new_age_input').value.trim(); if(val) { if(!window.cmsFormConfig.ages) window.cmsFormConfig.ages = []; window.cmsFormConfig.ages.push(val); document.getElementById('new_age_input').value = ''; window.renderFormConfigOptions(); } };
         window.delAgeOption = (i) => { window.cmsFormConfig.ages.splice(i, 1); window.renderFormConfigOptions(); };
         window.addCourseOption = () => { let val = document.getElementById('new_course_input').value.trim(); if(val) { if(!window.cmsFormConfig.courses) window.cmsFormConfig.courses = []; window.cmsFormConfig.courses.push(val); document.getElementById('new_course_input').value = ''; window.renderFormConfigOptions(); } };
         window.delCourseOption = (i) => { window.cmsFormConfig.courses.splice(i, 1); window.renderFormConfigOptions(); };
+        window.addStudyOption = () => { let val = document.getElementById('new_study_input').value.trim(); if(val) { if(!window.cmsFormConfig.studyModes) window.cmsFormConfig.studyModes = []; window.cmsFormConfig.studyModes.push(val); document.getElementById('new_study_input').value = ''; window.renderFormConfigOptions(); } };
+        window.delStudyOption = (i) => { window.cmsFormConfig.studyModes.splice(i, 1); window.renderFormConfigOptions(); };
+        window.addCityOption = () => { let val = document.getElementById('new_city_input').value.trim(); if(val) { if(!window.cmsFormConfig.cities) window.cmsFormConfig.cities = []; window.cmsFormConfig.cities.push(val); document.getElementById('new_city_input').value = ''; window.renderFormConfigOptions(); } };
+        window.delCityOption = (i) => { window.cmsFormConfig.cities.splice(i, 1); window.renderFormConfigOptions(); };
+        
         window.saveFormConfig = async () => { await update(ref(db, 'pageContent/form_config'), window.cmsFormConfig); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu Tùy chọn Form!', showConfirmButton:false, timer:2000}); let fMod = bootstrap.Modal.getInstance(document.getElementById('formConfigModal')); if(fMod) fMod.hide(); };
+
+
+        // ==========================================
+        // CÁC HÀM XỬ LÝ MENU HEADER
+        // ==========================================
+        window.renderMenuPreview = () => {
+            let html = '';
+            (cmsData.header_menu || []).forEach(m => {
+                let icon = m.type === 'phone' ? '<i class="bi bi-telephone-fill me-1"></i>' : '';
+                html += `<span class="badge px-3 py-2 fs-6 m-1" style="background-color: ${m.type==='phone'?'#e31837':'#112255'}; cursor:pointer;">${icon}${m.name}</span>`;
+            });
+            if(html === '') html = '<span class="text-muted fst-italic">Chưa có Menu nào</span>';
+            if(document.getElementById('p_header_menu_render')) document.getElementById('p_header_menu_render').innerHTML = html;
+        };
+
+        window.renderMenuOptions = () => {
+            let html = '';
+            (window.cmsMenuConfig || []).forEach((m, i) => {
+                let typeLabel = m.type === 'phone' ? '<i class="bi bi-telephone"></i> Chế độ gọi' : '<i class="bi bi-link-45deg"></i> Chế độ Link';
+                let badgeColor = m.type === 'phone' ? 'bg-danger' : 'bg-primary';
+                html += `
+                <div class="config-list-item d-flex align-items-center justify-content-between p-2 mb-2 bg-white rounded shadow-sm border border-light">
+                    <div>
+                        <span class="fw-bold d-block text-dark mb-1">${m.name}</span>
+                        <span class="badge ${badgeColor} me-1">${typeLabel}</span><small class="text-muted">${m.value}</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-danger py-1 px-2 border-0" onclick="window.delMenuOption(${i})"><i class="bi bi-trash fs-5"></i></button>
+                </div>`;
+            });
+            if(html === '') html = '<div class="text-muted text-center p-3">Chưa có menu nào</div>';
+            document.getElementById('render_menu_options').innerHTML = html;
+        };
+
+        window.openMenuModal = () => {
+            window.cmsMenuConfig = JSON.parse(JSON.stringify(cmsData.header_menu || []));
+            window.renderMenuOptions();
+            new bootstrap.Modal(document.getElementById('menuConfigModal')).show();
+        };
+
+        window.toggleMenuType = () => {
+            let t = document.getElementById('new_menu_type').value;
+            let v = document.getElementById('new_menu_val');
+            if(t === 'phone') {
+                v.placeholder = "Nhập Số điện thoại (VD: 0909123456)";
+            } else {
+                v.placeholder = "Nhập Link / ID vùng (VD: #wrap_about)";
+            }
+        };
+
+        window.addMenuOption = () => {
+            let name = document.getElementById('new_menu_name').value.trim();
+            let type = document.getElementById('new_menu_type').value;
+            let val = document.getElementById('new_menu_val').value.trim();
+            if(!name || !val) {
+                Swal.fire({toast:true, position:'top-end', icon:'warning', title:'Vui lòng nhập đủ Tên và Giá trị!', showConfirmButton:false, timer:2500});
+                return;
+            }
+            window.cmsMenuConfig.push({ name: name, type: type, value: val });
+            document.getElementById('new_menu_name').value = '';
+            document.getElementById('new_menu_val').value = '';
+            window.renderMenuOptions();
+        };
+
+        window.delMenuOption = (i) => {
+            window.cmsMenuConfig.splice(i, 1);
+            window.renderMenuOptions();
+        };
+
+        window.saveMenuConfig = async () => {
+            cmsData.header_menu = window.cmsMenuConfig;
+            await update(ref(db, 'pageContent'), { header_menu: cmsData.header_menu });
+            Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu Cấu Hình Menu!', showConfirmButton:false, timer:2000});
+            let modal = bootstrap.Modal.getInstance(document.getElementById('menuConfigModal'));
+            if(modal) modal.hide();
+            window.renderMenuPreview();
+        };
+
 
         let cmsData = {};
         onValue(ref(db, 'pageContent'), (snap) => {
             if(snap.exists()) {
                 cmsData = snap.val();
                 
+                // Khởi tạo Menu nếu chưa có
+                if (!cmsData.header_menu) {
+                    cmsData.header_menu = [
+                        { name: 'VỀ CHÚNG TÔI', type: 'link', value: '#wrap_about' }
+                    ];
+                    update(ref(db, 'pageContent'), { header_menu: cmsData.header_menu });
+                }
+                window.renderMenuPreview();
+
+                // CẤU HÌNH KHỐI LLC NEWS
+                if (!cmsData.news_data) {
+                    cmsData.news_data = { title: "LLC NEWS", slides: [{ img: "https://via.placeholder.com/800x600?text=News+Image+1" }] };
+                    update(ref(db, 'pageContent'), { news_data: cmsData.news_data });
+                }
+
+                if (!cmsData.about_data) {
+                    cmsData.about_data = { img: "https://via.placeholder.com/600x400?text=Anh+Minh+Hoa", title: "Tiêu đề khối giới thiệu", desc: "Nội dung mô tả giới thiệu chi tiết...", bgColor: "transparent", titleColor: "#112255", descColor: "#475569" };
+                    update(ref(db, 'pageContent'), { about_data: cmsData.about_data });
+                }
+
+                // KHỞI TẠO DỮ LIỆU CẤU HÌNH FORM MỚI
                 if (!cmsData.form_config) { 
-                    cmsData.form_config = { ages: ["Mẫu giáo (4-6 tuổi)", "Tiểu học (6-11 tuổi)", "Cấp 2 (11-15 tuổi)", "Khác"], courses: ["Khối Thông Tin 1: Ứng Dụng AI", "Khối Thông Tin 1: Kỹ Sư ROBOCON", "Khối Thông Tin 1: Lập Trình MINECRAFT", "Khối Thông Tin 2 Mẫu Giáo", "Khối Thông Tin 2 Tiểu Học", "Khối Thông Tin 2 Cấp 2", "Chưa quyết định (Cần tư vấn thêm)"] };
+                    cmsData.form_config = { 
+                        ages: ["Mẫu giáo (4-6 tuổi)", "Tiểu học (6-11 tuổi)", "Cấp 2 (11-15 tuổi)", "Khác"], 
+                        courses: ["Khối Thông Tin 1: Ứng Dụng AI", "Khối Thông Tin 1: Kỹ Sư ROBOCON", "Khối Thông Tin 1: Lập Trình MINECRAFT", "Khối Thông Tin 2 Mẫu Giáo", "Khối Thông Tin 2 Tiểu Học", "Khối Thông Tin 2 Cấp 2", "Chưa quyết định (Cần tư vấn thêm)"],
+                        studyModes: ["Học tại trung tâm", "Học Online", "Kèm 1-1"],
+                        cities: ["TP. Hồ Chí Minh", "Hà Nội", "Bình Thuận", "Tỉnh/Thành phố khác"]
+                    };
                     update(ref(db, 'pageContent'), { form_config: cmsData.form_config }); 
                 }
+                // Upgrade config nếu thiếu
+                if (!cmsData.form_config.studyModes) cmsData.form_config.studyModes = ["Học tại trung tâm", "Học Online"];
+                if (!cmsData.form_config.cities) cmsData.form_config.cities = ["TP. Hồ Chí Minh", "Bình Thuận", "Khác"];
+                
                 window.cmsFormConfig = cmsData.form_config;
                 window.renderFormConfigOptions();
                 window.updateFilterAgeDropdown();
 
+                // CẤU HÌNH KHỐI LIÊN HỆ ĐẶT TRƯỚC FOOTER
+                if (!cmsData.contact_data) {
+                    cmsData.contact_data = { phone: "028 7308 3333 (Phím 0)", messenger: "#" };
+                    update(ref(db, 'pageContent'), { contact_data: cmsData.contact_data });
+                }
+                if(document.getElementById('p_contact_phone')) {
+                    document.getElementById('p_contact_phone').innerText = cmsData.contact_data.phone;
+                }
+
                 if (!cmsData.custom_blocks) { cmsData.custom_blocks = []; }
 
-                // CẤU HÌNH DATA CHO KHỐI HÌNH ẢNH HOẠT ĐỘNG
                 if (!cmsData.activity_data) {
                     cmsData.activity_data = { title: "HÌNH ẢNH HOẠT ĐỘNG", slides: [{ img: "https://via.placeholder.com/1200x600?text=Activity+Image", text: "Nội dung hình ảnh hoạt động..." }] };
                     update(ref(db, 'pageContent'), { activity_data: cmsData.activity_data });
                 }
 
-                // CẤU HÌNH KHÔI PHỤC DATA GIÁO VIÊN CŨ CHUẨN XÁC
                 if (!cmsData.teacher_data) {
                     cmsData.teacher_data = { title: "ĐỘI NGŨ GIẢNG VIÊN", icon: "bi-person-video3", color: "#00d5ff", cards: [] };
                     update(ref(db, 'pageContent'), { teacher_data: cmsData.teacher_data });
                 }
 
-                if (!cmsData.visibility) { cmsData.visibility = { header: true, activity: true, teacher: true, intro: true, contact: true, footer: true }; update(ref(db, 'pageContent'), { visibility: cmsData.visibility }); }
+                if (!cmsData.visibility) { cmsData.visibility = { header: true, news: true, about: true, activity: true, teacher: true, intro: true, contact_form: true, footer: true }; update(ref(db, 'pageContent'), { visibility: cmsData.visibility }); }
                 else { 
                     let updatedVis = false;
+                    if(cmsData.visibility.news === undefined) { cmsData.visibility.news = true; updatedVis = true; }
+                    if(cmsData.visibility.about === undefined) { cmsData.visibility.about = true; updatedVis = true; }
                     if(cmsData.visibility.activity === undefined) { cmsData.visibility.activity = true; updatedVis = true; }
                     if(cmsData.visibility.teacher === undefined) { cmsData.visibility.teacher = true; updatedVis = true; }
-                    
-                    // FIX LỖI KHỐI GIÁO VIÊN BỊ ẨN MẶC ĐỊNH
-                    if(cmsData.visibility.teacher === false) { cmsData.visibility.teacher = true; updatedVis = true; }
-
+                    if(cmsData.visibility.contact_form === undefined) { cmsData.visibility.contact_form = true; updatedVis = true; }
                     if(updatedVis) update(ref(db, 'pageContent/visibility'), cmsData.visibility); 
                 }
 
                 if (!cmsData.footer_data) { cmsData.footer_data = { logo: "https://media.leloipt.edu.vn/Media/30_TH1041/Images/footer-logo-leloi83f2a8da-5-e.png", name: "CÔNG TY CỔ PHẦN QUỐC TẾ ANH VĂN HỘI VIỆT MỸ", license: "Giấy chứng nhận doanh nghiệp số: 0313548147", address: "Trụ Sở Chính Tại 189 Nguyễn Thị Minh Khai, Phường Bến Thành, TP. Hồ Chí Minh", privacy: "Chính sách bảo vệ dữ liệu cá nhân", map_lat: "10.768820", map_lng: "106.688320", map_w: "100%", map_h: "150px" }; update(ref(db, 'pageContent'), { footer_data: cmsData.footer_data }); }
 
                 const applyVis = (id, key) => { let el = document.getElementById(id); if(el) { if(!cmsData.visibility[key]) el.classList.add('is-hidden-section'); else el.classList.remove('is-hidden-section'); } };
-                applyVis('wrap_header', 'header'); applyVis('wrap_activity', 'activity'); applyVis('wrap_intro', 'intro'); applyVis('wrap_footer', 'footer');
+                applyVis('wrap_header', 'header'); applyVis('wrap_news', 'news'); applyVis('wrap_about', 'about'); applyVis('wrap_activity', 'activity'); applyVis('wrap_intro', 'intro'); applyVis('wrap_contact_form', 'contact_form'); applyVis('wrap_footer', 'footer');
 
                 const setT = (id) => { if(document.getElementById('p_'+id)) document.getElementById('p_'+id).innerHTML = cmsData[id]||'...'; }; const setI = (id) => { if(document.getElementById('p_'+id)) document.getElementById('p_'+id).src = cmsData[id]||''; };
                 setI('logo'); setT('site_title'); setT('sec1_title'); setT('sec1_desc');
                 
                 if(cmsData.intro_bg_color) document.getElementById('cms_intro_bg_preview').style.backgroundColor = cmsData.intro_bg_color; else document.getElementById('cms_intro_bg_preview').style.backgroundColor = 'transparent';
 
-                // RENDER KHỐI HÌNH ẢNH HOẠT ĐỘNG
+                // Đổ dữ liệu cho LLC NEWS MẶC ĐỊNH
+                if (document.getElementById('p_news_title')) document.getElementById('p_news_title').innerText = cmsData.news_data.title || "LLC NEWS";
+                if(document.getElementById('cms_news_render')) {
+                    let newsHTML = '';
+                    if(cmsData.news_data.slides) {
+                        cmsData.news_data.slides.forEach((s, i) => {
+                            newsHTML += `<div class="swiper-slide" style="width:250px;"><div class="position-relative w-100" onclick="event.stopPropagation()">
+                                <div class="cms-actions" style="top: 10px; right: 10px; z-index: 10; display:flex;"><button onclick="cmsEditNewsSlide(${i})" class="btn btn-sm btn-primary py-1 px-2"><i class="bi bi-pencil"></i> Sửa</button><button onclick="window.swalDelNewsDirect(${i})" class="btn btn-sm btn-danger py-1 px-2 ms-1"><i class="bi bi-trash"></i></button></div>
+                                <img src="${s.img || 'https://via.placeholder.com/800x600'}" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: contain;">
+                            </div></div>`;
+                        });
+                    }
+                    document.getElementById('cms_news_render').innerHTML = newsHTML;
+                }
+
+                if(document.getElementById('p_about_img')) document.getElementById('p_about_img').src = cmsData.about_data.img || 'https://via.placeholder.com/600x400';
+                if(document.getElementById('p_about_title')) { document.getElementById('p_about_title').innerText = cmsData.about_data.title || 'Tiêu Đề'; document.getElementById('p_about_title').style.color = cmsData.about_data.titleColor || '#112255'; }
+                if(document.getElementById('p_about_desc')) { document.getElementById('p_about_desc').innerHTML = cmsData.about_data.desc || 'Mô tả...'; document.getElementById('p_about_desc').style.color = cmsData.about_data.descColor || '#475569'; }
+                if(document.getElementById('cms_about_bg')) document.getElementById('cms_about_bg').style.backgroundColor = cmsData.about_data.bgColor || 'transparent';
+
                 document.getElementById('p_activity_title').innerText = cmsData.activity_data.title || "HÌNH ẢNH HOẠT ĐỘNG";
                 let actHTML = '';
                 if(cmsData.activity_data.slides) {
@@ -522,7 +898,6 @@
                 }
                 document.getElementById('cms_activity_render').innerHTML = actHTML;
 
-                // RENDER KHỐI GIÁO VIÊN TOÀN CỤC BỊ ẨN MẤT HOẶC XÓA
                 document.getElementById('p_teacher_title_global').innerText = cmsData.teacher_data.title || "ĐỘI NGŨ GIẢNG VIÊN";
                 let gtbColor = cmsData.teacher_data.color || '#00d5ff';
                 let gtbIcon = cmsData.teacher_data.icon || 'bi-person-video3';
@@ -536,10 +911,7 @@
                         let st = wg.querySelector('.sm-toolbar'); if(st) st.style.background = gtbColor;
                         let ei = document.getElementById('p_teacher_icon_global'); if(ei) ei.className = `bi ${gtbIcon}`;
                         let eh = wg.querySelector('.editable-block'); if(eh) eh.style.color = gtbColor;
-                        
-                        // Áp dụng lớp ẩn nếu thuộc tính visibility đang false
-                        if(!cmsData.visibility['teacher']) wg.classList.add('is-hidden-section');
-                        else wg.classList.remove('is-hidden-section');
+                        if(!cmsData.visibility['teacher']) wg.classList.add('is-hidden-section'); else wg.classList.remove('is-hidden-section');
                     }
                 }
 
@@ -587,6 +959,19 @@
                         let innerCards = ''; if(block.cards) { block.cards.forEach((c, cIndex) => { let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience || '0'}</span><small>năm<br>kinh nghiệm</small></div>`; innerCards += `<div class="swiper-slide"><div class="cms-card-wrapper teacher-card" onclick="event.stopPropagation();" style="border-color: ${c.bgColor||'#00d5ff'} !important;"><div class="cms-actions"><button onclick="event.stopPropagation(); cmsEditTeacherCard(${cIndex}, ${bIndex})" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i> Sửa</button><button onclick="event.stopPropagation(); cmsDeleteTeacherCard(${cIndex}, ${bIndex})" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button></div>${badgeHTML}<img src="${c.img || 'https://via.placeholder.com/400x500?text=Teacher'}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role || 'Chức vụ'}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name || 'TÊN GIÁO VIÊN'}</h4></div></div></div>`; }); }
                         dbHTML = `<div class="section-master ${isHidClass}" style="border-color:${tbColor};">${masterToolbar}<div class="section-master-header" style="border-bottom-color: ${tbColor};"><h5 class="sm-title editable-block p-1 m-0" onclick="cmsEditTeacherTitle(${bIndex})" style="color:${tbColor};"><i class="bi ${tbIcon}"></i> ${block.title||'Đội Ngũ Giảng Viên'}<div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></h5><button class="btn btn-sm btn-outline-info text-dark fw-bold" onclick="cmsAddTeacherCard(${bIndex})"><i class="bi bi-plus-circle"></i> Quản lý Giáo Viên</button></div><div class="p-3 rounded-4" style="background-color: transparent;"><div class="swiper teacherSwiper-${bIndex} teacherSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div></div>`;
                     }
+                    else if (block.type === 'news') {
+                        let nColor = block.color || '#ff9800';
+                        let innerSlides = '';
+                        if(block.slides) {
+                            block.slides.forEach((s, sIndex) => {
+                                innerSlides += `<div class="swiper-slide" style="width:200px;"><div class="position-relative w-100" onclick="event.stopPropagation()">
+                                    <div class="cms-actions" style="top: 5px; right: 5px; z-index: 10; display:flex;"><button onclick="event.stopPropagation(); cmsEditCustomNewsSlide(${sIndex}, ${bIndex})" class="btn btn-sm btn-primary py-1 px-2"><i class="bi bi-pencil"></i></button><button onclick="event.stopPropagation(); window.swalDelCustomNewsDirect(${sIndex}, ${bIndex})" class="btn btn-sm btn-danger py-1 px-2 ms-1"><i class="bi bi-trash"></i></button></div>
+                                    <img src="${s.img || 'https://via.placeholder.com/800x600'}" style="width: 100%; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: contain;">
+                                </div></div>`;
+                            });
+                        }
+                        dbHTML = `<div class="section-master ${isHidClass}" style="border-color:${nColor}; background: #f8fafc;">${masterToolbar}<div class="text-center mb-4 editable-block" onclick="cmsEditBlockTitle(${bIndex})"><h3 class="fw-bold" style="color: ${nColor}; text-transform: uppercase;">${block.title}</h3><div style="width: 50px; height: 3px; background-color: ${nColor}; margin: 10px auto;"></div><div class="edit-btn-overlay"><i class="bi bi-pencil"></i></div></div><div class="position-relative p-2"><div class="text-center mb-3"><button class="btn btn-sm btn-outline-warning text-dark fw-bold" onclick="cmsAddCustomNewsSlide(${bIndex})"><i class="bi bi-plus-circle"></i> Quản lý Ảnh NEWS</button></div><div class="swiper customNewsSwiper-${bIndex}" style="padding-bottom: 30px;"><div class="swiper-wrapper">${innerSlides}</div><div class="swiper-pagination"></div></div></div></div>`;
+                    }
 
                     let dropZoneHtml = `<div class="drop-zone mini-drop" ondrop="window.dropHandlerBetween(event, ${bIndex})" ondragover="allowDrop(event)" ondragleave="dragLeave(event)" ondragenter="allowDrop(event)"><i class="bi bi-arrow-down-circle"></i> Thả khối mới vào giữa đây</div>`;
                     if(block.pos === 'pos-top') { renderTop += dbHTML + dropZoneHtml; }
@@ -599,9 +984,10 @@
                 document.getElementById('render_pos_mid2').innerHTML = renderMid2;
                 document.getElementById('render_pos_bottom').innerHTML = renderBottom;
 
-                // TẢI LẠI SWIPER JS CHO TẤT CẢ CÁC SLIDES CÓ TRÊN TRANG (Tạo độ trễ nhẹ để HTML render xong)
-                // CHÚ Ý: Bổ sung observer: true, observeParents: true để khắc phục lỗi Bootstrap ẩn Tabs làm Slider không lên hình
                 setTimeout(() => {
+                    if (window.newsSwiperPreviewInstance) window.newsSwiperPreviewInstance.destroy(true, true);
+                    window.newsSwiperPreviewInstance = new Swiper('.newsSwiperPreview', { slidesPerView: 2, spaceBetween: 20, observer: true, observeParents: true, pagination: { el: '.swiper-pagination', clickable: true } });
+
                     if (window.activitySwiperInstance) window.activitySwiperInstance.destroy(true, true);
                     window.activitySwiperInstance = new Swiper('.activitySwiper', { slidesPerView: 1, spaceBetween: 20, observer: true, observeParents: true, autoplay: { delay: 2000, disableOnInteraction: false }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } });
 
@@ -612,6 +998,10 @@
                         if(block.type === 'teacher') {
                             if(window[`teacherSwiperInstance_${bIndex}`]) window[`teacherSwiperInstance_${bIndex}`].destroy(true, true);
                             window[`teacherSwiperInstance_${bIndex}`] = new Swiper(`.teacherSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, observer: true, observeParents: true, autoplay: { delay: 2000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } });
+                        }
+                        if (block.type === 'news') {
+                            if(window[`customNewsSwiperInstance_${bIndex}`]) window[`customNewsSwiperInstance_${bIndex}`].destroy(true, true);
+                            window[`customNewsSwiperInstance_${bIndex}`] = new Swiper(`.customNewsSwiper-${bIndex}`, { slidesPerView: 2, spaceBetween: 20, observer: true, observeParents: true, pagination: { el: '.swiper-pagination', clickable: true } });
                         }
                     });
                 }, 100);
@@ -627,22 +1017,281 @@
             }
         });
 
-        // XỬ LÝ KHỐI HÌNH ẢNH HOẠT ĐỘNG
+        // HÀM SỬA KHỐI LIÊN HỆ ĐẶT TRƯỚC FOOTER
+        window.cmsEditContactForm = async () => {
+            let cd = cmsData.contact_data || { phone: "028 7308 3333 (Phím 0)", messenger: "#" };
+            const { value: vals } = await Swal.fire({
+                title: 'Tùy Chỉnh Nút Liên Hệ (Form Mới)',
+                html: `
+                    <div class="alert alert-info text-start small">
+                        Khối đăng ký này dùng chung dữ liệu Độ Tuổi, Hình Thức, Thành Phố từ Nút "Sửa Form Đăng Ký" trên đầu trang.<br>
+                        Tại đây bạn chỉ có thể sửa thông tin nút Gọi Điện và Nhắn Tin.
+                    </div>
+                    <label class="fw-bold text-start d-block mb-1">Số điện thoại hiển thị:</label>
+                    <input id="swal-cf-phone" class="form-control mb-3" value="${cd.phone}">
+                    <label class="fw-bold text-start d-block mb-1">Link Messenger / Zalo:</label>
+                    <input id="swal-cf-messenger" class="form-control mb-3" value="${cd.messenger}">
+                `,
+                showCancelButton: true, confirmButtonText: 'Lưu thay đổi', cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    return {
+                        phone: document.getElementById('swal-cf-phone').value,
+                        messenger: document.getElementById('swal-cf-messenger').value
+                    }
+                }
+            });
+            if(vals) {
+                cmsData.contact_data = vals;
+                await update(ref(db, 'pageContent'), { contact_data: vals });
+                Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000});
+            }
+        };
+
+        // HÀM SỬA KHỐI GIỚI THIỆU (ABOUT)
+        window.cmsEditAbout = async () => {
+            let ab = cmsData.about_data || {};
+            const { value: vals } = await Swal.fire({
+                title: 'Sửa Khối Ảnh & Chữ', width: '800px',
+                html: `
+                    <div class="row">
+                        <div class="col-md-5">
+                            <label class="fw-bold small text-start d-block mb-1">Ảnh bên trái:</label>
+                            <img id="preview-about-img" src="${ab.img || 'https://via.placeholder.com/600x400'}" style="width: 100%; border-radius: 8px; margin-bottom: 10px; object-fit: cover; aspect-ratio: 16/10;">
+                            <input id="swal-about-img" class="form-control form-control-sm mb-2" placeholder="Dán link ảnh..." value="${ab.img || ''}">
+                            <input type="file" class="form-control form-control-sm mb-3" accept="image/*" onchange="encodeImageFileAsURLAbout(this)">
+                            <input type="hidden" id="swal-img-b64-about" value="">
+                        </div>
+                        <div class="col-md-7 text-start">
+                            <label class="fw-bold small mb-1">Tiêu đề (cột phải):</label>
+                            <input id="swal-about-title" class="form-control mb-3 fw-bold" value="${ab.title || ''}" placeholder="Nhập tiêu đề...">
+                            <label class="fw-bold small mb-1">Nội dung văn bản (chuẩn hộp thoại):</label>
+                            <div class="editor-toolbar bg-light border p-1 mb-1 d-flex gap-1 flex-wrap rounded">
+                                <button type="button" class="btn btn-sm btn-outline-dark fw-bold" onmousedown="event.preventDefault();" onclick="document.execCommand('bold', false, '');" title="In đậm">B</button>
+                                <button type="button" class="btn btn-sm btn-outline-dark fst-italic" onmousedown="event.preventDefault();" onclick="document.execCommand('italic', false, '');" title="In nghiêng">I</button>
+                                <button type="button" class="btn btn-sm btn-outline-dark text-decoration-underline" onmousedown="event.preventDefault();" onclick="document.execCommand('underline', false, '');" title="Gạch chân">U</button>
+                                <div class="vr mx-1"></div>
+                                <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('justifyLeft', false, '');" title="Căn trái"><i class="bi bi-text-left"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('justifyCenter', false, '');" title="Căn giữa"><i class="bi bi-text-center"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-dark" onmousedown="event.preventDefault();" onclick="document.execCommand('justifyRight', false, '');" title="Căn phải"><i class="bi bi-text-right"></i></button>
+                                <div class="vr mx-1"></div>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onmousedown="event.preventDefault();" onclick="document.execCommand('removeFormat', false, '');"><i class="bi bi-eraser"></i></button>
+                            </div>
+                            <div id="swal-about-desc" contenteditable="true" class="form-control" style="min-height: 150px; max-height: 250px; overflow-y: auto;">${ab.desc || ''}</div>
+                        </div>
+                    </div>
+                    <div class="row mt-3 text-start">
+                        <div class="col-4"><label class="fw-bold small">Màu nền khối:</label><input type="color" id="swal-about-bg" value="${ab.bgColor || '#ffffff'}" class="form-control form-control-color form-control-sm w-100 p-0"></div>
+                        <div class="col-4"><label class="fw-bold small">Màu tiêu đề:</label><input type="color" id="swal-about-title-color" value="${ab.titleColor || '#112255'}" class="form-control form-control-color form-control-sm w-100 p-0"></div>
+                        <div class="col-4"><label class="fw-bold small">Màu chữ nội dung:</label><input type="color" id="swal-about-desc-color" value="${ab.descColor || '#475569'}" class="form-control form-control-color form-control-sm w-100 p-0"></div>
+                    </div>
+                `,
+                showCancelButton: true, confirmButtonText: 'Lưu thay đổi', cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    let b64 = document.getElementById('swal-img-b64-about').value; let url = document.getElementById('swal-about-img').value;
+                    return { img: b64 ? b64 : url, title: document.getElementById('swal-about-title').value, desc: document.getElementById('swal-about-desc').innerHTML, bgColor: document.getElementById('swal-about-bg').value, titleColor: document.getElementById('swal-about-title-color').value, descColor: document.getElementById('swal-about-desc-color').value }
+                }
+            });
+            if(vals) { cmsData.about_data = vals; await update(ref(db, 'pageContent/about_data'), vals); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu thành công!', showConfirmButton:false, timer:2000}); }
+        };
+
+        // CÁC HÀM XỬ LÝ KHỐI LLC NEWS (MẶC ĐỊNH)
+        window.cmsEditNewsTitle = async () => {
+            const { value: title } = await Swal.fire({ title: 'Sửa Tiêu Đề LLC NEWS', input: 'text', inputValue: cmsData.news_data.title, showCancelButton: true, cancelButtonText: 'Hủy' });
+            if(title) { cmsData.news_data.title = title; await update(ref(db, 'pageContent/news_data'), cmsData.news_data); }
+        };
+
+        window.swalDelNewsDirect = async (idx) => {
+            Swal.fire({ title: 'Xóa ảnh này khỏi LLC NEWS?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Đồng ý', cancelButtonText: 'Hủy' }).then(async (r) => {
+                if(r.isConfirmed) {
+                    cmsData.news_data.slides.splice(idx, 1);
+                    await update(ref(db, 'pageContent/news_data'), cmsData.news_data);
+                }
+            });
+        };
+
+        window.swalDelNews = async (idx) => {
+            Swal.fire({ title: 'Xóa ảnh này?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Đồng ý', cancelButtonText: 'Hủy' }).then(async (r) => {
+                if(r.isConfirmed) {
+                    cmsData.news_data.slides.splice(idx, 1);
+                    await update(ref(db, 'pageContent/news_data'), cmsData.news_data);
+                    let newList = '';
+                    cmsData.news_data.slides.forEach((s, i) => {
+                        newList += `<tr><td>${i+1}</td><td class="text-start"><img src="${s.img}" style="width:30px; height:30px; object-fit:cover;" class="border rounded"></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelNews(${i})"><i class="bi bi-trash"></i></button></td></tr>`;
+                    });
+                    document.getElementById('swal-news-tbody').innerHTML = newList;
+                }
+            });
+        };
+
+        window.cmsAddNewsSlide = async () => {
+            let listHTML = '';
+            if(cmsData.news_data.slides) {
+                cmsData.news_data.slides.forEach((s, i) => {
+                    listHTML += `<tr><td>${i+1}</td><td class="text-start"><img src="${s.img}" style="width:30px; height:30px; object-fit:cover;" class="border rounded"></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelNews(${i})"><i class="bi bi-trash"></i></button></td></tr>`;
+                });
+            }
+
+            let leftCol = `
+                <div class="text-start pe-2">
+                    <div class="text-center mb-2 d-none" id="preview-news-add-wrapper">
+                        <img id="preview-news-add-img" src="" style="max-height: 120px; border-radius: 8px; object-fit: contain;">
+                    </div>
+                    <label class="fw-bold mb-1 small">Link Ảnh HOẶC Tải ảnh từ máy:</label>
+                    <input id="swal-img-news-add" class="form-control form-control-sm mb-2" placeholder="Dán link ảnh...">
+                    <input id="swal-img-file-news-add" type="file" class="form-control form-control-sm mb-2" accept="image/*" onchange="encodeImageFileAsURLNewsAdd(this)">
+                    <input type="hidden" id="swal-img-b64-news-add" value="">
+                </div>
+            `;
+            
+            let rightCol = `
+                <div class="text-start ps-2" style="max-height: 300px; overflow-y: auto;">
+                    <label class="fw-bold mb-2 text-primary small">Dữ liệu hiện tại:</label>
+                    <table class="table table-sm table-bordered table-hover">
+                        <thead class="table-light"><tr><th style="width:40px;">STT</th><th>Ảnh Cover</th><th style="width:40px;">Xóa</th></tr></thead>
+                        <tbody id="swal-news-tbody">${listHTML}</tbody>
+                    </table>
+                </div>
+            `;
+            
+            let htmlFull = `<div class="row m-0"><div class="col-md-6 border-end p-0">${leftCol}</div><div class="col-md-6 p-0">${rightCol}</div></div>`;
+
+            const { value: vals } = await Swal.fire({
+                title: 'Quản Lý Ảnh LLC NEWS', width: '700px', html: htmlFull,
+                showCancelButton: true, confirmButtonText: 'Thêm mới', cancelButtonText: 'Đóng',
+                preConfirm: () => {
+                    let b64 = document.getElementById('swal-img-b64-news-add').value;
+                    let url = document.getElementById('swal-img-news-add').value;
+                    let finalImg = b64 ? b64 : url;
+                    if (!finalImg) { Swal.showValidationMessage('Vui lòng chọn ảnh từ máy hoặc dán link ảnh!'); return false; }
+                    return { img: finalImg };
+                }
+            });
+            
+            if(vals) {
+                if(!cmsData.news_data.slides) cmsData.news_data.slides = [];
+                cmsData.news_data.slides.push(vals);
+                await update(ref(db, 'pageContent/news_data'), cmsData.news_data);
+                Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã thêm thành công!', showConfirmButton:false, timer:2000});
+            }
+        };
+
+        window.cmsEditNewsSlide = async (i) => {
+            let slide = cmsData.news_data.slides[i];
+            const { value: vals } = await Swal.fire({
+                title: 'Sửa Ảnh LLC NEWS',
+                html: `
+                    <div class="text-center mb-3">
+                        <img id="preview-news-img" src="${slide.img}" style="max-height: 150px; border-radius: 8px; object-fit: contain;">
+                    </div>
+                    <label class="fw-bold d-block text-start small mb-1">Thay thế (Dán Link HOẶC Tải ảnh mới):</label>
+                    <input id="swal-img-news" class="swal2-input mt-0 mb-2" placeholder="Dán link ảnh..." value="${slide.img || ''}">
+                    <input id="swal-img-file-news" type="file" class="form-control w-75 mx-auto mb-3" accept="image/*" onchange="encodeImageFileAsURLNews(this)">
+                    <input type="hidden" id="swal-img-b64-news" value="">
+                `,
+                showCancelButton: true, confirmButtonText: 'Lưu thay đổi', cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    let b64 = document.getElementById('swal-img-b64-news').value; let url = document.getElementById('swal-img-news').value;
+                    return { img: b64 ? b64 : url };
+                }
+            });
+            if(vals) { cmsData.news_data.slides[i] = vals; await update(ref(db, 'pageContent/news_data'), cmsData.news_data); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); }
+        };
+
+        window.encodeImageFileAsURLNews = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); document.getElementById('swal-img-b64-news').value = ''; document.getElementById('swal-img-news').value = url; if(document.getElementById('preview-news-img')) document.getElementById('preview-news-img').src = url; } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
+        window.encodeImageFileAsURLNewsAdd = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); document.getElementById('swal-img-b64-news-add').value = ''; document.getElementById('swal-img-news-add').value = url; if(document.getElementById('preview-news-add-wrapper')) { document.getElementById('preview-news-add-wrapper').classList.remove('d-none'); document.getElementById('preview-news-add-img').src = url; } } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
+
+        // =========================================================
+        // CÁC HÀM XỬ LÝ KHỐI LLC NEWS (KÉO THẢ TÙY CHỈNH)
+        // =========================================================
+        window.swalDelCustomNewsDirect = async (idx, bIndex) => {
+            Swal.fire({ title: 'Xóa ảnh này khỏi LLC NEWS?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Đồng ý', cancelButtonText: 'Hủy' }).then(async (r) => {
+                if(r.isConfirmed) {
+                    cmsData.custom_blocks[bIndex].slides.splice(idx, 1);
+                    await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks });
+                }
+            });
+        };
+
+        window.swalDelCustomNews = async (idx, bIndex) => {
+            Swal.fire({ title: 'Xóa ảnh này?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Đồng ý', cancelButtonText: 'Hủy' }).then(async (r) => {
+                if(r.isConfirmed) {
+                    cmsData.custom_blocks[bIndex].slides.splice(idx, 1);
+                    await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks });
+                    let newList = '';
+                    cmsData.custom_blocks[bIndex].slides.forEach((s, i) => {
+                        newList += `<tr><td>${i+1}</td><td class="text-start"><img src="${s.img}" style="width:30px; height:30px; object-fit:cover;" class="border rounded"></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelCustomNews(${i}, ${bIndex})"><i class="bi bi-trash"></i></button></td></tr>`;
+                    });
+                    document.getElementById('swal-custom-news-tbody').innerHTML = newList;
+                }
+            });
+        };
+
+        window.cmsAddCustomNewsSlide = async (bIndex) => {
+            let block = cmsData.custom_blocks[bIndex];
+            if(!block.slides) block.slides = [];
+            let listHTML = '';
+            block.slides.forEach((s, i) => {
+                listHTML += `<tr><td>${i+1}</td><td class="text-start"><img src="${s.img}" style="width:30px; height:30px; object-fit:cover;" class="border rounded"></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelCustomNews(${i}, ${bIndex})"><i class="bi bi-trash"></i></button></td></tr>`;
+            });
+
+            let leftCol = `<div class="text-start pe-2"><div class="text-center mb-2 d-none" id="preview-cnews-add-wrapper"><img id="preview-cnews-add-img" src="" style="max-height: 120px; border-radius: 8px; object-fit: contain;"></div><label class="fw-bold mb-1 small">Link Ảnh HOẶC Tải ảnh từ máy:</label><input id="swal-img-cnews-add" class="form-control form-control-sm mb-2" placeholder="Dán link ảnh..."><input id="swal-img-file-cnews-add" type="file" class="form-control form-control-sm mb-2" accept="image/*" onchange="encodeImageFileAsURLCNewsAdd(this)"><input type="hidden" id="swal-img-b64-cnews-add" value=""></div>`;
+            let rightCol = `<div class="text-start ps-2" style="max-height: 300px; overflow-y: auto;"><label class="fw-bold mb-2 text-primary small">Dữ liệu hiện tại:</label><table class="table table-sm table-bordered table-hover"><thead class="table-light"><tr><th style="width:40px;">STT</th><th>Ảnh Cover</th><th style="width:40px;">Xóa</th></tr></thead><tbody id="swal-custom-news-tbody">${listHTML}</tbody></table></div>`;
+            
+            const { value: vals } = await Swal.fire({
+                title: 'Quản Lý Ảnh NEWS Mới', width: '700px', html: `<div class="row m-0"><div class="col-md-6 border-end p-0">${leftCol}</div><div class="col-md-6 p-0">${rightCol}</div></div>`,
+                showCancelButton: true, confirmButtonText: 'Thêm mới', cancelButtonText: 'Đóng',
+                preConfirm: () => {
+                    let b64 = document.getElementById('swal-img-b64-cnews-add').value;
+                    let url = document.getElementById('swal-img-cnews-add').value;
+                    let finalImg = b64 ? b64 : url;
+                    if (!finalImg) { Swal.showValidationMessage('Vui lòng chọn ảnh!'); return false; }
+                    return { img: finalImg };
+                }
+            });
+            
+            if(vals) {
+                cmsData.custom_blocks[bIndex].slides.push(vals);
+                await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks });
+                Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã thêm!', showConfirmButton:false, timer:2000});
+            }
+        };
+
+        window.cmsEditCustomNewsSlide = async (idx, bIndex) => {
+            let slide = cmsData.custom_blocks[bIndex].slides[idx];
+            const { value: vals } = await Swal.fire({
+                title: 'Sửa Ảnh NEWS',
+                html: `<div class="text-center mb-3"><img id="preview-cnews-img" src="${slide.img}" style="max-height: 150px; border-radius: 8px; object-fit: contain;"></div><label class="fw-bold d-block text-start small mb-1">Thay thế (Link HOẶC Tải ảnh):</label><input id="swal-img-cnews" class="swal2-input mt-0 mb-2" value="${slide.img || ''}"><input id="swal-img-file-cnews" type="file" class="form-control w-75 mx-auto mb-3" accept="image/*" onchange="encodeImageFileAsURLCNews(this)"><input type="hidden" id="swal-img-b64-cnews" value="">`,
+                showCancelButton: true, confirmButtonText: 'Lưu thay đổi', cancelButtonText: 'Hủy',
+                preConfirm: () => {
+                    let b64 = document.getElementById('swal-img-b64-cnews').value; let url = document.getElementById('swal-img-cnews').value;
+                    return { img: b64 ? b64 : url };
+                }
+            });
+            if(vals) { cmsData.custom_blocks[bIndex].slides[idx] = vals; await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); }
+        };
+
+        window.encodeImageFileAsURLCNewsAdd = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); document.getElementById('swal-img-b64-cnews-add').value = ''; document.getElementById('swal-img-cnews-add').value = url; if(document.getElementById('preview-cnews-add-wrapper')) { document.getElementById('preview-cnews-add-wrapper').classList.remove('d-none'); document.getElementById('preview-cnews-add-img').src = url; } } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
+        window.encodeImageFileAsURLCNews = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); document.getElementById('swal-img-b64-cnews').value = ''; document.getElementById('swal-img-cnews').value = url; if(document.getElementById('preview-cnews-img')) document.getElementById('preview-cnews-img').src = url; } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
+
+
+        // CÁC HÀM XỬ LÝ KHỐI HOẠT ĐỘNG
         window.cmsEditActivityTitle = async () => {
-            const { value: title } = await Swal.fire({ title: 'Sửa Tiêu Đề', input: 'text', inputValue: cmsData.activity_data.title });
+            const { value: title } = await Swal.fire({ title: 'Sửa Tiêu Đề', input: 'text', inputValue: cmsData.activity_data.title, showCancelButton: true, cancelButtonText: 'Hủy' });
             if(title) { cmsData.activity_data.title = title; await update(ref(db, 'pageContent/activity_data'), cmsData.activity_data); }
         };
         
         window.swalDelAct = async (idx) => {
-            if(confirm('Bạn có chắc chắn muốn xóa ảnh này?')) {
-                cmsData.activity_data.slides.splice(idx, 1);
-                await update(ref(db, 'pageContent/activity_data'), cmsData.activity_data);
-                let newList = '';
-                cmsData.activity_data.slides.forEach((s, i) => {
-                    newList += `<tr><td>${i+1}</td><td class="text-start"><img src="${s.img}" style="width:30px; height:30px; object-fit:cover;" class="me-1 border rounded"><span class="small">${s.text ? s.text.substring(0, 20)+'...' : ''}</span></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelAct(${i})"><i class="bi bi-trash"></i></button></td></tr>`;
-                });
-                document.getElementById('swal-act-tbody').innerHTML = newList;
-            }
+            Swal.fire({ title: 'Xóa ảnh hoạt động này?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Đồng ý', cancelButtonText: 'Hủy' }).then(async (r) => {
+                if(r.isConfirmed) {
+                    cmsData.activity_data.slides.splice(idx, 1);
+                    await update(ref(db, 'pageContent/activity_data'), cmsData.activity_data);
+                    let newList = '';
+                    cmsData.activity_data.slides.forEach((s, i) => {
+                        newList += `<tr><td>${i+1}</td><td class="text-start"><img src="${s.img}" style="width:30px; height:30px; object-fit:cover;" class="me-1 border rounded"><span class="small">${s.text ? s.text.substring(0, 20)+'...' : ''}</span></td><td><button type="button" class="btn btn-sm btn-danger py-0 px-1" onclick="window.swalDelAct(${i})"><i class="bi bi-trash"></i></button></td></tr>`;
+                    });
+                    document.getElementById('swal-act-tbody').innerHTML = newList;
+                }
+            });
         };
 
         window.cmsAddActivitySlide = async () => {
@@ -713,17 +1362,17 @@
             const { value: vals } = await Swal.fire({
                 title: 'Sửa Ảnh & Nội Dung',
                 html: `${imgHtml}<div class="text-start mt-3"><label class="fw-bold">Nội dung (chữ in nghiêng):</label></div><textarea id="swal-text-act" class="swal2-textarea mt-0" placeholder="Nhập nội dung...">${slide.text || ''}</textarea>`,
-                showCancelButton: true, confirmButtonText: 'Lưu thay đổi',
+                showCancelButton: true, confirmButtonText: 'Lưu thay đổi', cancelButtonText: 'Hủy',
                 preConfirm: () => {
                     let b64 = document.getElementById('swal-img-b64-act').value; let url = document.getElementById('swal-img-act').value;
                     return { img: b64 ? b64 : url, text: document.getElementById('swal-text-act').value };
                 }
             });
-            if(vals) { cmsData.activity_data.slides[i] = vals; await update(ref(db, 'pageContent/activity_data'), cmsData.activity_data); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); }
+ if(vals) { cmsData.activity_data.slides[i] = vals; await update(ref(db, 'pageContent/activity_data'), cmsData.activity_data); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu!', showConfirmButton:false, timer:2000}); }
         };
 
-        window.encodeImageFileAsURLAct = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { document.getElementById('swal-img-b64-act').value = reader.result; document.getElementById('swal-img-act').value = ''; if(document.getElementById('preview-act-img')) document.getElementById('preview-act-img').src = reader.result; }; reader.readAsDataURL(file); };
-        window.encodeImageFileAsURLActAdd = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { document.getElementById('swal-img-b64-act-add').value = reader.result; document.getElementById('swal-img-act-add').value = ''; if(document.getElementById('preview-act-add-wrapper')) { document.getElementById('preview-act-add-wrapper').classList.remove('d-none'); document.getElementById('preview-act-add-img').src = reader.result; } }; reader.readAsDataURL(file); };
+        window.encodeImageFileAsURLAct = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); document.getElementById('swal-img-b64-act').value = ''; document.getElementById('swal-img-act').value = url; if(document.getElementById('preview-act-img')) document.getElementById('preview-act-img').src = url; } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
+        window.encodeImageFileAsURLActAdd = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); document.getElementById('swal-img-b64-act-add').value = ''; document.getElementById('swal-img-act-add').value = url; if(document.getElementById('preview-act-add-wrapper')) { document.getElementById('preview-act-add-wrapper').classList.remove('d-none'); document.getElementById('preview-act-add-img').src = url; } } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
 
         window.cmsToggleVis = async (key) => { let cur = cmsData.visibility ? cmsData.visibility[key] : true; await update(ref(db, 'pageContent/visibility'), { [key]: !cur }); };
         window.cmsToggleVisBlock = async (bIndex) => { cmsData.custom_blocks[bIndex].isHidden = !cmsData.custom_blocks[bIndex].isHidden; await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); };
@@ -735,12 +1384,16 @@
             let block = cmsData.custom_blocks[bIndex];
             let htmlForm = `<input id="swal-bt-title" class="swal2-input mt-0 mb-3" placeholder="Nhập tiêu đề..." value="${block.title||''}">`;
             
-            if(block.type === 'tech' || block.type === 'english') {
-                let iconsArr = ['bi-card-checklist', 'bi-robot', 'bi-controller', 'bi-laptop', 'bi-book', 'bi-brush', 'bi-code', 'bi-globe', 'bi-lightning', 'bi-palette', 'bi-rocket', 'bi-star'];
-                let currentIcon = block.icon || (block.type==='tech'?'bi-card-checklist':'bi-book');
-                htmlForm += `<div class="mb-2 text-start mt-3"><label class="fw-bold">Chọn Icon cho Tiêu đề:</label></div><div id="icon-picker" class="d-flex flex-wrap gap-2 mb-3 justify-content-center p-2 rounded bg-light border">` + iconsArr.map(i => `<i class="bi ${i} fs-3 p-2 border rounded bg-white icon-option ${currentIcon === i ? 'border-primary border-3' : ''}" style="cursor:pointer;" onclick="selectIcon('${i}', event)"></i>`).join('') + `</div><input type="hidden" id="swal-icon" value="${currentIcon}">`;
-                htmlForm += `<div class="mt-3 text-start px-2"><label class="fw-bold">Màu sắc Tiêu đề / Viền khối:</label><input type="color" id="swal-bt-color" value="${block.color || (block.type==='tech'?'#f15a3a':'#112255')}" class="form-control form-control-color w-100"></div>`;
-                htmlForm += `<div class="mt-3 text-start px-2"><label class="fw-bold">Màu nền toàn khối:</label><input type="color" id="swal-bt-bg" value="${block.bgColor || (block.type==='tech'?'transparent':'#00d5ff')}" class="form-control form-control-color w-100"></div>`;
+            if(block.type === 'tech' || block.type === 'english' || block.type === 'news') {
+                if(block.type !== 'news') {
+                    let iconsArr = ['bi-card-checklist', 'bi-robot', 'bi-controller', 'bi-laptop', 'bi-book', 'bi-brush', 'bi-code', 'bi-globe', 'bi-lightning', 'bi-palette', 'bi-rocket', 'bi-star'];
+                    let currentIcon = block.icon || (block.type==='tech'?'bi-card-checklist':'bi-book');
+                    htmlForm += `<div class="mb-2 text-start mt-3"><label class="fw-bold">Chọn Icon cho Tiêu đề:</label></div><div id="icon-picker" class="d-flex flex-wrap gap-2 mb-3 justify-content-center p-2 rounded bg-light border">` + iconsArr.map(i => `<i class="bi ${i} fs-3 p-2 border rounded bg-white icon-option ${currentIcon === i ? 'border-primary border-3' : ''}" style="cursor:pointer;" onclick="selectIcon('${i}', event)"></i>`).join('') + `</div><input type="hidden" id="swal-icon" value="${currentIcon}">`;
+                }
+                htmlForm += `<div class="mt-3 text-start px-2"><label class="fw-bold">Màu sắc Tiêu đề / Viền khối:</label><input type="color" id="swal-bt-color" value="${block.color || (block.type==='tech'?'#f15a3a':(block.type==='news'?'#ff9800':'#112255'))}" class="form-control form-control-color w-100"></div>`;
+                if(block.type !== 'news') {
+                    htmlForm += `<div class="mt-3 text-start px-2"><label class="fw-bold">Màu nền toàn khối:</label><input type="color" id="swal-bt-bg" value="${block.bgColor || (block.type==='tech'?'transparent':'#00d5ff')}" class="form-control form-control-color w-100"></div>`;
+                }
             }
 
             const { value: vals } = await Swal.fire({ 
@@ -756,9 +1409,9 @@
             if (vals) { cmsData.custom_blocks[bIndex].title = vals.title; if(vals.icon) cmsData.custom_blocks[bIndex].icon = vals.icon; if(vals.color) cmsData.custom_blocks[bIndex].color = vals.color; if(vals.bgColor) cmsData.custom_blocks[bIndex].bgColor = vals.bgColor; await update(ref(db, 'pageContent'), { custom_blocks: cmsData.custom_blocks }); } 
         };
 
-        window.encodeImageFileAsURL = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { if(document.getElementById('swal-img-b64')) document.getElementById('swal-img-b64').value = reader.result; if(document.getElementById('swal-img')) { document.getElementById('swal-img').value = ''; } if(document.getElementById('swal-f-logo')) document.getElementById('swal-f-logo').value = ''; }; reader.readAsDataURL(file); }
-        window.encodeImageFileAsURLTeacher = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { if(document.getElementById('swal-img-b64-teacher')) document.getElementById('swal-img-b64-teacher').value = reader.result; if(document.getElementById('swal-img-teacher')) { document.getElementById('swal-img-teacher').value = ''; } if(document.getElementById('preview-teacher-img')) document.getElementById('preview-teacher-img').src = reader.result; }; reader.readAsDataURL(file); }
-        window.encodeImageFileAsURLTeacherAdd = function(element) { let file = element.files[0]; if(!file) return; let reader = new FileReader(); reader.onloadend = function() { if(document.getElementById('swal-img-b64-teacher-add')) document.getElementById('swal-img-b64-teacher-add').value = reader.result; if(document.getElementById('swal-img-teacher-add')) { document.getElementById('swal-img-teacher-add').value = ''; } if(document.getElementById('preview-teacher-add-wrapper')) { document.getElementById('preview-teacher-add-wrapper').classList.remove('d-none'); document.getElementById('preview-teacher-add-img').src = reader.result; } }; reader.readAsDataURL(file); }
+        window.encodeImageFileAsURL = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); if(document.getElementById('swal-img-b64')) document.getElementById('swal-img-b64').value = ''; if(document.getElementById('swal-img')) document.getElementById('swal-img').value = url; if(document.getElementById('swal-f-logo')) document.getElementById('swal-f-logo').value = url; } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
+        window.encodeImageFileAsURLTeacher = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); if(document.getElementById('swal-img-b64-teacher')) document.getElementById('swal-img-b64-teacher').value = ''; if(document.getElementById('swal-img-teacher')) document.getElementById('swal-img-teacher').value = url; if(document.getElementById('preview-teacher-img')) document.getElementById('preview-teacher-img').src = url; } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
+        window.encodeImageFileAsURLTeacherAdd = async function(element) { let file = element.files[0]; if(!file) return; Swal.showLoading(); try { let url = await window.uploadImageToGitHub(file); if(document.getElementById('swal-img-b64-teacher-add')) document.getElementById('swal-img-b64-teacher-add').value = ''; if(document.getElementById('swal-img-teacher-add')) document.getElementById('swal-img-teacher-add').value = url; if(document.getElementById('preview-teacher-add-wrapper')) { document.getElementById('preview-teacher-add-wrapper').classList.remove('d-none'); document.getElementById('preview-teacher-add-img').src = url; } } catch(e) { Swal.showValidationMessage(e); } Swal.hideLoading(); };
         
         window.selectIcon = function(iconClass, event) { document.querySelectorAll('.icon-option').forEach(el => el.classList.remove('border-primary', 'border-3')); event.currentTarget.classList.add('border-primary', 'border-3'); document.getElementById('swal-icon').value = iconClass; }
 
@@ -774,6 +1427,7 @@
             else if (type === "tech-list") { newBlock = { ...newBlock, type: 'tech', title: 'Khối Thông Tin 1', color: '#f15a3a', icon: 'bi-card-checklist', cards: [{ img: "", title: "", desc: "", color: "#00d5ff", icon: "bi-robot", has_detail: false }] }; } 
             else if (type === "english-list") { newBlock = { ...newBlock, type: 'english', title: 'Khối Thông Tin 2', color: '#112255', icon: 'bi-book', bgColor: "#00d5ff", cards: [{ img: "", title: "", age: "", desc: "", bg_color: "#ffffff", text_color: "#233066", has_detail: false }] }; }
             else if (type === "teacher-list") { newBlock = { ...newBlock, type: 'teacher', title: 'Đội Ngũ Giảng Viên Mới', icon: 'bi-person-video3', color: '#00d5ff', cards: [{ img: "", name: "", role: "", experience: "", hideExperience: false, nameColor: "#112255", roleColor: "#112255", bgColor: "#00d5ff" }] }; }
+            else if (type === "news-list") { newBlock = { ...newBlock, type: 'news', title: 'LLC NEWS MỚI', color: '#ff9800', slides: [{ img: "https://via.placeholder.com/800x600?text=News+Image+1" }] }; }
             return newBlock;
         };
 
@@ -851,7 +1505,12 @@
         };
 
         window.insertDetailImage = async () => {
-            const { value: url } = await Swal.fire({ title: 'Chèn ảnh', input: 'url', inputPlaceholder: 'Dán link ảnh vào đây...', showCancelButton: true });
+            const { value: url } = await Swal.fire({ 
+                title: 'Chèn ảnh', 
+                html: `<input id="swal-detail-img" class="swal2-input mt-0 mb-2" placeholder="Dán link ảnh vào đây..."><label class="fw-bold small d-block text-start mb-1 px-4">Hoặc tải ảnh từ PC:</label><input type="file" class="form-control w-75 mx-auto" accept="image/*" onchange="window.handleSimpleUpload(this, 'swal-detail-img')">`,
+                showCancelButton: true,
+                preConfirm: () => document.getElementById('swal-detail-img').value
+            });
             if (url) {
                 document.getElementById('swal-detail-content').focus();
                 const imgHtml = `<div style="text-align: center; margin: 15px 0;"><img src="${url}" style="max-width: 100%; border-radius: 8px;" class="detail-editable-img" title="Click đúp để thêm ghi chú"></div><p><br></p>`;
@@ -944,8 +1603,7 @@
                 let iconGrid = `<div class="mb-2 text-start mt-3"><label class="fw-bold">Chọn Icon cho thẻ:</label></div><div id="icon-picker" class="d-flex flex-wrap gap-2 mb-3 justify-content-center p-2 rounded bg-light border">` + iconsArr.map(i => `<i class="bi ${i} fs-3 p-2 border rounded bg-white icon-option ${card.icon === i ? 'border-primary border-3' : ''}" style="cursor:pointer;" onclick="selectIcon('${i}', event)"></i>`).join('') + `</div><input type="hidden" id="swal-icon" value="${card.icon || 'bi-cpu'}">`; 
                 htmlForm = `<input id="swal-title" class="swal2-input mt-0" placeholder="Tiêu đề (Vd: Khóa học mới)" value="${card.title || ''}"><textarea id="swal-desc" class="swal2-textarea" placeholder="Nhập mô tả chi tiết...">${card.desc || ''}</textarea>${imgInputHtml}${iconGrid}<div class="mt-3 text-start px-4"><label class="fw-bold">Màu chủ đạo thẻ:</label><input type="color" id="swal-color" value="${card.color || '#000000'}" class="form-control form-control-color w-100"></div>${detailConfigHtml}`; 
             } else { 
-                htmlForm = `<input id="swal-title" class="swal2-input mt-0" placeholder="Tiêu đề (Vd: Tiếng anh trẻ em)" value="${card.title || ''}"><input id="swal-age" class="swal2-input" placeholder="Độ tuổi (vd: 4-6)" value="${card.age || ''}"><textarea id="swal-desc" class="swal2-textarea" placeholder="Nhập mô tả chi tiết...">${card.desc || ''}</textarea>${imgInputHtml}<div class="row mt-3"><div class="col-6 text-start"><label class="fw-bold">Màu nền thẻ:</label><input type="color" id="swal-bgcolor" value="${card.bg_color || '#ffffff'}" class="form-control form-control-color w-100"></div><div class="col-6 text-start"><label class="fw-bold">Màu chữ chung:</label><input type="color" id="swal-textcolor" value="${card.text_color || '#000000'}" class="form-control form-control-color w-100"></div></div>${detailConfigHtml}`; 
-            } 
+} 
             const { value: vals } = await Swal.fire({ 
                 title: 'Tùy Chỉnh Thẻ (Card)', 
                 html: `<div style="max-height: 70vh; overflow-y: auto; overflow-x: hidden; padding: 5px;">${htmlForm}</div>`, 
@@ -1172,8 +1830,7 @@
 
         window.toggleBoxTextStyles = () => { let isTrans = document.getElementById('swal-cb-transparent').checked; let hasShadow = document.getElementById('swal-cb-shadow').checked; let bgPicker = document.getElementById('swal-cb-bg'); let contentBox = document.getElementById('swal-cb-content'); contentBox.style.backgroundColor = isTrans ? 'transparent' : bgPicker.value; contentBox.style.boxShadow = hasShadow ? '0 5px 15px rgba(0,0,0,0.1)' : 'none'; };
         window.applyFontSize = (size) => { document.execCommand("fontSize", false, "7"); let fontElements = document.getElementById('swal-cb-content').getElementsByTagName("font"); for (let i = 0; i < fontElements.length; ++i) { if (fontElements[i].size == "7") { fontElements[i].removeAttribute("size"); fontElements[i].style.fontSize = size; } } };
-
-        window.cmsEditCustomBlock = async (index) => { 
+ window.cmsEditCustomBlock = async (index) => { 
             let block = cmsData.custom_blocks[index]; 
             const { value: vals } = await Swal.fire({ 
                 title: 'Trình Soạn Thảo Box Text', width: '800px',
@@ -1222,15 +1879,21 @@
 
                 let htmlContent = `<div id="swal-hero-container">`;
                 images.forEach((img, i) => {
-                    htmlContent += `<div class="d-flex mb-2 input-group-hero align-items-center"><input class="swal2-input m-0 w-100 hero-img-input" placeholder="Link Ảnh" value="${img||''}"><button class="btn btn-danger ms-2 mt-0" style="height: 40px; border-radius: 5px;" onclick="this.parentElement.remove()"><i class="bi bi-trash"></i></button></div>`;
+                    let uniqueId = 'hero-img-' + Date.now() + i;
+                    htmlContent += `<div class="mb-3 p-2 border rounded bg-light input-group-hero">
+                        <div class="d-flex align-items-center mb-2"><input id="${uniqueId}" class="swal2-input m-0 w-100 hero-img-input" placeholder="Link Ảnh" value="${img||''}"><button class="btn btn-danger ms-2 mt-0" style="height: 40px; border-radius: 5px;" onclick="this.parentElement.parentElement.remove()"><i class="bi bi-trash"></i></button></div>
+                        <input type="file" class="form-control form-control-sm" accept="image/*" onchange="window.handleSimpleUpload(this, '${uniqueId}')">
+                    </div>`;
                 });
-                htmlContent += `</div><button class="btn btn-sm btn-success mt-2 fw-bold" onclick="addHeroInput()">+ Thêm Ảnh</button>`;
+                htmlContent += `</div><button class="btn btn-sm btn-success mt-2 fw-bold" onclick="window.addHeroInput()">+ Thêm Ảnh</button>`;
 
                 window.addHeroInput = () => {
                     const container = document.getElementById('swal-hero-container');
+                    const id = 'hero-img-' + Date.now();
                     const div = document.createElement('div');
-                    div.className = 'd-flex mb-2 input-group-hero align-items-center';
-                    div.innerHTML = `<input class="swal2-input m-0 w-100 hero-img-input" placeholder="Link Ảnh mới"><button class="btn btn-danger ms-2 mt-0" style="height: 40px; border-radius: 5px;" onclick="this.parentElement.remove()"><i class="bi bi-trash"></i></button>`;
+                    div.className = 'mb-3 p-2 border rounded bg-light input-group-hero';
+                    div.innerHTML = `<div class="d-flex align-items-center mb-2"><input id="${id}" class="swal2-input m-0 w-100 hero-img-input" placeholder="Link Ảnh mới"><button class="btn btn-danger ms-2 mt-0" style="height: 40px; border-radius: 5px;" onclick="this.parentElement.parentElement.remove()"><i class="bi bi-trash"></i></button></div>
+                    <input type="file" class="form-control form-control-sm" accept="image/*" onchange="window.handleSimpleUpload(this, '${id}')">`;
                     container.appendChild(div);
                 };
 
@@ -1253,8 +1916,16 @@
                     updateObj.hero_bg_3 = fv[2] || '';
                     await update(ref(db, 'pageContent'), updateObj);
                 }
+            } else if (type === 'image') {
+                const { value: newVal } = await Swal.fire({ 
+                    title: titleText, 
+                    html: `<input id="swal-simple-img" class="swal2-input mt-0 mb-2" placeholder="Dán link ảnh..." value="${cmsData[key] || ''}"><label class="fw-bold small d-block text-start mb-1 px-4">Hoặc tải ảnh từ máy tính:</label><input type="file" class="form-control w-75 mx-auto" accept="image/*" onchange="window.handleSimpleUpload(this, 'swal-simple-img')">`,
+                    showCancelButton: true,
+                    preConfirm: () => document.getElementById('swal-simple-img').value
+                }); 
+                if (newVal !== undefined && newVal !== cmsData[key]) { let obj = {}; obj[key] = newVal; await update(ref(db, 'pageContent'), obj); } 
             } else { 
-                let inputType = type === 'image' ? 'url' : (type === 'text' ? 'textarea' : 'color'); 
+                let inputType = type === 'text' ? 'textarea' : 'color'; 
                 const { value: newVal } = await Swal.fire({ title: titleText, input: inputType, inputValue: cmsData[key] || '', showCancelButton: true }); 
                 if (newVal !== undefined && newVal !== cmsData[key]) { let obj = {}; obj[key] = newVal; await update(ref(db, 'pageContent'), obj); } 
             } 
@@ -1266,5 +1937,43 @@
             if (vals) { cmsData.footer_data = vals; await update(ref(db, 'pageContent'), { footer_data: vals }); Swal.fire({toast:true, position:'top-end', icon:'success', title:'Đã lưu Footer thành công!', showConfirmButton:false, timer:2000}); } 
         };
     </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
 </body>
 </html>
