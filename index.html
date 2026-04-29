@@ -9,7 +9,7 @@
     <meta property="og:title" content="Trung tâm Ngoại ngữ - Công nghệ Lê Lợi tại Phan Thiết" />
     <meta property="og:description" content="Khám phá tương lai – Làm chủ công nghệ" />
     <meta property="og:image" content="https://raw.githubusercontent.com/leloitrungtam-glitch/leloi/main/uploads/1777449025951_img-tt-1.jpg" />
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/leloitrungtam-glitch/leloi/main/uploads/1777449025951_img-tt-1.jpg">
+        <meta name="twitter:image" content="https://raw.githubusercontent.com/leloitrungtam-glitch/leloi/main/uploads/1777449025951_img-tt-1.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Trung tâm Ngoại ngữ - Công nghệ Lê Lợi tại Phan Thiết">
     <meta name="twitter:description" content="Khám phá tương lai – Làm chủ công nghệ">
@@ -130,9 +130,10 @@
 
         div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; display: none; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.85); z-index: 9999; backdrop-filter: blur(8px); }
 
-        /* ĐÃ CẬP NHẬT CHÍNH XÁC NHƯ HÌNH: Viền đen dày, bo tròn góc, có margin để tách khỏi mép trang */
-        .main-footer { background-color: #1d73dd; padding: 40px 30px; border: 3px solid #000000; border-radius: 20px; margin: 0 15px 20px 15px; color: #ffffff; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .footer-container { max-width: 1500px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between; }
+        /* ĐÃ CẬP NHẬT: Tạo viền trắng nằm chìm bên trong khối xanh */
+        .main-footer { position: relative; background-color: #1d73dd; padding: 40px 30px; border-radius: 20px; margin: 0 15px 20px 15px; color: #ffffff; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .main-footer::before { content: ""; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px; border: 2px solid #ffffff; border-radius: 12px; pointer-events: none; z-index: 0; }
+        .footer-container { position: relative; z-index: 1; max-width: 1500px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between; }
         .footer-left { flex: 1; min-width: 300px; }
         .footer-right { width: 350px; min-width: 300px; text-align: right; }
         .f-logo { height: 165px; object-fit: contain; margin-bottom: 18px; display: block; }
@@ -213,6 +214,7 @@
             
             /* Tối ưu viền footer trên điện thoại */
             .main-footer { margin: 0 10px 15px 10px; padding: 30px 15px; border-radius: 15px; }
+            .main-footer::before { top: 8px; left: 8px; right: 8px; bottom: 8px; border-radius: 10px; border-width: 1.5px; }
         }
 
         /* --- HIỆU ỨNG POPUP CHI TIẾT MƯỢT MÀ --- */
