@@ -533,7 +533,7 @@
         // CẤU HÌNH & HÀM UPLOAD ẢNH LÊN GITHUB
         // ==========================================
         window.GITHUB_CONFIG = {
-            TOKEN: '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',
+            TOKEN: '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',
             OWNER: 'leloitrungtam-glitch',
             REPO: 'leloi',
             FOLDER: 'uploads',
@@ -1426,8 +1426,7 @@
             } 
             else if (type === "tech-list") { newBlock = { ...newBlock, type: 'tech', title: 'Khối Thông Tin 1', color: '#f15a3a', icon: 'bi-card-checklist', cards: [{ img: "", title: "", desc: "", color: "#00d5ff", icon: "bi-robot", has_detail: false }] }; } 
             else if (type === "english-list") { newBlock = { ...newBlock, type: 'english', title: 'Khối Thông Tin 2', color: '#112255', icon: 'bi-book', bgColor: "#00d5ff", cards: [{ img: "", title: "", age: "", desc: "", bg_color: "#ffffff", text_color: "#233066", has_detail: false }] }; }
-            else if (type === "teacher-list") { newBlock = { ...newBlock, type: 'teacher', title: 'Đội Ngũ Giảng Viên Mới', icon: 'bi-person-video3', color: '#00d5ff', cards: [{ img: "", name: "", role: "", experience: "", hideExperience: false, nameColor: "#112255", roleColor: "#112255", bgColor: "#00d5ff" }] }; }
-            else if (type === "news-list") { newBlock = { ...newBlock, type: 'news', title: 'LLC NEWS MỚI', color: '#ff9800', slides: [{ img: "https://via.placeholder.com/800x600?text=News+Image+1" }] }; }
+else if (type === "teacher-list") { newBlock = { ...newBlock, type: 'teacher', title: 'Đội Ngũ Giảng Viên Mới', icon: 'bi-person-video3', color: '#1d73dd', cards: [{ img: "", name: "", role: "", experience: "", hideExperience: false, nameColor: "#112255", roleColor: "#112255", bgColor: "#1d73dd" }] }; }            else if (type === "news-list") { newBlock = { ...newBlock, type: 'news', title: 'LLC NEWS MỚI', color: '#ff9800', slides: [{ img: "https://via.placeholder.com/800x600?text=News+Image+1" }] }; }
             return newBlock;
         };
 
@@ -1734,7 +1733,7 @@
                     <div class="row g-1 mb-2 text-start">
                         <div class="col-4"><label class="fw-bold small" style="font-size:11px;">Màu tên:</label><input type="color" id="swal-t-namecol-add" value="#112255" class="form-control form-control-color form-control-sm w-100 p-0"></div>
                         <div class="col-4"><label class="fw-bold small" style="font-size:11px;">Màu chức vụ:</label><input type="color" id="swal-t-rolecol-add" value="#112255" class="form-control form-control-color form-control-sm w-100 p-0"></div>
-                        <div class="col-4"><label class="fw-bold small" style="font-size:11px;">Nền dưới:</label><input type="color" id="swal-t-bgcol-add" value="#00d5ff" class="form-control form-control-color form-control-sm w-100 p-0"></div>
+                       <div class="col-4"><label class="fw-bold small" style="font-size:11px;">Nền dưới:</label><input type="color" id="swal-t-bgcol-add" value="#1d73dd" class="form-control form-control-color form-control-sm w-100 p-0"></div>
                     </div>
                     <input id="swal-t-role-add" class="form-control form-control-sm mb-2" placeholder="Chức vụ (vd: Giáo viên)">
                     <input id="swal-t-exp-add" class="form-control form-control-sm mb-2" placeholder="Số năm kinh nghiệm (vd: 8)">
@@ -1817,7 +1816,7 @@
                             <div class="row px-4 mt-2 mb-2 text-start">
                                 <div class="col-6"><label class="fw-bold fs-6">Màu tên:</label><input type="color" id="swal-t-namecol" value="${card.nameColor || '#112255'}" class="form-control form-control-color w-100"></div>
                                 <div class="col-6"><label class="fw-bold fs-6">Màu chức vụ:</label><input type="color" id="swal-t-rolecol" value="${card.roleColor || '#112255'}" class="form-control form-control-color w-100"></div>
-                                <div class="col-12 mt-2"><label class="fw-bold fs-6">Màu nền khung dưới:</label><input type="color" id="swal-t-bgcol" value="${card.bgColor || '#00d5ff'}" class="form-control form-control-color w-100"></div>
+                               <div class="col-12 mt-2"><label class="fw-bold fs-6">Màu nền khung dưới:</label><input type="color" id="swal-t-bgcol" value="${card.bgColor || '#1d73dd'}" class="form-control form-control-color w-100"></div>
                             </div>
                             <input id="swal-t-role" class="swal2-input" placeholder="Chức vụ (vd: Giáo viên)" value="${card.role || ''}">
                             <input id="swal-t-exp" class="swal2-input" placeholder="Số năm kinh nghiệm (vd: 8)" value="${card.experience || ''}">
