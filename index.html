@@ -547,7 +547,12 @@
                                 <div class="form-floating"><select class="form-select" id="p_age" required><option value="" disabled selected>Chọn độ tuổi</option></select><label>Độ tuổi *</label></div>
                             </div>
                         </div>
-
+                        <div class="form-floating mb-3">
+    <select class="form-select" id="p_study" required>
+        <option value="" disabled selected>Chọn hình thức học</option>
+    </select>
+    <label>Hình thức học *</label>
+</div>
                         <div class="form-floating mb-3"><select class="form-select" id="p_course" required><option value="" disabled selected>Khóa học đăng ký</option></select><label>Khóa học đăng ký *</label></div>
                         <div class="form-check mb-4 mt-2"><input class="form-check-input" type="checkbox" id="allow" checked required><label class="form-check-label">Tôi đồng ý nhận tư vấn chi tiết.</label></div>
                         <button type="submit" class="btn btn-submit text-uppercase">ĐĂNG KÝ THAM GIA</button>
@@ -652,6 +657,7 @@
 
                         // Đổ cho Popup
                         renderOptions('p_age', config.ages, "Chọn độ tuổi");
+                        renderOptions('p_study', config.studyModes, "Chọn hình thức học"); // <-- THÊM DÒNG NÀY
                         renderOptions('p_course', config.courses, "Khóa học đăng ký");
                         renderOptions('p_city', config.cities, "Tỉnh/ Thành phố");
 
@@ -964,21 +970,22 @@ mapEl.src = `https://maps.google.com/maps?q=${data.footer_data.map_lat},${data.f
         };
 
         // Bắt sự kiện Form Popup
-        document.getElementById('form_popup').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const data = {
-                parentName: document.getElementById('p_name').value,
-                phone: document.getElementById('p_phone').value,
-                email: document.getElementById('p_email').value,
-                city: document.getElementById('p_city').value,
-                ageGroup: document.getElementById('p_age').value,
-                course: document.getElementById('p_course').value,
-                note: "Nguồn: Form Đăng Ký Qua Popup",
-                studyMode: "Đăng ký qua Popup"
-            };
-            submitRegistration(data);
-            this.reset();
-        });
+        // Sửa lại đoạn bắt sự kiện Form Popup
+document.getElementById('form_popup').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = {
+        parentName: document.getElementById('p_name').value,
+        phone: document.getElementById('p_phone').value,
+        email: document.getElementById('p_email').value,
+        city: document.getElementById('p_city').value,
+        ageGroup: document.getElementById('p_age').value,
+        course: document.getElementById('p_course').value,
+        studyMode: document.getElementById('p_study').value, // <-- SỬA DÒNG NÀY (Lấy giá trị từ ID p_study)
+        note: "Nguồn: Form Đăng Ký Qua Popup"
+    };
+    submitRegistration(data);
+    this.reset();
+});
 
         // Bắt sự kiện Form Footer
         document.getElementById('form_footer').addEventListener('submit', function(e) {
