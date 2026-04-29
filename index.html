@@ -586,7 +586,7 @@
         const backToTopBtn = document.getElementById("backToTopBtn");
         window.addEventListener("scroll", () => { if (window.scrollY > 400) { backToTopBtn.style.display = "flex"; } else { backToTopBtn.style.display = "none"; } });
         backToTopBtn.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: "smooth" }); });
-        window.addEventListener('load', () => { setTimeout(() => { const loader = document.getElementById('page-loader'); if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); } }, 600); });
+        window.addEventListener('load', () => { setTimeout(() => { const loader = document.getElementById('page-loader'); if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); } }, 1500); });
         
         window.showDetailModal = (encodedContent) => {
             const modalBody = document.getElementById('detailModalBody');
