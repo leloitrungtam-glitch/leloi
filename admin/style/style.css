@@ -1,0 +1,131 @@
+/* Đổi sang font Inter chuẩn tiếng Việt chống lỗi chữ */
+        body { background-color: #f4f7f6; font-family: 'Inter', Arial, Helvetica, sans-serif; overflow-x: hidden; }
+        
+        /* LOGIN */
+        #login-section { height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f4f7f6 0%, #e0e5ec 100%); }
+        .login-card { background: #ffffff; padding: 40px 30px 30px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); width: 100%; max-width: 400px; text-align: center; position: relative; margin-top: 50px; }
+        .logo-img { width: 110px; height: 110px; object-fit: cover; border-radius: 50%; border: 5px solid #ffffff; position: absolute; top: -55px; left: 50%; transform: translateX(-50%); background-color: #fff; }
+        
+        /* ADMIN DASHBOARD & TABS */
+        #admin-section { display: none; }
+        .admin-header { background: #112255; color: white; padding: 20px 0 0 0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .nav-tabs { border-bottom: none; justify-content: flex-start; padding-left: 20px; margin-top: 20px; gap: 5px; align-items: flex-end;}
+        .nav-tabs .nav-link { color: rgba(255,255,255,0.6); border: none; font-weight: 600; padding: 15px 30px; border-radius: 15px 15px 0 0; transition: 0.3s; font-size: 16px;}
+        .nav-tabs .nav-link:hover { color: rgba(255,255,255,1); }
+        .nav-tabs .nav-link.active { color: #112255; background-color: #f4f7f6; font-weight: 700; box-shadow: 0 -4px 10px rgba(0,0,0,0.05);}
+        
+        .filter-card { background-color: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #e9ecef; }
+        .card-table { box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 15px; border: none; overflow: hidden; background: #fff; }
+        .card-table table th { white-space: nowrap; }
+        
+        /* PREVIEW CONTAINER */
+        .preview-wrapper { width: 100%; overflow-x: auto; background-color: #e0e5ec; padding: 20px 0; border-radius: 15px; display: flex; justify-content: center; transition: all 0.5s ease; }
+        .cms-container { background: #fff; border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); width: 100%; max-width: 1920px; min-height: 1080px; margin: 0 auto; }
+        .cms-container.mobile-view { max-width: 414px !important; aspect-ratio: 1080/2340; border: 15px solid #222 !important; border-radius: 35px !important; padding: 15px !important; overflow-y: auto; overflow-x: hidden; height: 897px; min-height: auto; }
+
+        .editable-block { position: relative; border: 2px dashed transparent; transition: all 0.3s; padding: 10px; border-radius: 10px; }
+        .editable-block:hover { border-color: #f15a3a; background: rgba(241, 90, 58, 0.05); cursor: pointer; }
+        .edit-btn-overlay { position: absolute; top: -15px; right: -15px; background: #f15a3a; color: white; width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 100;}
+        .editable-block:hover .edit-btn-overlay { display: flex; }
+
+        .editable-block-blue { position: relative; border: 3px dashed transparent; transition: all 0.3s; padding: 15px; border-radius: 20px; }
+        .editable-block-blue:hover { border-color: #007bff; cursor: pointer; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.1); }
+        .edit-btn-overlay-blue { position: absolute; top: -15px; right: -15px; background: #007bff; color: white; width: 35px; height: 35px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 100;}
+        .editable-block-blue:hover .edit-btn-overlay-blue { display: flex; }
+
+        .cms-card-wrapper { position: relative; border: 2px dashed #ccc; border-radius: 20px; transition: 0.3s; background: #fff;}
+        .cms-card-wrapper:hover { border-color: #f15a3a; }
+        .cms-actions { position: absolute; top: 10px; right: 10px; display: none; gap: 5px; z-index: 100; }
+        .cms-card-wrapper:hover .cms-actions { display: flex; }
+        .cms-hero { background: #e0e5ec; padding: 40px; border-radius: 15px; text-align: center; margin-bottom: 30px; font-weight: bold; color: #112255;}
+        .cms-logo-img { width: 80px; height: 80px; border-radius: 50%; object-fit: contain; border: 2px solid #ccc; background: white;}
+        
+        .drag-item { padding: 20px 15px; cursor: grab; margin-bottom: 15px; text-align: center; border-radius: 12px; font-weight: bold; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .drag-item:active { cursor: grabbing; }
+        .drag-item:hover { transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.2); filter: brightness(1.1); }
+        
+        .drop-zone { min-height: 60px; border: 3px dashed #007bff; margin: 20px 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #007bff; transition: all 0.3s ease; background: rgba(0, 123, 255, 0.05); font-size: 15px; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; cursor: crosshair;}
+        .drop-zone.mini-drop { min-height: 40px; margin: 10px 0; border: 2px dashed #ff9800; color: #ff9800; background: rgba(255, 152, 0, 0.05); font-size: 13px; }
+        .drop-zone.dragover { background: #e0f7fa; border-color: #00d5ff; color: #007bff; min-height: 120px; font-size: 18px; transform: scale(1.02); box-shadow: 0 10px 20px rgba(0,213,255,0.2); z-index: 10;}
+
+        .section-master { position: relative; border: 2px dashed #00d5ff; border-radius: 20px; padding: 25px 20px; margin-bottom: 0px; transition: all 0.3s; background: #fff; }
+        .section-master:hover { box-shadow: 0 10px 25px rgba(0,213,255,0.15); }
+        .section-master-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px dashed #e0e5ec; }
+        .sm-title { font-weight: 800; font-size: 18px; color: #112255; margin: 0; }
+        .sm-toolbar { position: absolute; top: -15px; left: 20px; background: #112255; color: white; padding: 4px 15px; border-radius: 50px; font-size: 12px; font-weight: bold; display: flex; gap: 10px; z-index: 10;}
+        .sm-toolbar button { background: none; border: none; color: white; padding: 0; font-size: 12px; font-weight: bold; }
+        .sm-toolbar button:hover { color: #00d5ff; }
+        .is-hidden-section { opacity: 0.4; filter: grayscale(40%); border-color: #ccc; }
+        .is-hidden-section::after { content: "KHỐI ĐANG BỊ ẨN"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: bold; color: #ff0000; z-index: 5; background: rgba(255,255,255,0.8); padding: 10px 20px; border-radius: 10px; pointer-events: none;}
+
+        .course-card { border-radius: 20px; padding: 0 0 35px 0; height: 100%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); overflow: hidden; display: flex; flex-direction: column; border-top-style: solid; border-top-width: 5px;}
+        .course-card-img { width: 100%; height: 150px; object-fit: cover; border-radius: 20px 20px 0 0; margin-bottom: 25px; }
+        .icon-box { width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 24px; position: absolute; top: 125px; left: 20px; z-index: 2; }
+        .course-title, .course-desc { padding: 0 20px; }
+        .course-title { font-weight: 700; font-size: 18px; margin-bottom: 10px; margin-top: 10px; color:#112255;}
+        .course-desc { color: #475569; font-size: 14px; line-height: 1.6; }
+        .ep-card { border-radius: 20px; padding: 15px; height: 100%; display: flex; flex-direction: column; }
+        .ep-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .ep-title { font-weight: 700; font-size: 16px; margin: 0; padding-right: 10px; }
+        .ep-age-badge { padding: 4px 10px; border-radius: 8px; text-align: center; min-width: 60px; display: flex; flex-direction: column; align-items: center; }
+        .ep-age-badge span { font-size: 11px; line-height: 1; } .ep-age-badge strong { font-size: 16px; margin: 2px 0; }
+        .ep-img { width: 100%; border-radius: 12px; margin-bottom: 15px; object-fit: cover; aspect-ratio: 4/3; }
+        .ep-desc { font-size: 13px; line-height: 1.5; margin-bottom: 15px; flex-grow: 1;}
+
+        /* STYLES CHO KHỐI GIÁO VIÊN VÀ SWIPER */
+        .teacherSwiper { width: 100%; padding-bottom: 50px !important; }
+        .teacherSwiper .swiper-slide { height: auto; display: flex; }
+        .teacherSwiper .swiper-pagination-bullet { width: 25px; height: 6px; border-radius: 4px; background: #ccc; opacity: 1; transition: all 0.3s ease; }
+        .teacherSwiper .swiper-pagination-bullet-active { background: #00d5ff; width: 45px; }
+        
+        .teacher-card { border: 4px solid #00d5ff !important; border-radius: 15px !important; position: relative; background: #fff; overflow: hidden; height: 100%; display: flex; flex-direction: column; padding: 0 !important; transition: 0.3s; width: 100%; }
+        .teacher-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,213,255,0.2); }
+        .teacher-badge { position: absolute; top: 0; right: 25px; background: #e31837; color: white; padding: 8px 12px; border-radius: 0 0 10px 10px; text-align: center; z-index: 2; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .teacher-badge span { font-size: 26px; display: block; font-weight: 800; line-height: 1; margin-bottom: 2px;}
+        .teacher-badge small { font-size: 9px; text-transform: lowercase; font-weight: bold; line-height: 1.1; display: block; }
+        .teacher-img { width: 100%; height: 280px; object-fit: contain; object-position: bottom; background: #fdfdfd; }
+        .teacher-info { background: #00d5ff; color: #112255; padding: 15px 10px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+        .teacher-role { font-size: 14px; margin-bottom: 3px; font-weight: 500; }
+        .teacher-name { font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 0; color: #112255; }
+
+        /* STYLES CHO KHỐI HÌNH ẢNH HOẠT ĐỘNG & NEWS */
+        .activitySwiper { width: 100%; padding: 0 40px; padding-bottom: 30px !important; }
+        .activitySwiper .swiper-slide { height: auto; display: flex; justify-content: center;}
+        .activity-slide-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .activity-slide-text { font-style: italic; text-align: center; margin-top: 15px; color: #333; font-size: 15px; font-weight: 500;}
+        .activitySwiper .swiper-button-next, .activitySwiper .swiper-button-prev { background: rgba(255,255,255,0.8); width: 40px; height: 40px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .activitySwiper .swiper-button-next:after, .activitySwiper .swiper-button-prev:after { font-size: 20px; font-weight: bold; }
+
+        .newsSwiperPreview .swiper-slide { width: auto; height: auto; display: flex; justify-content: center; }
+
+        .loading-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); display: none; justify-content: center; align-items: center; z-index: 10; }
+        
+        .editor-toolbar button { padding: 4px 8px; font-size: 14px; }
+        #swal-cb-content:focus, #swal-detail-content:focus { outline: 2px solid #00d5ff; }
+
+        /* FULLSCREEN EDITOR STYLES */
+        .fullscreen-editor { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 99999 !important; background: #f4f7f6 !important; padding: 20px !important; display: flex !important; flex-direction: column !important; box-sizing: border-box !important; }
+        .fullscreen-editor > label { font-size: 18px !important; margin-bottom: 15px !important; color: #112255 !important; }
+        .fullscreen-editor #swal-detail-content { flex-grow: 1 !important; max-height: none !important; height: 100% !important; font-size: 16px !important; padding: 30px !important; border-radius: 12px !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; }
+        .fullscreen-editor .editor-toolbar { padding: 12px !important; border-radius: 12px !important; margin-bottom: 15px !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+        /* FORM & MENU CONFIG MODAL STYLES */
+        .form-config-modal .modal-content { background: #1a233a; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); border: none; }
+        .form-config-modal .modal-title { color: #ffffff; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .form-config-modal .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+        .form-config-modal .config-list-item { background: #ffffff; border-radius: 12px; padding: 12px 15px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .form-config-modal .config-list-item:hover { transform: translateY(-2px); }
+        .form-config-modal .config-list-item span { font-size: 15px; font-weight: 500; color: #333; }
+        .form-config-modal .btn-submit-config { background: #fa8f64; color: white; font-weight: 700; border-radius: 15px; padding: 14px; font-size: 16px; transition: 0.3s; margin-top: 15px;}
+        .form-config-modal .btn-submit-config:hover { background: #f07b4e; color: white; }
+
+        /* SOCIAL FOOTER STYLES */
+        .social-follow-card { background-color: #ffffff; border-radius: 20px; padding: 20px 30px; text-align: center; max-width: 600px; margin: 0 auto; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .social-icon-btn { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; border: 2px solid #112255; color: #112255; font-size: 20px; text-decoration: none; transition: all 0.3s ease; background-color: transparent; }
+        .social-icon-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .social-icon-btn.fb { border-color: #e31837; color: #e31837; } /* Red outline default like image */
+        .social-icon-btn.fb:hover { background-color: #e31837; color: white; }
+        .social-icon-btn.yt:hover { border-color: #ff0000; color: #ff0000; }
+        .social-icon-btn.zl:hover { border-color: #0068ff; color: #0068ff; }
+        .social-icon-btn.tt:hover { border-color: #000000; color: #000000; }
+        .social-icon-btn.ig:hover { border-color: #e1306c; color: #e1306c; }

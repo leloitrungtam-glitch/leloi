@@ -25,287 +25,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
-        window.scrollTo(0, 0);
-        window.addEventListener('beforeunload', function () { window.scrollTo(0, 0); });
-    </script>
-
-    <style>
-        :root { --primary-color: #f15a3a; --dark-blue: #112255; --gradient-btn: linear-gradient(135deg, #ff7e5f, #feb47b); --gradient-btn-hover: linear-gradient(135deg, #feb47b, #ff7e5f); }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Inter', Arial, Helvetica, sans-serif; margin: 0; padding: 0; background-color: #f4f7f6; color: #333; overflow-x: hidden; }
-
-        #page-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #f8fafc; z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
-        .loader-ring { position: relative; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; }
-        .loader-ring::before { content: ""; position: absolute; width: 100%; height: 100%; border: 4px solid #e2e8f0; border-top-color: #007bff; border-radius: 50%; animation: spinRing 1s linear infinite; }
-        .loader-logo { width: 90px; height: 90px; object-fit: contain; border-radius: 50%; padding: 5px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .loader-text { margin-top: 20px; font-weight: 700; color: var(--dark-blue); font-size: 16px; letter-spacing: 2px; animation: pulseText 1.5s infinite; }
-        @keyframes spinRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-        .main-header { position: fixed; top: 0; left: 0; width: 100%; height: 80px; background-color: #ffffff; box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); display: flex; align-items: center; padding: 0 5%; z-index: 1000; justify-content: space-between; }
-        .header-left { display: flex; align-items: center; }
-        .header-logo { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #007bff; object-fit: contain; background-color: #fff; margin-right: 15px; padding: 2px; }
-        .header-title { font-size: 20px; font-weight: 800; color: var(--dark-blue); margin: 0; text-transform: uppercase; letter-spacing: -0.5px; }
-        
-        /* CẬP NHẬT CSS HEADER MENU */
-        .header-nav a { text-decoration: none; color: var(--dark-blue); font-weight: 700; font-size: 15px; padding: 8px 18px; border-radius: 50px; transition: 0.3s; border: 2px solid transparent; margin-left: 5px; }
-        .header-nav a:hover { background: rgba(17, 34, 85, 0.05); color: var(--primary-color); border-color: var(--primary-color); }
-        .btn-phone-menu { background: var(--primary-color) !important; color: white !important; border-color: var(--primary-color) !important; box-shadow: 0 4px 10px rgba(241, 90, 58, 0.3); }
-        .btn-phone-menu:hover { background: #d94e30 !important; transform: translateY(-2px); }
-        .menu-toggle-btn { background: transparent; border: none; color: var(--dark-blue); padding: 0; transition: 0.3s; }
-        .menu-toggle-btn:focus { box-shadow: none; outline: none; }
-        .menu-toggle-btn:active { transform: scale(0.9); }
-        
-        /* CSS MOBILE MENU OFFCANVAS */
-        .mobile-menu-link { display: block; padding: 12px 20px; font-size: 16px; font-weight: 700; color: var(--dark-blue); text-decoration: none; background: #f8fafc; border-radius: 12px; transition: 0.3s; }
-        .mobile-menu-link:hover { background: #e2e8f0; color: var(--primary-color); }
-        .mobile-menu-link.phone-link { background: #fff5f5; color: #e31837; border: 1px solid #fecaca; }
-
-        .hero-section { position: relative; width: 100%; aspect-ratio: 1920 / 800; margin-top: 80px; background-size: 100% 100%; background-position: center; background-repeat: no-repeat; display: flex; align-items: center; justify-content: center; transition: background-image 0.8s ease-in-out; }
-        .hero-indicators { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 5; }
-        .indicator-bar { width: 40px; height: 6px; background-color: rgba(255, 255, 255, 0.4); cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .indicator-bar:hover { background-color: rgba(255, 255, 255, 0.8); }
-        .indicator-bar.active { background-color: #ffffff; width: 80px; box-shadow: 0 0 10px rgba(255,255,255,0.6); }
-
-        .btn-fixed-register { position: fixed; bottom: 30px; right: 30px; z-index: 9997; background: var(--gradient-btn); color: white; padding: 15px 25px; font-size: 16px; font-weight: 700; border: none; border-radius: 50px; box-shadow: 0 5px 15px rgba(241, 90, 58, 0.4); cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; text-decoration: none; animation: pulse-btn 1.5s infinite; transform-origin: center; }
-        .btn-fixed-register i { font-size: 20px; margin-right: 8px; }
-        .btn-fixed-register:hover { transform: scale(1.1); box-shadow: 0 10px 25px rgba(241, 90, 58, 0.6); color: white; animation: none; }
-        @keyframes pulse-btn { 0% { transform: scale(1); box-shadow: 0 5px 15px rgba(241, 90, 58, 0.4); } 15% { transform: scale(1.15) rotate(-3deg); box-shadow: 0 15px 30px rgba(241, 90, 58, 0.7); } 30% { transform: scale(1.15) rotate(3deg); } 45% { transform: scale(1.15) rotate(-3deg); } 60% { transform: scale(1); box-shadow: 0 5px 15px rgba(241, 90, 58, 0.4); } 100% { transform: scale(1); box-shadow: 0 5px 15px rgba(241, 90, 58, 0.4); } }
-
-        #backToTopBtn { position: fixed; bottom: 100px; right: 30px; z-index: 9998; background-color: #112255; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 28px; display: none; justify-content: center; align-items: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.3s ease; }
-        #backToTopBtn:hover { background-color: #f15a3a; transform: translateY(-5px); box-shadow: 0 6px 20px rgba(241, 90, 58, 0.4); }
-
-        .custom-reg-modal { background-color: #112255; border-radius: 20px; color: white; border: none; box-shadow: 0 20px 50px rgba(0,0,0,0.3); padding: 10px; }
-        .custom-reg-modal .modal-header { border-bottom: none; padding-bottom: 0; }
-        .custom-reg-modal .form-floating > label { color: #6c757d; font-weight: 500; }
-        .custom-reg-modal .form-floating > .form-control, .custom-reg-modal .form-floating > .form-select { border-radius: 12px; font-size: 15px; color: #333; border: none; }
-        .custom-reg-modal .form-select { background-color: white; }
-        .btn-submit { background-color: #ff9868; color: white !important; font-weight: 700; border-radius: 50px; padding: 15px; font-size: 16px; width: 100%; border: none; transition: 0.3s; margin-top: 10px; box-shadow: 0 5px 15px rgba(255, 152, 104, 0.3);}
-        .btn-submit:hover { background-color: #ff854c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 152, 104, 0.4);}
-        .form-check-label { color: rgba(255,255,255,0.9); font-size: 14px; }
-
-       .content-section { padding: 5px 10px 20px 10px; background: #f8fafc; }
-        .content-container { max-width: 1500px; margin: 0 auto; overflow: hidden; }
-        .section-heading { text-align: center; margin-bottom: 60px; }
-        .section-heading h2 { color: var(--dark-blue); font-weight: 800; font-size: 38px; margin-bottom: 15px; }
-        .section-heading p { font-size: 18px; color: #64748b; max-width: 800px; margin: 0 auto; line-height: 1.6; }
-
-        /* CSS LLC NEWS COVERFLOW */
-        .news-section { background-color: #f8fafc; padding: 60px 0; }
-        .newsSwiper { width: 100%; padding-top: 20px; padding-bottom: 50px; }
-        .newsSwiper .swiper-slide { background-position: center; background-size: cover; width: 800px; height: auto; display: flex; flex-direction: column; align-items: center; filter: brightness(0.6); transition: 0.4s; }
-        .newsSwiper .swiper-slide-active { filter: brightness(1); }
-        .news-img-card { width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); object-fit: contain; background: #fff; }
-        .newsSwiper .swiper-pagination-bullet { width: 15px; height: 15px; background: #cbd5e1; opacity: 1; margin: 0 8px !important; }
-        .newsSwiper .swiper-pagination-bullet-active { background: var(--dark-blue); width: 40px; border-radius: 10px; }
-        
-        .course-card { background: #ffffff; border-radius: 20px; padding: 0 0 25px 0; height: 100%; width: 100%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); transition: all 0.4s ease; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-        .course-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); }
-        .course-card-img { width: 100%; height: 200px; object-fit: cover; margin-bottom: 25px; transition: transform 0.5s ease; }
-        .course-card:hover .course-card-img { transform: scale(1.05); }
-        .icon-box { background-color: #ffffff; width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; position: absolute; top: 170px; left: 30px; z-index: 2; transition: transform 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .course-title, .course-desc { padding: 0 30px; }
-        .course-title { font-weight: 700; font-size: 22px; color: var(--dark-blue); margin-bottom: 15px; margin-top: 10px; }
-        .course-desc { color: #475569; font-size: 15.5px; line-height: 1.7; flex-grow: 1; }
-
-        .english-programs-section { background-color: #00d5ff; border-radius: 24px; padding: 40px 20px; transition: 0.5s ease;}
-        .ep-card { background-color: #ffffff; border-radius: 20px; padding: 25px; height: 100%; width: 100%; display: flex; flex-direction: column; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
-        .ep-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .ep-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; gap: 15px; }
-        .ep-title { font-weight: 700; color: #112255; font-size: 19px; margin: 0; line-height: 1.4; flex: 1; }
-        .ep-age-badge { background-color: #112255; color: #ffffff !important; padding: 8px 12px; border-radius: 12px; text-align: center; min-width: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .ep-age-badge span { font-size: 11px; display: block; line-height: 1.2; color: #ffffff !important; opacity: 0.9; }
-        .ep-age-badge strong { font-size: 22px; line-height: 1.1; margin: 2px 0; color: #ffffff !important; font-weight: 800; }
-        .ep-img { width: 100%; border-radius: 15px; margin-bottom: 20px; object-fit: cover; aspect-ratio: 16/10; transition: transform 0.5s ease; border: 1px solid #f1f5f9; }
-        .ep-card:hover .ep-img { transform: scale(1.03); }
-        .ep-desc { color: #475569; font-size: 15px; line-height: 1.6; flex-grow: 1; margin-bottom: 20px; }
-        .ep-btn { background-color: #112255; color: white; border: none; border-radius: 50px; padding: 12px 20px; font-weight: 700; display: flex; justify-content: center; align-items: center; width: 100%; text-decoration: none; transition: 0.3s; }
-        .ep-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-        .ep-btn i { background-color: white; color: #112255; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; margin-left: 10px; font-size: 14px; }
-        
-        .btn-detail { transition: all 0.3s; border-radius: 50px; border: none; font-weight: 600; padding: 10px; }
-        .btn-detail:hover { opacity: 0.85; transform: translateY(-2px); }
-
-        div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; display: none; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.85); z-index: 9999; backdrop-filter: blur(8px); }
-
-        /* ĐÃ CẬP NHẬT: Tạo viền trắng nằm chìm bên trong khối xanh */
-        .main-footer { position: relative; background-color: #1d73dd; padding: 40px 30px; border-radius: 20px; margin: 0 15px 20px 15px; color: #ffffff; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .main-footer::before { content: ""; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px; border: 2px solid #ffffff; border-radius: 12px; pointer-events: none; z-index: 0; }
-        .footer-container { position: relative; z-index: 1; max-width: 1500px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between; }
-        .footer-left { flex: 1; min-width: 300px; }
-        .footer-right { width: 350px; min-width: 300px; text-align: right; }
-        .f-logo { height: 165px; object-fit: contain; margin-bottom: 18px; display: block; }
-        .f-name { color: #ffffff; font-weight: 700; font-size: 22px; margin-bottom: 10px; text-transform: uppercase; }
-        .f-text { color: #f1f5f9; font-size: 18px; line-height: 1.6; margin-bottom: 6px; }
-        .f-privacy { color: #ffffff; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;}        
-        .f-privacy i { color: #198754; font-size: 16px; }
-        .f-map-wrapper { border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
-        .f-support-btn { background-color: #00d5ff; color: #112255; border: none; border-radius: 50px; padding: 14px 25px; font-weight: 700; width: 100%; display: inline-flex; justify-content: center; align-items: center; text-transform: uppercase; transition: all 0.3s; cursor: pointer; text-decoration: none !important; }
-        .f-support-btn:hover { background-color: #00bce6; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 213, 255, 0.4); color: #112255; }
-        .f-support-btn i { margin-right: 8px; font-size: 18px; }
-
-        .activity-container { max-width: 900px; margin: 0 auto; }
-        .activitySwiper { width: 100%; padding-bottom: 40px !important; }
-        .activity-slide-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .activity-slide-text { font-style: italic; text-align: center; margin-top: 15px; color: #333; font-size: 15px; font-weight: 500;}
-        .activitySwiper .swiper-button-next, .activitySwiper .swiper-button-prev { color: var(--primary-color); }
-        .activitySwiper .swiper-pagination-bullet-active { background: var(--primary-color); }
-
-        .teacherSwiper { width: 100%; padding-bottom: 50px !important; }
-        .teacherSwiper .swiper-slide { height: auto; display: flex; padding: 10px; }
-        .teacherSwiper .swiper-pagination-bullet { width: 25px; height: 6px; border-radius: 4px; background: #ccc; opacity: 1; transition: all 0.3s ease; }
-        .teacherSwiper .swiper-pagination-bullet-active { background: #00d5ff; width: 45px; }
-        
-        .teacher-card { border: 4px solid #00d5ff; border-radius: 15px; position: relative; background: #fff; overflow: hidden; height: 100%; display: flex; flex-direction: column; padding: 0; transition: 0.3s; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .teacher-card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
-        .teacher-badge { position: absolute; top: 0; right: 25px; background: #e31837; color: white; padding: 8px 12px; border-radius: 0 0 10px 10px; text-align: center; z-index: 2; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .teacher-badge span { font-size: 26px; display: block; font-weight: 800; line-height: 1; margin-bottom: 2px;}
-        .teacher-badge small { font-size: 9px; text-transform: lowercase; font-weight: bold; line-height: 1.1; display: block; }
-        .teacher-img { width: 100%; height: 280px; object-fit: contain; object-position: bottom; background: #fdfdfd; }
-        .teacher-info { background: #00d5ff; color: #112255; padding: 15px 10px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .teacher-role { font-size: 14px; margin-bottom: 3px; font-weight: 500; }
-        .teacher-name { font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 0; color: #112255; }
-
-        .techSwiper, .englishSwiper { width: 100%; padding-bottom: 50px !important; }
-        .techSwiper .swiper-slide, .englishSwiper .swiper-slide { height: auto; display: flex; padding: 10px; }
-        .techSwiper .swiper-pagination-bullet, .englishSwiper .swiper-pagination-bullet { width: 25px; height: 6px; border-radius: 4px; background: #ccc; opacity: 1; transition: all 0.3s ease; }
-        .techSwiper .swiper-pagination-bullet-active { background: var(--primary-color); width: 45px; }
-        .englishSwiper .swiper-pagination-bullet-active { background: #112255; width: 45px; }
-
-        @media (max-width: 991px) {
-            .main-header { height: 70px; } .header-logo { width: 50px; height: 50px; } .header-title { font-size: 15px; }
-            .header-nav { display: none; }
-            .custom-text-box h1, .custom-text-box h2, .custom-text-box h3, .section-heading h2 { font-size: 32px !important; line-height: 1.3 !important; }
-            
-            .hero-section { flex-direction: column; justify-content: flex-start; min-height: auto; aspect-ratio: 1920 / 800; background-size: 100% 100%; margin-top: 70px; }
-            
-            #p_about_title { font-size: 28px !important; }
-            .newsSwiper .swiper-slide { width: 320px; }
-            
-            .btn-fixed-register { display: none !important; }
-            
-            .f-support-btn { padding: 10px 15px; font-size: 13px; }
-            .f-support-btn i { font-size: 15px; }
-            
-            #backToTopBtn { bottom: 30px; right: 20px; width: 45px; height: 45px; font-size: 24px; }
-            .footer-right { width: 100%; text-align: left;} .footer-container { gap: 20px; }
-            .course-card-img { height: 180px; margin-bottom: 20px; }
-            .icon-box { top: 160px; left: 20px; width: 45px; height: 45px; font-size: 22px; border-radius: 12px; }
-            .course-title { font-size: 18px !important; padding: 0 20px; margin-bottom: 10px; margin-top: 12px; }
-            .course-desc { font-size: 14px; padding: 0 20px; line-height: 1.5; }
-            .course-card { padding: 0 0 20px 0; border-radius: 15px; }
-            .ep-card { padding: 20px; border-radius: 15px; }
-            .ep-header { flex-direction: row; margin-bottom: 15px; gap: 10px; align-items: flex-start; }
-            .ep-title { font-size: 15px !important; }
-            .ep-age-badge { padding: 6px 10px; min-width: 55px; border-radius: 8px; }
-            .ep-age-badge span { font-size: 9px; }
-            .ep-age-badge strong { font-size: 16px; margin: 2px 0; }
-            .ep-img { margin-bottom: 15px; border-radius: 10px; }
-            .ep-desc { font-size: 13px; margin-bottom: 15px; }
-            .ep-btn { padding: 10px; font-size: 12px; }
-            .ep-btn i { width: 22px; height: 22px; font-size: 11px; margin-left: 6px; }
-            .teacher-card { padding: 0 !important; }
-            .teacherSwiper .swiper-slide, .techSwiper .swiper-slide, .englishSwiper .swiper-slide { padding: 0 5px; }
-            .news-section { padding: 30px 0 0 0 !important; }
-            .newsSwiper { padding-bottom: 30px !important; }
-            #wrap_about { margin-top: -30px !important; padding-top: 0 !important; }
-            
-            /* Tối ưu viền footer trên điện thoại */
-            .main-footer { margin: 0 10px 15px 10px; padding: 30px 15px; border-radius: 15px; }
-            .main-footer::before { top: 8px; left: 8px; right: 8px; bottom: 8px; border-radius: 10px; border-width: 1.5px; }
-        }
-
-        /* --- HIỆU ỨNG POPUP CHI TIẾT MƯỢT MÀ --- */
-        #detailModal.fade .modal-dialog {
-            transform: scale(0.8) translateY(-50px);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            opacity: 0;
-        }
-        #detailModal.show .modal-dialog {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
-
-        /* --- HIỆU ỨNG POPUP ĐĂNG KÝ TRƯỢT LÊN MỀM MẠI --- */
-        #registrationModal.fade .modal-dialog {
-            transform: translateY(60px);
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            opacity: 0;
-        }
-        #registrationModal.show .modal-dialog {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        /* --- STYLE CHO FORM ĐĂNG KÝ FOOTER --- */
-        @keyframes tiltShaking {
-          0% { transform: rotate(-3deg); }
-          10% { transform: rotate(5deg); }
-          20% { transform: rotate(-8deg); }
-          30% { transform: rotate(2deg); }
-          40% { transform: rotate(-5deg); }
-          50% { transform: rotate(-3deg); }
-          100% { transform: rotate(-3deg); }
-        }
-
-        .advice-highlight-wrapper {
-            position: relative;
-            display: inline-block;
-            animation: tiltShaking 2s infinite;
-        }
-
-        .advice-highlight {
-            background-color: #e31837; 
-            color: white;
-            padding: 5px 25px;
-            border-radius: 50px;
-            display: inline-block;
-            font-weight: 800;
-            position: relative;
-            z-index: 2;
-        }
-
-        .advice-sparkle {
-            position: absolute;
-            top: -20px;
-            right: -35px;
-            width: 50px;
-            height: 50px;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .contact-footer-input {
-            padding: 12px 20px !important;
-            background: rgba(255, 255, 255, 0.9) !important;
-            border: none !important;
-            border-radius: 50px !important;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .contact-footer-input:focus {
-            background: #fff !important;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5) !important;
-        }
-
-        .btn-submit-dark {
-            background-color: #233066 !important;
-            color: white !important;
-            border-radius: 50px !important;
-            padding: 14px !important;
-            font-weight: 700;
-            transition: 0.3s;
-            border: none;
-        }
-
-        .btn-submit-dark:hover {
-            background-color: #112255 !important;
-            transform: translateY(-2px);
-        }
-    </style>
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
 
@@ -316,33 +36,27 @@
         <div class="loader-text">ĐANG TẢI DỮ LIỆU...</div>
     </div>
 
-    <!-- HEADER MENU & OFFCANVAS -->
     <header class="main-header" id="wrap_header">
         <div class="header-left">
             <img id="cms_logo" src="https://media.leloipt.edu.vn/Media/30_TH1041/Images/footer-logo-leloi83f2a8da-5-e.png" alt="Logo" class="header-logo">
             <h1 id="cms_site_title" class="header-title">Đang tải...</h1>
         </div>
         
-        <!-- Navbar Desktop -->
         <nav class="header-nav d-none d-lg-flex" id="desktop_nav">
-            <!-- Render từ Firebase -->
-        </nav>
+            </nav>
         
-        <!-- Nút Hamburger Mobile -->
         <button class="menu-toggle-btn d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
             <i class="bi bi-list" style="font-size: 32px;"></i>
         </button>
     </header>
 
-    <!-- Offcanvas Mobile Menu -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileMenu" style="width: 300px;">
         <div class="offcanvas-header border-bottom">
             <h5 class="offcanvas-title fw-bold text-primary" id="mobileMenuLabel"><i class="bi bi-grid-fill"></i> DANH MỤC</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body d-flex flex-column gap-2" id="mobile_nav_render">
-            <!-- Render từ Firebase -->
-        </div>
+            </div>
     </div>
 
     <section class="hero-section" id="wrap_hero" data-aos="fade-in" data-aos-duration="1000">
@@ -352,7 +66,7 @@
     <section id="wrap_news" class="news-section" data-aos="fade-up" style="display: none;">
         <div class="container-fluid">
             <div class="section-heading mb-4">
-                <h2 id="cms_news_title" style="color: #112255; font-weight: 800; font-size: 42px;">LLC NEWS</h2>
+                <h2 id="cms_news_title" style="color: #112255; font-weight: 800; font-size: 24px;">LLC NEWS</h2>
             </div>
             <div class="swiper newsSwiper">
                 <div class="swiper-wrapper" id="news_render"></div>
@@ -381,20 +95,7 @@
                 </div>
             </div>
 
-            <div id="wrap_activity" class="mb-5" data-aos="fade-up" style="display: none;">
-                <div class="section-heading mb-4">
-                    <h2 id="cms_activity_title" style="color: #f15a3a; font-weight: 800; font-size: 32px;">HÌNH ẢNH HOẠT ĐỘNG</h2>
-                    <div style="width: 60px; height: 4px; background-color: #f15a3a; margin: 0 auto; border-radius: 2px;"></div>
-                </div>
-                <div class="position-relative px-md-4 activity-container">
-                    <div class="swiper activitySwiper">
-                        <div class="swiper-wrapper" id="activity_render"></div>
-                        <div class="swiper-pagination"></div>
-                        <div class="swiper-button-next d-none d-md-flex"></div>
-                        <div class="swiper-button-prev d-none d-md-flex"></div>
-                    </div>
-                </div>
-            </div>
+           
 
             <div id="render_pos_top" class="mb-5"></div>
 
@@ -441,7 +142,6 @@
         </div>
     </section>
 
-    <!-- FORM LIÊN HỆ DƯỚI CÙNG (FOOTER FORM) -->
     <section id="wrap_contact_form" class="content-section" style="background-color: #f8fafc; border-top: 1px solid #e0e5ec;" data-aos="fade-up">
         <div class="container py-5">
             <div class="text-center mb-5">
@@ -481,7 +181,6 @@
                                         <option value="" disabled selected>Tỉnh/ Thành phố *</option>
                                     </select>
                                 </div>
-                                <!-- TRƯỜNG ĐỘ TUỔI THÊM VÀO ĐÚNG THEO YÊU CẦU -->
                                 <div class="col-md-6">
                                     <select id="f_course" class="form-select contact-footer-input" required>
                                         <option value="" disabled selected>Khóa học đăng ký *</option>
@@ -517,7 +216,7 @@
         <div class="footer-container">
             <div class="footer-left">
                 <img id="f_logo" src="" alt="Footer Logo" class="f-logo">
-                
+              <h5 id="f_name" class="f-name">Trung tâm Ngoại ngữ – Công nghệ Lê Lợi (thuộc Trường THCS & THPT Lê Lợi, Phan Thiết)</h5>
                 <p id="f_license" class="f-text">...</p>
                 <p id="f_address" class="f-text">...</p>
                 <div class="f-privacy"><i class="bi bi-shield-lock-fill text-success"></i> <span id="f_privacy">...</span></div>
@@ -526,16 +225,13 @@
                 <div class="f-map-wrapper">
                     <iframe id="f_map" src="" width="100%" height="150px" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
-                
-                <a href="https://www.facebook.com/profile.php?id=61585530223166" target="_blank" class="f-support-btn">
-                    <i class="bi bi-chat-dots"></i> TƯ VẤN QUA FACEBOOK
-                </a>
-
             </div>
+            
+            <div id="footer_social_render" class="w-100 mt-4 pt-3 d-flex justify-content-center"></div>
+
         </div>
     </footer>
 
-    <!-- MODAL POPUP FORM -->
     <div class="modal fade" id="registrationModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content custom-reg-modal">
@@ -570,7 +266,6 @@
         </div>
     </div>
 
-    <!-- MODAL HIỂN THỊ CHI TIẾT KHÓA HỌC -->
     <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
             <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 20px 50px rgba(0,0,0,0.3);">
@@ -594,499 +289,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
-    <script>
-        AOS.init({ duration: 800, once: true, offset: 50 });
-        const backToTopBtn = document.getElementById("backToTopBtn");
-        window.addEventListener("scroll", () => { if (window.scrollY > 400) { backToTopBtn.style.display = "flex"; } else { backToTopBtn.style.display = "none"; } });
-        backToTopBtn.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: "smooth" }); });
-        window.addEventListener('load', () => { setTimeout(() => { const loader = document.getElementById('page-loader'); if (loader) { loader.style.opacity = '0'; setTimeout(() => loader.style.display = 'none', 500); } }, 1500); });
-        
-        window.showDetailModal = (encodedContent) => {
-            const modalBody = document.getElementById('detailModalBody');
-            modalBody.style.opacity = '0';
-            modalBody.style.transform = 'translateY(15px)';
-            modalBody.innerHTML = decodeURIComponent(encodedContent);
-            let detailModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('detailModal'));
-            detailModal.show();
-            setTimeout(() => {
-                modalBody.style.transition = 'all 0.4s ease';
-                modalBody.style.opacity = '1';
-                modalBody.style.transform = 'translateY(0)';
-            }, 150);
-        };
-    </script>
+    <script type="module" src="srcpt/srcpt.js"></script>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getDatabase, ref, push, onValue, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
-
-        const firebaseConfig = { apiKey: "AIzaSyA85V7th40ettZccP5or_tUNBE5_LRF1wU", authDomain: "test-web1-b1795.firebaseapp.com", databaseURL: "https://test-web1-b1795-default-rtdb.firebaseio.com", projectId: "test-web1-b1795" };
-        const app = initializeApp(firebaseConfig); const db = getDatabase(app);
-
-        let backgroundImages = [  ];
-        let currentIndex = 0; const heroSection = document.getElementById('wrap_hero'); const heroIndicators = document.getElementById('hero-indicators');
-
-        function updateIndicators() { if (!heroIndicators) return; heroIndicators.innerHTML = ''; backgroundImages.forEach((_, idx) => { heroIndicators.innerHTML += `<div class="indicator-bar ${idx === currentIndex ? 'active' : ''}" onclick="window.setSlide(${idx})"></div>`; }); }
-        window.setSlide = (index) => { currentIndex = index; heroSection.style.backgroundImage = backgroundImages[currentIndex]; updateIndicators(); };
-
-        onValue(ref(db, 'pageContent'), (snapshot) => {
-            if(snapshot.exists()){
-                const data = snapshot.val();
-                
-                try {
-                    // --- CẤU HÌNH MENU HEADER ---
-                    if (data.header_menu) {
-                        let dNav = '';
-                        let mNav = '';
-                        data.header_menu.forEach(m => {
-                            if (m.type === 'phone') {
-                                let phoneNum = m.value.replace(/[^0-9]/g, '');
-                                dNav += `<a href="tel:${phoneNum}" class="btn-phone-menu"><i class="bi bi-telephone-fill"></i> ${m.name}</a>`;
-                                mNav += `<a href="tel:${phoneNum}" class="mobile-menu-link phone-link"><i class="bi bi-telephone-fill"></i> ${m.name}</a>`;
-                            } else {
-                                dNav += `<a href="${m.value}">${m.name}</a>`;
-                                mNav += `<a href="${m.value}" class="mobile-menu-link" onclick="bootstrap.Offcanvas.getInstance(document.getElementById('mobileMenu')).hide();">${m.name}</a>`;
-                            }
-                        });
-                        if(document.getElementById('desktop_nav')) document.getElementById('desktop_nav').innerHTML = dNav;
-                        if(document.getElementById('mobile_nav_render')) document.getElementById('mobile_nav_render').innerHTML = mNav;
-                    }
-
-                    // --- CẤU HÌNH CÁC TÙY CHỌN TRONG FORM ---
-                    if (data.form_config) {
-                        const config = data.form_config;
-                        const renderOptions = (elId, list, defaultText) => {
-                            const el = document.getElementById(elId);
-                            if (!el) return;
-                            let html = `<option value="" disabled selected>${defaultText}</option>`;
-                            (list || []).forEach(item => { html += `<option value="${item}"> ${item}</option>`; });
-                            el.innerHTML = html;
-                        };
-
-                        // Đổ cho Popup
-                        renderOptions('p_age', config.ages, "Chọn độ tuổi");
-                        renderOptions('p_study', config.studyModes, "Chọn hình thức học"); // <-- THÊM DÒNG NÀY
-                        renderOptions('p_course', config.courses, "Khóa học đăng ký");
-                        renderOptions('p_city', config.cities, "Tỉnh/ Thành phố");
-
-                        // Đổ cho Footer Form
-                        renderOptions('f_study', config.studyModes, "Hình thức học");
-                        renderOptions('f_city', config.cities, "Tỉnh/ Thành phố");
-                        renderOptions('f_age', config.ages, "Độ tuổi *"); // Đã thêm Độ Tuổi
-                        renderOptions('f_course', config.courses, "Khóa học đăng ký *");
-                    }
-
-                    // CẬP NHẬT THÔNG TIN LIÊN HỆ TRONG KHỐI FOOTER FORM
-                    if (data.contact_data) {
-                        if(document.getElementById('display_phone')) document.getElementById('display_phone').innerText = data.contact_data.phone;
-                        if(document.getElementById('link_messenger')) document.getElementById('link_messenger').href = data.contact_data.messenger;
-                        if(document.getElementById('link_phone')) {
-                            let rawPhone = data.contact_data.phone.replace(/[^0-9]/g, '');
-                            document.getElementById('link_phone').href = "tel:" + rawPhone;
-                        }
-                    }
-
-                    // ẨN / HIỆN CÁC KHỐI
-                    if (data.visibility) {
-                        const applyVis = (elId, key) => { const el = document.getElementById(elId); if (el) el.style.display = data.visibility[key] ? '' : 'none'; };
-                        applyVis('wrap_header', 'header'); applyVis('wrap_hero', 'header'); 
-                        applyVis('wrap_news', 'news'); 
-                        applyVis('wrap_about', 'about'); 
-                        applyVis('wrap_activity', 'activity'); 
-                        applyVis('wrap_intro', 'intro'); applyVis('wrap_global_tech', 'global_tech'); applyVis('wrap_global_english', 'global_english'); 
-                        applyVis('wrap_global_teacher', 'global_teacher'); 
-                        applyVis('wrap_contact_form', 'contact_form'); 
-                        applyVis('wrap_footer', 'footer');
-                    }
-                    
-                    // SLIDE ẢNH BÌA
-                    let fetchedBgs = [];
-                    if(data.hero_bg_1 && data.hero_bg_1.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_1}')`);
-                    if(data.hero_bg_2 && data.hero_bg_2.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_2}')`);
-                    if(data.hero_bg_3 && data.hero_bg_3.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_3}')`);
-
-                    if(fetchedBgs.length === 0) {
-                        heroSection.style.display = 'none'; 
-                    } else {
-                        heroSection.style.display = 'flex'; 
-                        backgroundImages = fetchedBgs;
-                        currentIndex = 0;
-                        heroSection.style.backgroundImage = backgroundImages[currentIndex];
-                        updateIndicators();
-                    }
-                    
-                    const updateHTML = (id, value) => { if(value && document.getElementById(id)) document.getElementById(id).innerHTML = value; };
-                    const updateIMG = (id, value) => { if(value && document.getElementById(id)) document.getElementById(id).src = value; };
-
-                    // THÔNG TIN CHUNG
-                    updateIMG('cms_logo', data.logo); updateIMG('loader_img', data.logo);
-                    updateHTML('cms_site_title', data.site_title); updateHTML('cms_sec1_title', data.sec1_title); updateHTML('cms_sec1_desc', data.sec1_desc);
-
-                    // KHỐI LLC NEWS (KHỐI MẶC ĐỊNH)
-                    if (data.news_data && document.getElementById('news_render')) {
-                        document.getElementById('cms_news_title').innerText = data.news_data.title || "LLC NEWS";
-                        let nHTML = '';
-                        if (data.news_data.slides) {
-                            data.news_data.slides.forEach(s => { 
-                                if(s) nHTML += `<div class="swiper-slide"><img src="${s.img || ''}" class="news-img-card" alt="News Image"></div>`; 
-                            });
-                        }
-                        document.getElementById('news_render').innerHTML = nHTML;
-                    }
-
-                    // KHỐI GIỚI THIỆU
-                    if (data.about_data && document.getElementById('wrap_about')) {
-                        updateIMG('p_about_img', data.about_data.img);
-                        updateHTML('p_about_title', data.about_data.title);
-                        updateHTML('p_about_desc', data.about_data.desc);
-                        const abTitle = document.getElementById('p_about_title'); if (abTitle) abTitle.style.color = data.about_data.titleColor || '#112255';
-                        const abDesc = document.getElementById('p_about_desc'); if (abDesc) abDesc.style.color = data.about_data.descColor || '#475569';
-                        const abBg = document.getElementById('cms_about_bg'); if (abBg) abBg.style.backgroundColor = data.about_data.bgColor || 'transparent';
-                    }
-
-                    // KHỐI HÌNH ẢNH HOẠT ĐỘNG
-                    if(data.activity_data && document.getElementById('activity_render')) {
-                        document.getElementById('cms_activity_title').innerText = data.activity_data.title || "HÌNH ẢNH HOẠT ĐỘNG";
-                        let actHTML = '';
-                        if(data.activity_data.slides) {
-                            data.activity_data.slides.forEach(s => { 
-                                if(s) actHTML += `<div class="swiper-slide"><div class="w-100"><img src="${s.img || ''}" class="activity-slide-img"><p class="activity-slide-text">${s.text || ''}</p></div></div>`; 
-                            });
-                        }
-                        document.getElementById('activity_render').innerHTML = actHTML;
-                    }
-
-                    // KHỐI THÔNG TIN 1 (TECH)
-                    const techContainer = document.getElementById('tech_cards_container');
-                    if(data.tech_cards && techContainer) {
-                        techContainer.innerHTML = '';
-                        data.tech_cards.forEach((card, index) => { 
-                            if(card) {
-                                let btnDetail = card.has_detail ? `<div class="px-4 pb-3 mt-auto"><button type="button" class="btn w-100 btn-detail" style="background-color: ${card.detail_bg||'#f15a3a'}; color: ${card.detail_color||'#ffffff'}; font-size: ${card.detail_size||'14'}px; font-family: ${card.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(card.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${card.detail_text||'Xem chi tiết'}</button></div>` : '';
-                                techContainer.innerHTML += `<div class="swiper-slide"><div class="course-card"><div style="background-color: ${card.color}; height: 5px; width: 100%; position: absolute; top: 0; left: 0; z-index: 10;"></div><img src="${card.img}" class="course-card-img"><div class="icon-box" style="color: ${card.color}; border: 2px solid ${card.color}30;"><i class="bi ${card.icon}"></i></div><h3 class="course-title">${card.title}</h3><p class="course-desc">${card.desc}</p>${btnDetail}</div></div>`; 
-                            }
-                        });
-                    }
-
-                    // KHỐI THÔNG TIN 2 (ENGLISH)
-                    const englishContainer = document.getElementById('english_cards_container'); const englishSection = document.getElementById('wrap_global_english');
-                    if(data.english_bg_color && englishSection) englishSection.style.backgroundColor = data.english_bg_color;
-                    if(data.english_cards && englishContainer) {
-                        englishContainer.innerHTML = '';
-                        data.english_cards.forEach((card, index) => { 
-                            if(card) {
-                                let btnDetail = card.has_detail ? `<button type="button" class="btn w-100 mt-2 btn-detail" style="background-color: ${card.detail_bg||'#112255'}; color: ${card.detail_color||'#ffffff'}; font-size: ${card.detail_size||'14'}px; font-family: ${card.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(card.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${card.detail_text||'Xem chi tiết'}</button>` : '';
-                                englishContainer.innerHTML += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${card.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${card.text_color || '#112255'};">${card.title}</h3><div class="ep-age-badge" style="background-color: ${card.text_color || '#112255'};"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${card.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${card.img}" class="ep-img"><p class="ep-desc" style="color: ${card.text_color || '#475569'};">${card.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: ${card.text_color || '#112255'}; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: ${card.text_color || '#112255'}; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
-                            }
-                        });
-                    }
-
-                    // KHỐI GIÁO VIÊN
-                    if(data.teacher_config && document.getElementById('cms_teacher_title')) {
-                        const tc = data.teacher_config; document.getElementById('cms_teacher_title').innerHTML = `<i class="bi ${tc.icon}"></i> ${tc.title}`; document.getElementById('cms_teacher_title').style.color = tc.color;
-                    }
-                    if(data.teacher_cards && document.getElementById('global_teacher_render')) {
-                        let tHTML = '';
-                        data.teacher_cards.forEach((c) => {
-                            if(c) {
-                                let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience}</span><small>năm<br>kinh nghiệm</small></div>`;
-                                tHTML += `<div class="swiper-slide"><div class="teacher-card" style="border-color: ${c.bgColor||'#00d5ff'} !important;">${badgeHTML}<img src="${c.img}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name}</h4></div></div></div>`;
-                            }
-                        });
-                        document.getElementById('global_teacher_render').innerHTML = tHTML;
-                    }
-
-                    // RENDER CÁC KHỐI KÉO THẢ (CUSTOM BLOCKS BAO GỒM LLC NEWS)
-                    let renderTop = '', renderMid1 = '', renderMid2 = '', renderBottom = '';
-                    if (data.custom_blocks) {
-                        data.custom_blocks.forEach((block, bIndex) => {
-                            if (block && !block.isHidden) {
-                                let dbHTML = '';
-                                if (block.type === 'text' || !block.type) { 
-                                    let bgStyle = block.isTransparent ? 'transparent' : (block.bgColor || '#e0f2fe'); let shadowStyle = block.hasShadow === false ? 'none' : '0 5px 15px rgba(0,0,0,0.05)'; let padStyle = (block.isTransparent && block.hasShadow === false) ? '15px 0' : '30px';
-                                    dbHTML = `<div class="custom-text-box" data-aos="fade-up" style="background-color: ${bgStyle}; color: ${block.textColor}; padding: ${padStyle}; border-radius: 20px; box-shadow: ${shadowStyle}; margin-bottom: 30px;">${block.content}</div>`; 
-                                } 
-                                else if (block.type === 'tech') { 
-                                    let innerCards = ''; 
-                                    if(block.cards) { 
-                                        block.cards.forEach((c, i) => { 
-                                            if(c) {
-                                                let btnDetail = c.has_detail ? `<div class="px-4 pb-4 mt-auto"><button type="button" class="btn w-100 btn-detail" style="background-color: ${c.detail_bg||'#f15a3a'}; color: ${c.detail_color||'#ffffff'}; font-size: ${c.detail_size||'14'}px; font-family: ${c.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(c.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${c.detail_text||'Xem chi tiết'}</button></div>` : '';
-                                                innerCards += `<div class="swiper-slide"><div class="course-card"><div style="background-color: ${c.color}; height: 5px; width: 100%; position: absolute; top: 0; left: 0; z-index: 10;"></div><img src="${c.img}" class="course-card-img"><div class="icon-box" style="color: ${c.color}; border: 2px solid ${c.color}30;"><i class="bi ${c.icon}"></i></div><h3 class="course-title">${c.title}</h3><p class="course-desc">${c.desc}</p>${btnDetail}</div></div>`; 
-                                            }
-                                        }); 
-                                    } 
-                                    let bColor = block.color || '#f15a3a'; let bIcon = block.icon || 'bi-card-checklist';
-                                    dbHTML = `<div data-aos="fade-up" class="mb-5"><div class="section-heading mb-4" style="text-align: left;"><h2 style="color: ${bColor}; font-size: 32px;"><i class="bi ${bIcon}"></i> ${block.title || 'Khối Thông Tin 1'}</h2></div><div class="swiper customTechSwiper-${bIndex} techSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div>`; 
-                                }
-                                else if (block.type === 'english') { 
-                                    let innerCards = ''; 
-                                    if(block.cards) { 
-                                        block.cards.forEach((c, i) => { 
-                                            if(c) {
-                                                let btnDetail = c.has_detail ? `<button type="button" class="btn w-100 mt-2 btn-detail" style="background-color: ${c.detail_bg||'#112255'}; color: ${c.detail_color||'#ffffff'}; font-size: ${c.detail_size||'14'}px; font-family: ${c.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(c.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${c.detail_text||'Xem chi tiết'}</button>` : '';
-                                                innerCards += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${c.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${c.text_color || '#112255'};">${c.title}</h3><div class="ep-age-badge" style="background-color: ${c.text_color || '#112255'};"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${c.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${c.img}" class="ep-img"><p class="ep-desc" style="color: ${c.text_color || '#475569'};">${c.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: ${c.text_color || '#112255'}; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: ${c.text_color || '#112255'}; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
-                                            }
-                                        }); 
-                                    } 
-                                    let bColor = block.color || '#112255'; let bIcon = block.icon || 'bi-book'; let bBg = block.bgColor || '#00d5ff';
-                                    dbHTML = `<div class="english-programs-section mb-5" style="background-color: ${bBg};" data-aos="fade-up"><div class="section-heading mb-4" style="margin-bottom: 30px; text-align: left; border-bottom: 2px dashed #cbd5e1; padding-bottom: 15px;"><h2 style="color: ${bColor}; font-size: 32px; margin-bottom: 0;"><i class="bi ${bIcon}"></i> ${block.title || 'Khối Thông Tin 2'}</h2></div><div class="swiper customEnglishSwiper-${bIndex} englishSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div>`; 
-                                }
-                                else if (block.type === 'teacher') {
-                                    let tbColor = block.color || '#00d5ff'; let tbIcon = block.icon || 'bi-person-video3';
-                                    let innerCards = ''; 
-                                    if(block.cards) { 
-                                        block.cards.forEach((c) => { 
-                                            if(c) {
-                                                let badgeHTML = c.hideExperience ? '' : `<div class="teacher-badge"><span>+${c.experience}</span><small>năm<br>kinh nghiệm</small></div>`; 
-                                                innerCards += `<div class="swiper-slide"><div class="teacher-card" style="border-color: ${c.bgColor||'#00d5ff'} !important;">${badgeHTML}<img src="${c.img}" class="teacher-img"><div class="teacher-info" style="background-color: ${c.bgColor||'#00d5ff'};"><div class="teacher-role" style="color: ${c.roleColor||'#112255'};">${c.role}</div><h4 class="teacher-name" style="color: ${c.nameColor||'#112255'};">${c.name}</h4></div></div></div>`; 
-                                            }
-                                        }); 
-                                    }
-                                    dbHTML = `<div class="mb-5" data-aos="fade-up"><div class="section-heading mb-4"><h2 style="color:${tbColor}; font-size: 32px;"><i class="bi ${tbIcon}"></i> ${block.title||'Đội Ngũ Giảng Viên'}</h2></div><div class="swiper customTeacherSwiper-${bIndex} teacherSwiper"><div class="swiper-wrapper">${innerCards}</div><div class="swiper-pagination"></div></div></div>`;
-                                }
-                                else if (block.type === 'news') {
-                                    let nColor = block.color || '#ff9800';
-                                    let innerSlides = '';
-                                    if(block.slides) {
-                                        block.slides.forEach((s) => {
-                                            if(s) innerSlides += `<div class="swiper-slide"><img src="${s.img || ''}" class="news-img-card" alt="News Image"></div>`;
-                                        });
-                                    }
-                                    dbHTML = `<div class="news-section mb-5" data-aos="fade-up" style="background-color: transparent; padding: 0;">
-                                        <div class="section-heading mb-4">
-                                            <h2 style="color: ${nColor}; font-weight: 800; font-size: 38px; text-transform: uppercase;">${block.title || 'LLC NEWS'}</h2>
-                                            <div style="width: 60px; height: 4px; background-color: ${nColor}; margin: 0 auto; border-radius: 2px;"></div>
-                                        </div>
-                                        <div class="swiper customNewsSwiper-${bIndex} newsSwiper">
-                                            <div class="swiper-wrapper">${innerSlides}</div>
-                                            <div class="swiper-pagination"></div>
-                                        </div>
-                                    </div>`;
-                                }
-
-                                if(block.pos === 'pos-top') renderTop += dbHTML;
-                                else if(block.pos === 'pos-mid1') renderMid1 += dbHTML;
-                                else if(block.pos === 'pos-mid2') renderMid2 += dbHTML;
-                                else renderBottom += dbHTML;
-                            }
-                        });
-                    }
-                    document.getElementById('render_pos_top').innerHTML = renderTop;
-                    document.getElementById('render_pos_mid1').innerHTML = renderMid1;
-                    document.getElementById('render_pos_mid2').innerHTML = renderMid2;
-                    document.getElementById('render_pos_bottom').innerHTML = renderBottom;
-
-                    // FOOTER VÀ BẢN ĐỒ
-                    if(data.footer_data) { 
-                        updateIMG('f_logo', data.footer_data.logo); updateHTML('f_name', data.footer_data.name); updateHTML('f_license', data.footer_data.license); updateHTML('f_address', data.footer_data.address); updateHTML('f_privacy', data.footer_data.privacy); 
-                        const mapEl = document.getElementById('f_map'); 
-                        if(mapEl && data.footer_data.map_lat && data.footer_data.map_lng) { 
-mapEl.src = `https://maps.google.com/maps?q=${data.footer_data.map_lat},${data.footer_data.map_lng}&t=k&z=16&output=embed&iwloc=near`;                            mapEl.style.width = data.footer_data.map_w || '100%'; 
-                            mapEl.style.height = data.footer_data.map_h || '150px'; 
-                        } 
-                    }
-
-                    // CHẠY HIỆU ỨNG SWIPER SAU KHI RENDER HTML XONG
-                    setTimeout(() => { 
-                        if (window.newsSwiperInstance) window.newsSwiperInstance.destroy(true, true);
-                        window.newsSwiperInstance = new Swiper('.newsSwiper', { 
-                            effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto',
-                            autoplay: { delay: 3000, disableOnInteraction: false },
-                            coverflowEffect: { rotate: 20, stretch: 0, depth: 100, modifier: 1.5, slideShadows: false },
-                            pagination: { el: '.swiper-pagination', clickable: true }
-                        });
-
-                        if (window.activitySwiperInstance) window.activitySwiperInstance.destroy(true, true);
-                        window.activitySwiperInstance = new Swiper('.activitySwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 2000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } });
-                        
-                        if (window.globalTeacherSwiperInstance) window.globalTeacherSwiperInstance.destroy(true, true);
-                        window.globalTeacherSwiperInstance = new Swiper('.globalTeacherSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } });
-
-                        if (window.globalTechSwiperInstance) window.globalTechSwiperInstance.destroy(true, true);
-                        window.globalTechSwiperInstance = new Swiper('.globalTechSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3500, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
-
-                        if (window.globalEnglishSwiperInstance) window.globalEnglishSwiperInstance.destroy(true, true);
-                        window.globalEnglishSwiperInstance = new Swiper('.globalEnglishSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 4000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
-
-                        if (data.custom_blocks) {
-                            data.custom_blocks.forEach((block, bIndex) => {
-                                if(block && block.type === 'teacher') {
-                                    if(window[`customTeacherSwiper_${bIndex}`]) window[`customTeacherSwiper_${bIndex}`].destroy(true, true);
-                                    window[`customTeacherSwiper_${bIndex}`] = new Swiper(`.customTeacherSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } });
-                                } else if (block && block.type === 'tech') {
-                                    if(window[`customTechSwiper_${bIndex}`]) window[`customTechSwiper_${bIndex}`].destroy(true, true);
-                                    window[`customTechSwiper_${bIndex}`] = new Swiper(`.customTechSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3500, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
-                                } else if (block && block.type === 'english') {
-                                    if(window[`customEnglishSwiper_${bIndex}`]) window[`customEnglishSwiper_${bIndex}`].destroy(true, true);
-                                    window[`customEnglishSwiper_${bIndex}`] = new Swiper(`.customEnglishSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 4000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
-                                } else if (block && block.type === 'news') {
-                                    if(window[`customNewsSwiper_${bIndex}`]) window[`customNewsSwiper_${bIndex}`].destroy(true, true);
-                                    window[`customNewsSwiper_${bIndex}`] = new Swiper(`.customNewsSwiper-${bIndex}`, {
-                                        effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto',
-                                        autoplay: { delay: 3000, disableOnInteraction: false },
-                                        coverflowEffect: { rotate: 20, stretch: 0, depth: 100, modifier: 1.5, slideShadows: false },
-                                        pagination: { el: '.swiper-pagination', clickable: true }
-                                    });
-                                }
-                            });
-                        }
-                        AOS.refresh(); 
-                    }, 300);
-
-                } catch (error) {
-                    console.error("Đã xảy ra lỗi trong quá trình render giao diện từ Firebase:", error);
-                }
-            }
-        });
-
-        heroSection.style.backgroundImage = backgroundImages[0];
-        updateIndicators();
-        
-        setInterval(() => { 
-            if (backgroundImages.length > 0) {
-                currentIndex = (currentIndex + 1) % backgroundImages.length; 
-                heroSection.style.backgroundImage = backgroundImages[currentIndex]; 
-                updateIndicators(); 
-            }
-        }, 3000);
-
-        // HÀM GỬI DỮ LIỆU ĐĂNG KÝ CHUNG
-        const submitRegistration = async (formData) => {
-            document.getElementById('loading').style.display = 'flex';
-            try {
-                await push(ref(db, "registrations"), {
-                    ...formData,
-                    timestamp: serverTimestamp()
-                });
-                document.getElementById('loading').style.display = 'none';
-                
-                // Đóng modal nếu đang mở
-                const modalEl = document.getElementById('registrationModal');
-                const modal = bootstrap.Modal.getInstance(modalEl);
-                if (modal) modal.hide();
-
-                Swal.fire({
-                    title: '✨ Thành công!',
-                    html: `Cảm ơn phụ huynh <b>${formData.parentName}</b> với SĐT <b>${formData.phone}</b>, trung tâm sẽ liên hệ vào giây lát.`,
-                    icon: 'success'
-                });
-            } catch (error) {
-                document.getElementById('loading').style.display = 'none';
-                Swal.fire('Lỗi!', 'Không thể gửi dữ liệu, vui lòng thử lại.', 'error');
-            }
-        };
-
-        // Bắt sự kiện Form Popup
-        // Sửa lại đoạn bắt sự kiện Form Popup
-document.getElementById('form_popup').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const data = {
-        parentName: document.getElementById('p_name').value,
-        phone: document.getElementById('p_phone').value,
-        email: document.getElementById('p_email').value,
-        city: document.getElementById('p_city').value,
-        ageGroup: document.getElementById('p_age').value,
-        course: document.getElementById('p_course').value,
-        studyMode: document.getElementById('p_study').value, // <-- SỬA DÒNG NÀY (Lấy giá trị từ ID p_study)
-        note: "Nguồn: Form Đăng Ký Qua Popup"
-    };
-    submitRegistration(data);
-    this.reset();
-});
-
-        // Bắt sự kiện Form Footer
-        document.getElementById('form_footer').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const data = {
-                parentName: document.getElementById('f_name').value,
-                phone: document.getElementById('f_phone').value,
-                email: document.getElementById('f_email').value,
-                city: document.getElementById('f_city').value,
-                studyMode: document.getElementById('f_study').value,
-                course: document.getElementById('f_course').value,
-                ageGroup: document.getElementById('f_age').value,
-                note: "Nguồn: Form Đăng Ký Cuối Trang"
-            };
-            submitRegistration(data);
-            this.reset();
-        });
-
-    </script>
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
 </body>
 </html>
