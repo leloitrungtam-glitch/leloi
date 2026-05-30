@@ -172,7 +172,7 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
 
 /* 1. Trạng thái mặc định của các thẻ (Khi KHÔNG nằm ở giữa) */
 .teacherSwiper .swiper-slide .teacher-card {
-    transform: scale(0.85) !important; /* Thu nhỏ các thẻ ở 2 bên */
+    transform: scale(0.8) !important; /* ĐÃ CHỈNH LẠI: THU NHỎ THÊM 2 KHUNG BÊN (CÒN 80%) */
     opacity: 1 !important; /* KHÔNG LÀM MỜ - GIỮ NGUYÊN ĐỘ SÁNG 100% */
     transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
     box-shadow: none !important;
@@ -180,7 +180,7 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
 
 /* 2. Trạng thái khi thẻ trượt vào vị trí trung tâm (ACTIVE) */
 .teacherSwiper .swiper-slide-active .teacher-card {
-    transform: scale(1.1) !important; /* Phóng to thẻ chính giữa */
+    transform: scale(1.15) !important; /* ĐÃ CHỈNH LẠI: PHÓNG TO THẺ CHÍNH GIỮA LÊN 115% */
     opacity: 1 !important; /* Hiển thị rõ nét nhất */
     box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important; /* Đổ bóng tạo hiệu ứng 3D */
     z-index: 10 !important;
@@ -188,7 +188,7 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
 
 /* 3. Hiệu ứng khi rê chuột (Hover) vào thẻ đang ở giữa */
 .teacherSwiper .swiper-slide-active .teacher-card:hover {
-    transform: scale(1.1) translateY(-8px) !important; 
+    transform: scale(1.15) translateY(-8px) !important; 
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25) !important; 
     z-index: 20 !important;
 }
