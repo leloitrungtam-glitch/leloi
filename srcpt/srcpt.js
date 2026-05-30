@@ -28,15 +28,20 @@ import { getDatabase, ref, push, onValue, serverTimestamp } from "https://www.gs
 const firebaseConfig = { apiKey: "AIzaSyA85V7th40ettZccP5or_tUNBE5_LRF1wU", authDomain: "test-web1-b1795.firebaseapp.com", databaseURL: "https://test-web1-b1795-default-rtdb.firebaseio.com", projectId: "test-web1-b1795" };
 const app = initializeApp(firebaseConfig); const db = getDatabase(app);
 
-let backgroundImages = [  ];
-let currentIndex = 0; const heroSection = document.getElementById('wrap_hero'); const heroIndicators = document.getElementById('hero-indicators');
-
-function updateIndicators() { if (!heroIndicators) return; heroIndicators.innerHTML = ''; backgroundImages.forEach((_, idx) => { heroIndicators.innerHTML += `<div class="indicator-bar ${idx === currentIndex ? 'active' : ''}" onclick="window.setSlide(${idx})"></div>`; }); }
-window.setSlide = (index) => { currentIndex = index; heroSection.style.backgroundImage = backgroundImages[currentIndex]; updateIndicators(); };
+// MẢNG LƯU TRỮ SWIPER ĐỂ TIÊU DIỆT SẠCH SẼ KHI DỮ LIỆU ĐỔI (CHỐNG KẸT/ĐỨNG YÊN)
+window.cmsSwipers = window.cmsSwipers || [];
 
 onValue(ref(db, 'pageContent'), (snapshot) => {
     if(snapshot.exists()){
         const data = snapshot.val();
+        
+        // 1. DỌN SẠCH CÁC SWIPER CŨ ĐANG CHẠY NGẦM ĐỂ TRÁNH XUNG ĐỘT
+        if (window.cmsSwipers.length > 0) {
+            window.cmsSwipers.forEach(s => {
+                try { s.destroy(true, true); } catch(e) {}
+            });
+            window.cmsSwipers = [];
+        }
         
         try {
             if (data.header_menu) {
@@ -85,9 +90,30 @@ onValue(ref(db, 'pageContent'), (snapshot) => {
                 applyVis('wrap_header', 'header'); applyVis('wrap_hero', 'header'); applyVis('wrap_news', 'news'); applyVis('wrap_about', 'about'); applyVis('wrap_activity', 'activity'); applyVis('wrap_intro', 'intro'); applyVis('wrap_global_tech', 'global_tech'); applyVis('wrap_global_english', 'global_english'); applyVis('wrap_global_teacher', 'global_teacher'); applyVis('wrap_contact_form', 'contact_form'); applyVis('wrap_footer', 'footer');
             }
             
+            // --- LOGIC ẢNH BÌA HERO (ĐÃ LỌC BỎ CODE CŨ) ---
             let fetchedBgs = [];
-            if(data.hero_bg_1 && data.hero_bg_1.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_1}')`); if(data.hero_bg_2 && data.hero_bg_2.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_2}')`); if(data.hero_bg_3 && data.hero_bg_3.trim() !== "") fetchedBgs.push(`url('${data.hero_bg_3}')`);
-            if(fetchedBgs.length === 0) { heroSection.style.display = 'none'; } else { heroSection.style.display = 'flex'; backgroundImages = fetchedBgs; currentIndex = 0; heroSection.style.backgroundImage = backgroundImages[currentIndex]; updateIndicators(); }
+            if(data.hero_images && data.hero_images.length > 0) {
+                 fetchedBgs = data.hero_images;
+            } else {
+                 if(data.hero_bg_1 && data.hero_bg_1.trim() !== "") fetchedBgs.push(data.hero_bg_1); 
+                 if(data.hero_bg_2 && data.hero_bg_2.trim() !== "") fetchedBgs.push(data.hero_bg_2); 
+                 if(data.hero_bg_3 && data.hero_bg_3.trim() !== "") fetchedBgs.push(data.hero_bg_3);
+            }
+            
+            const heroRender = document.getElementById('hero_render');
+            let heroSection = document.getElementById('wrap_hero');
+            if(fetchedBgs.length === 0) { 
+                if(heroSection) heroSection.style.display = 'none'; 
+            } else { 
+                if(heroSection) heroSection.style.display = 'block'; 
+                if(heroRender) {
+                    let hHtml = '';
+                    fetchedBgs.forEach(bg => {
+                        hHtml += `<div class="swiper-slide" style="background-image: url('${bg}'); background-size: cover; background-position: center; background-repeat: no-repeat; width: 100%; height: 100%;"></div>`;
+                    });
+                    heroRender.innerHTML = hHtml;
+                }
+            }
             
             const updateHTML = (id, value) => { if(value && document.getElementById(id)) document.getElementById(id).innerHTML = value; };
             const updateIMG = (id, value) => { if(value && document.getElementById(id)) document.getElementById(id).src = value; };
@@ -203,7 +229,6 @@ onValue(ref(db, 'pageContent'), (snapshot) => {
                             let nColor = block.color || '#ff9800';
                             let innerSlides = '';
                             if(block.slides) { block.slides.forEach((s) => { if(s) innerSlides += `<div class="swiper-slide"><img src="${s.img || ''}" class="news-img-card" alt="News Image"></div>`; }); }
-                            /* ĐÃ THU NHỎ SIZE TIÊU ĐỀ XUỐNG 24PX Ở KHỐI BUILDER */
                             dbHTML = `<div id="${block.slug || 'block-'+block.id}" class="news-section mb-5" data-aos="fade-up" style="background-color: transparent; padding: 0;"><div class="section-heading mb-4"><h2 style="color: ${nColor}; font-weight: 800; font-size: 24px; text-transform: uppercase;">${block.title || 'LLC NEWS'}</h2><div style="width: 40px; height: 3px; background-color: ${nColor}; margin: 0 auto; border-radius: 2px;"></div></div><div class="swiper customNewsSwiper-${bIndex} newsSwiper"><div class="swiper-wrapper">${innerSlides}</div><div class="swiper-pagination"></div></div></div>`;
                         }
 
@@ -219,7 +244,6 @@ onValue(ref(db, 'pageContent'), (snapshot) => {
                 if(mapEl && data.footer_data.map_lat && data.footer_data.map_lng) { mapEl.src = `https://maps.google.com/maps?q=${data.footer_data.map_lat},${data.footer_data.map_lng}&hl=vi&z=16&output=embed&iwloc=near`; mapEl.style.width = data.footer_data.map_w || '100%'; mapEl.style.height = data.footer_data.map_h || '150px'; } 
             }
             
-            /* --- LOGIC HIỂN THỊ MẠNG XÃ HỘI (Index 1) --- */
             if (data.footer_social && document.getElementById('footer_social_render')) {
                 let s = data.footer_social;
                 let sHtml = '';
@@ -243,64 +267,86 @@ onValue(ref(db, 'pageContent'), (snapshot) => {
                 }
             }
 
+            // 2. KHỞI TẠO LẠI CÁC SWIPER VỚI CẤU HÌNH CHUẨN ĐỂ ĐẢM BẢO CHẠY MƯỢT VÀ LUÔN NẰM GIỮA
             setTimeout(() => { 
-                if (window.newsSwiperInstance) window.newsSwiperInstance.destroy(true, true);
-                window.newsSwiperInstance = new Swiper('.newsSwiper', { effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto', loop: true, autoplay: { delay: 3000, disableOnInteraction: false }, coverflowEffect: { rotate: 20, stretch: 0, depth: 100, modifier: 1.5, slideShadows: false }, pagination: { el: '.swiper-pagination', clickable: true } });
-                
-                if (window.activitySwiperInstance) window.activitySwiperInstance.destroy(true, true);
-                window.activitySwiperInstance = new Swiper('.activitySwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 2000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } });
-                
-                /* ĐÃ FIX: CHẠY TỪ TRÁI QUA, 4 ẢNH = 4 CHẤM CHO KHỐI GIÁO VIÊN MẶC ĐỊNH */
-                if (window.globalTeacherSwiperInstance) window.globalTeacherSwiperInstance.destroy(true, true);
-                window.globalTeacherSwiperInstance = new Swiper('.globalTeacherSwiper', { 
+                // CẤU HÌNH RIÊNG CHUẨN CHO KHỐI GIÁO VIÊN/HỌC VIÊN
+                const teacherConfig = {
                     slidesPerView: 1, 
                     spaceBetween: 20, 
                     centeredSlides: true, 
-                    centeredSlidesBounds: true, /* CHỐT CỨNG ẢNH ĐẦU VÀO LỀ TRÁI */
                     loop: false, 
-                    initialSlide: 0, 
+                    rewind: true,
+                    //loopedSlides: 6, // RẤT QUAN TRỌNG: Khắc phục lỗi thiếu thẻ khi lặp làm hỏng canh giữa
+                    speed: 800, // Chuyển cảnh mềm mại không bị giật
+                    slideToClickedSlide: true,
                     observer: true, 
                     observeParents: true, 
-                    autoplay: { delay: 3000, disableOnInteraction: false }, 
+                    autoplay: { delay: 1200, disableOnInteraction: false }, 
                     pagination: { el: '.swiper-pagination', clickable: true }, 
-                    breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } 
-                });
+                    breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } }
+                };
+
+                // CẤU HÌNH CHO KHỐI KHÓA HỌC/TIẾNG ANH
+                const standardConfig = {
+                    slidesPerView: 1, 
+                    spaceBetween: 20, 
+                    loop: true, 
+                    loopedSlides: 6,
+                    speed: 800,
+                    slideToClickedSlide: true, 
+                    observer: true, 
+                    observeParents: true,
+                    autoplay: { delay: 3500, disableOnInteraction: false }, 
+                    pagination: { el: '.swiper-pagination', clickable: true }, 
+                    breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } }
+                };
+
+                window.cmsSwipers.push(new Swiper('.heroSwiper', { 
+                    slidesPerView: 1, loop: true, slideToClickedSlide: true, speed: 800,
+                    autoplay: { delay: 4000, disableOnInteraction: false }, 
+                    pagination: { el: '.hero-indicators', clickable: true } 
+                }));
                 
-                if (window.globalTechSwiperInstance) window.globalTechSwiperInstance.destroy(true, true);
-                window.globalTechSwiperInstance = new Swiper('.globalTechSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3500, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+                window.cmsSwipers.push(new Swiper('.newsSwiper', { 
+                    effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto', 
+                    loop: true, loopedSlides: 6, slideToClickedSlide: true, speed: 800,
+                    autoplay: { delay: 3000, disableOnInteraction: false }, 
+                    coverflowEffect: { rotate: 20, stretch: 0, depth: 100, modifier: 1.5, slideShadows: false }, 
+                    pagination: { el: '.swiper-pagination', clickable: true } 
+                }));
                 
-                if (window.globalEnglishSwiperInstance) window.globalEnglishSwiperInstance.destroy(true, true);
-                window.globalEnglishSwiperInstance = new Swiper('.globalEnglishSwiper', { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 4000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+                window.cmsSwipers.push(new Swiper('.activitySwiper', { 
+                    slidesPerView: 1, spaceBetween: 20, loop: true, slideToClickedSlide: true, speed: 800,
+                    autoplay: { delay: 2000, disableOnInteraction: false }, 
+                    pagination: { el: '.swiper-pagination', clickable: true }, 
+                    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } 
+                }));
+                
+                window.cmsSwipers.push(new Swiper('.globalTeacherSwiper', teacherConfig));
+                window.cmsSwipers.push(new Swiper('.globalTechSwiper', standardConfig));
+                window.cmsSwipers.push(new Swiper('.globalEnglishSwiper', standardConfig));
                 
                 if (data.custom_blocks) {
                     data.custom_blocks.forEach((block, bIndex) => {
                         if(block && block.type === 'teacher') {
-                            /* ĐÃ FIX: CHẠY TỪ TRÁI QUA, 4 ẢNH = 4 CHẤM CHO KHỐI CUSTOM */
-                            if(window[`customTeacherSwiper_${bIndex}`]) window[`customTeacherSwiper_${bIndex}`].destroy(true, true); 
-                            window[`customTeacherSwiper_${bIndex}`] = new Swiper(`.customTeacherSwiper-${bIndex}`, { 
-                                slidesPerView: 1, 
-                                spaceBetween: 20, 
-                                centeredSlides: true, 
-                                centeredSlidesBounds: true, /* CHỐT CỨNG ẢNH ĐẦU VÀO LỀ TRÁI */
-                                loop: false, 
-                                initialSlide: 0, 
-                                observer: true, 
-                                observeParents: true, 
-                                autoplay: { delay: 3000, disableOnInteraction: false }, 
-                                pagination: { el: '.swiper-pagination', clickable: true }, 
-                                breakpoints: { 768: { slidesPerView: 3, spaceBetween: 30 } } 
-                            });
+                            window.cmsSwipers.push(new Swiper(`.customTeacherSwiper-${bIndex}`, teacherConfig));
                         } else if (block && block.type === 'tech') {
-                            if(window[`customTechSwiper_${bIndex}`]) window[`customTechSwiper_${bIndex}`].destroy(true, true); window[`customTechSwiper_${bIndex}`] = new Swiper(`.customTechSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 3500, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+                            window.cmsSwipers.push(new Swiper(`.customTechSwiper-${bIndex}`, standardConfig));
                         } else if (block && block.type === 'english') {
-                            if(window[`customEnglishSwiper_${bIndex}`]) window[`customEnglishSwiper_${bIndex}`].destroy(true, true); window[`customEnglishSwiper_${bIndex}`] = new Swiper(`.customEnglishSwiper-${bIndex}`, { slidesPerView: 1, spaceBetween: 20, autoplay: { delay: 4000, disableOnInteraction: false }, pagination: { el: '.swiper-pagination', clickable: true }, breakpoints: { 768: { slidesPerView: 2, spaceBetween: 20 }, 1024: { slidesPerView: 3, spaceBetween: 30 } } });
+                            window.cmsSwipers.push(new Swiper(`.customEnglishSwiper-${bIndex}`, standardConfig));
                         } else if (block && block.type === 'news') {
-                            if(window[`customNewsSwiper_${bIndex}`]) window[`customNewsSwiper_${bIndex}`].destroy(true, true); window[`customNewsSwiper_${bIndex}`] = new Swiper(`.customNewsSwiper-${bIndex}`, { effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto', loop: true, autoplay: { delay: 3000, disableOnInteraction: false }, coverflowEffect: { rotate: 20, stretch: 0, depth: 100, modifier: 1.5, slideShadows: false }, pagination: { el: '.swiper-pagination', clickable: true } });
+                            window.cmsSwipers.push(new Swiper(`.customNewsSwiper-${bIndex}`, { 
+                                effect: 'coverflow', grabCursor: true, centeredSlides: true, slidesPerView: 'auto', 
+                                loop: true, loopedSlides: 6, slideToClickedSlide: true, speed: 800,
+                                autoplay: { delay: 3000, disableOnInteraction: false }, 
+                                coverflowEffect: { rotate: 20, stretch: 0, depth: 100, modifier: 1.5, slideShadows: false }, 
+                                pagination: { el: '.swiper-pagination', clickable: true } 
+                            }));
                         }
                     });
                 }
                 AOS.refresh(); 
-            }, 300);
+            }, 300); // Khởi tạo sau khi HTML render xong
         } catch (error) { console.error("Đã xảy ra lỗi:", error); }
     }
 });
