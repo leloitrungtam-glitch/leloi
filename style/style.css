@@ -25,6 +25,9 @@ body { font-family: 'Quicksand', sans-serif; margin: 0; padding: 0; background-c
 }
 .fade-in-left { opacity: 0; animation: fadeInLeft 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
 
+/* ========================================================
+   LOADER & HEADER
+   ======================================================== */
 #page-loader { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: #f8fafc; z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
 .loader-ring { position: relative; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; }
 .loader-ring::before { content: ""; position: absolute; width: 100%; height: 100%; border: 4px solid #e2e8f0; border-top-color: #007bff; border-radius: 50%; animation: spinRing 1s linear infinite; }
@@ -38,7 +41,6 @@ body { font-family: 'Quicksand', sans-serif; margin: 0; padding: 0; background-c
 .header-logo { width: 60px; height: 60px; border-radius: 50%; border: 3px solid #007bff; object-fit: contain; background-color: #fff; margin-right: 15px; padding: 2px; }
 .header-title { font-size: 20px; font-weight: 800; color: var(--dark-blue); margin: 0; text-transform: uppercase; letter-spacing: -0.5px; }
 
-/* CẬP NHẬT CSS HEADER MENU */
 .header-nav a { text-decoration: none; color: var(--dark-blue); font-weight: 700; font-size: 15px; padding: 8px 18px; border-radius: 50px; transition: 0.3s; border: 2px solid transparent; margin-left: 5px; }
 .header-nav a:hover { background: rgba(17, 34, 85, 0.05); color: var(--primary-color); border-color: var(--primary-color); }
 .btn-phone-menu { background: var(--primary-color) !important; color: white !important; border-color: var(--primary-color) !important; box-shadow: 0 4px 10px rgba(241, 90, 58, 0.3); }
@@ -47,21 +49,27 @@ body { font-family: 'Quicksand', sans-serif; margin: 0; padding: 0; background-c
 .menu-toggle-btn:focus { box-shadow: none; outline: none; }
 .menu-toggle-btn:active { transform: scale(0.9); }
 
-/* CSS MOBILE MENU OFFCANVAS */
 .mobile-menu-link { display: block; padding: 12px 20px; font-size: 16px; font-weight: 700; color: var(--dark-blue); text-decoration: none; background: #f8fafc; border-radius: 12px; transition: 0.3s; }
 .mobile-menu-link:hover { background: #e2e8f0; color: var(--primary-color); }
 .mobile-menu-link.phone-link { background: #fff5f5; color: #e31837; border: 1px solid #fecaca; }
 
-/* --- HERO SECTION ĐÃ ĐƯỢC CHUYỂN THÀNH SWIPER TRƯỢT --- */
+/* ========================================================
+   HERO & SWIPER COMPONENTS
+   ======================================================== */
 .hero-section { position: relative; width: 100%; aspect-ratio: 1920 / 800; margin-top: 80px; display: block; overflow: hidden; }
 .heroSwiper { width: 100%; height: 100%; }
 
-/* --- NÚT CHẤM TRÒN CHO ẢNH BÌA HERO SECTION --- */
 .hero-indicators { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); display: flex; justify-content: center; gap: 12px; z-index: 15; width: auto !important; }
 .hero-indicators .swiper-pagination-bullet { width: 14px !important; height: 14px !important; background-color: rgba(255, 255, 255, 0.5) !important; cursor: pointer !important; transition: all 0.4s ease !important; border-radius: 50% !important; box-shadow: 0 2px 5px rgba(0,0,0,0.3) !important; margin: 0 !important; opacity: 1 !important;}
 .hero-indicators .swiper-pagination-bullet:hover { background-color: rgba(255, 255, 255, 0.9) !important; transform: scale(1.15) !important; }
 .hero-indicators .swiper-pagination-bullet-active { background-color: #ffffff !important; transform: scale(1.3) !important; box-shadow: 0 0 12px rgba(255,255,255,0.8) !important; }
 
+.swiper-pagination { z-index: 50 !important; }
+.swiper-pagination-bullet { cursor: pointer !important; pointer-events: auto !important; }
+
+/* ========================================================
+   BUTTONS & MODALS
+   ======================================================== */
 .btn-fixed-register { position: fixed; bottom: 30px; right: 30px; z-index: 9997; background: var(--gradient-btn); color: white; padding: 15px 25px; font-size: 16px; font-weight: 700; border: none; border-radius: 50px; box-shadow: 0 5px 15px rgba(241, 90, 58, 0.4); cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; text-decoration: none; animation: pulse-btn 1.5s infinite; transform-origin: center; }
 .btn-fixed-register i { font-size: 20px; margin-right: 8px; }
 .btn-fixed-register:hover { transform: scale(1.1); box-shadow: 0 10px 25px rgba(241, 90, 58, 0.6); color: white; animation: none; }
@@ -79,17 +87,26 @@ body { font-family: 'Quicksand', sans-serif; margin: 0; padding: 0; background-c
 .btn-submit:hover { background-color: #ff854c; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 152, 104, 0.4);}
 .form-check-label { color: rgba(255,255,255,0.9); font-size: 14px; }
 
+#detailModal.fade .modal-dialog { transform: scale(0.8) translateY(-50px); transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); opacity: 0; }
+#detailModal.show .modal-dialog { transform: scale(1) translateY(0); opacity: 1; }
+#registrationModal.fade .modal-dialog { transform: translateY(60px); transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); opacity: 0; }
+#registrationModal.show .modal-dialog { transform: translateY(0); opacity: 1; }
+
+.btn-detail { transition: all 0.3s; border-radius: 50px; border: none; font-weight: 600; padding: 10px; }
+.btn-detail:hover { opacity: 0.85; transform: translateY(-2px); }
+
+/* ========================================================
+   CONTENT SECTIONS & CARDS
+   ======================================================== */
 .content-section { padding: 5px 10px 20px 10px; background: #f8fafc; }
 .content-container { max-width: 1500px; margin: 0 auto; overflow: hidden; }
-.section-heading { text-align: center; margin-bottom: 60px; }
-.section-heading h2 { color: var(--dark-blue); font-weight: 800; font-size: 38px; margin-bottom: 15px; }
+
+.section-heading, .section-heading[style] { text-align: center !important; margin-bottom: 60px; }
+.section-heading h2, .section-heading h2[style] { color: var(--dark-blue); font-weight: 800; font-size: 38px; margin-bottom: 15px; display: flex !important; justify-content: center !important; align-items: center !important; width: 100% !important; }
+.section-heading h2 i { margin-right: 12px !important; }
 .section-heading p { font-size: 18px; color: #64748b; max-width: 800px; margin: 0 auto; line-height: 1.6; }
 
-/* ĐẢM BẢO CHẤM TRÒN LUÔN BẤM ĐƯỢC MƯỢT MÀ */
-.swiper-pagination { z-index: 50 !important; }
-.swiper-pagination-bullet { cursor: pointer !important; pointer-events: auto !important; }
-
-/* CSS LLC NEWS COVERFLOW - ĐÃ SỬA CHẤM TRÒN HOÀN TOÀN */
+/* News / Tin tức */
 .news-section { background-color: #f8fafc; padding: 30px 0; }
 .newsSwiper { width: 100%; padding-top: 10px; padding-bottom: 30px; }
 .newsSwiper .swiper-slide { background-position: center; background-size: cover; width: 400px; height: auto; display: flex; flex-direction: column; align-items: center; filter: brightness(0.6); transition: 0.4s; }
@@ -98,68 +115,39 @@ body { font-family: 'Quicksand', sans-serif; margin: 0; padding: 0; background-c
 .newsSwiper .swiper-pagination-bullet { width: 12px !important; height: 12px !important; border-radius: 50% !important; background: #cbd5e1 !important; opacity: 1 !important; margin: 0 6px !important; transition: all 0.3s ease !important; }
 .newsSwiper .swiper-pagination-bullet-active { background: var(--dark-blue) !important; width: 12px !important; transform: scale(1.3) !important; }
 
+/* Course Cards */
 .course-card { background: #ffffff; border-radius: 20px; padding: 0 0 25px 0; height: 100%; width: 100%; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important; position: relative; overflow: hidden; display: flex; flex-direction: column; }
 .course-card:hover { transform: translateY(-12px) !important; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important; }
 .course-card-img { width: 100%; height: 200px; object-fit: cover; margin-bottom: 25px; transition: transform 0.5s ease; }
 .course-card:hover .course-card-img { transform: scale(1.05); }
-.icon-box { background-color: #ffffff; width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; position: absolute; top: 170px; left: 30px; z-index: 2; transition: transform 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.course-title, .course-desc { padding: 0 30px;  }
+.icon-box { background-color: #ffffff; width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 28px; position: absolute; top: 170px; left: 50% !important; transform: translateX(-50%) !important; z-index: 2; transition: transform 0.3s ease; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.course-title, .course-desc { padding: 0 30px; text-align: center !important; }
 .course-title { font-weight: 700; font-size: 22px; color: var(--dark-blue); margin-bottom: 15px; margin-top: 10px; }
 .course-desc { color: #475569; font-size: 15.5px; line-height: 1.7; flex-grow: 1; }
+.course-card .mt-auto button:first-child { background-color: #f15a3a !important; color: #ffffff !important; border: none !important; }
+.course-card .mt-auto button:first-child:hover { background-color: #d94e30 !important; opacity: 1 !important; }
 
+/* English Programs */
 .english-programs-section { background-color: #00d5ff; border-radius: 24px; padding: 40px 20px; transition: 0.5s ease;}
 .ep-card { background-color: #ffffff; border-radius: 20px; padding: 25px; height: 100%; width: 100%; display: flex; flex-direction: column; transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); }
 .ep-card:hover { transform: translateY(-12px) !important; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important; }
-.ep-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; gap: 15px; }
-.ep-title { font-weight: 700; color: #112255; font-size: 19px; margin: 0; line-height: 1.4; flex: 1; }
+.ep-header { display: flex; justify-content: center !important; align-items: flex-start; margin-bottom: 20px; gap: 15px; }
+.ep-title { font-weight: 700; color: #112255; font-size: 19px; margin: 0; line-height: 1.4; flex: 1; text-align: center !important; }
 .ep-age-badge { background-color: #112255; color: #ffffff !important; padding: 8px 12px; border-radius: 12px; text-align: center; min-width: 70px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 .ep-age-badge span { font-size: 11px; display: block; line-height: 1.2; color: #ffffff !important; opacity: 0.9; }
 .ep-age-badge strong { font-size: 22px; line-height: 1.1; margin: 2px 0; color: #ffffff !important; font-weight: 800; }
 .ep-img { width: 100%; border-radius: 15px; margin-bottom: 20px; object-fit: cover; aspect-ratio: 16/10; transition: transform 0.5s ease; border: 1px solid #f1f5f9; }
 .ep-card:hover .ep-img { transform: scale(1.03); }
-.ep-desc { color: #475569; font-size: 15px; line-height: 1.6; flex-grow: 1; margin-bottom: 20px; }
-.ep-btn { background-color: #112255; color: white; border: none; border-radius: 50px; padding: 12px 20px; font-weight: 700; display: flex; justify-content: center; align-items: center; width: 100%; text-decoration: none; transition: 0.3s; }
-.ep-btn:hover { opacity: 0.9; transform: translateY(-2px); }
-.ep-btn i { background-color: white; color: #112255; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; margin-left: 10px; font-size: 14px; }
-
-.btn-detail { transition: all 0.3s; border-radius: 50px; border: none; font-weight: 600; padding: 10px; }
-.btn-detail:hover { opacity: 0.85; transform: translateY(-2px); }
+.ep-desc { color: #475569; font-size: 15px; line-height: 1.6; flex-grow: 1; margin-bottom: 20px; text-align: center !important; }
+.ep-btn { background-color: #f15a3a !important; color: #ffffff !important; border: none; border-radius: 50px; padding: 12px 20px; font-weight: 700; display: flex; justify-content: center; align-items: center; width: 100%; text-decoration: none; transition: 0.3s; }
+.ep-btn:hover { background-color: #d94e30 !important; opacity: 1 !important; transform: translateY(-2px); }
+.ep-btn i { background-color: #ffffff !important; color: #f15a3a !important; border-radius: 50%; width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center; margin-left: 10px; font-size: 14px; }
 
 div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; display: none; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.85); z-index: 9999; backdrop-filter: blur(8px); }
 
-/* --- CSS FOOTER TRÀN VIỀN (MÁY TÍNH) --- */
-.main-footer { 
-    position: relative; 
-    background-color: rgb(16, 64, 178) !important;
-    padding: 50px 30px; 
-    margin: 0; 
-    border-radius: 0; 
-    color: #ffffff; 
-    overflow: hidden; 
-    box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
-}
-.main-footer::before { display: none !important; }
-.footer-container { position: relative; z-index: 1; max-width: 1500px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between; }
-.footer-left { flex: 1; min-width: 300px; }
-.footer-right { width: 350px; min-width: 300px; text-align: right; }
-.f-logo { height: 165px; object-fit: contain; margin-bottom: 18px; display: block; }
-.f-name { color: #ffffff; font-weight: 700; font-size: 22px; margin-bottom: 10px; text-transform: uppercase; word-wrap: break-word; word-break: break-word; line-height: 1.4; }
-.f-text { color: #f1f5f9; font-size: 18px; line-height: 1.6; margin-bottom: 6px; }
-.f-privacy { color: #ffffff; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;}        
-.f-privacy i { color: #198754; font-size: 16px; }
-.f-map-wrapper { border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
-.f-support-btn { background-color: #00d5ff; color: #112255; border: none; border-radius: 50px; padding: 14px 25px; font-weight: 700; width: 100%; display: inline-flex; justify-content: center; align-items: center; text-transform: uppercase; transition: all 0.3s; cursor: pointer; text-decoration: none !important; }
-.f-support-btn:hover { background-color: #00bce6; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 213, 255, 0.4); color: #112255; }
-.f-support-btn i { margin-right: 8px; font-size: 18px; }
-
-.activity-container { max-width: 900px; margin: 0 auto; }
-.activitySwiper { width: 100%; padding-bottom: 40px !important; }
-.activity-slide-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-.activity-slide-text { font-style: italic; text-align: center; margin-top: 15px; color: #333; font-size: 15px; font-weight: 500;}
-.activitySwiper .swiper-button-next, .activitySwiper .swiper-button-prev { color: var(--primary-color); }
-.activitySwiper .swiper-pagination-bullet-active { background: var(--primary-color); }
-
-/* --- KHỐI GIÁO VIÊN HOÀN CHỈNH DẠNG HÌNH BO GÓC MỚI --- */
+/* ========================================================
+   TEACHER CARDS & SWIPER (HIỆU ỨNG TRUNG TÂM PHÓNG TO)
+   ======================================================== */
 .teacherSwiper { 
     width: 100%; 
     max-width: 1250px !important; 
@@ -168,6 +156,7 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
     overflow: visible !important; 
     position: relative; 
 }
+
 .teacher-card {
     height: auto !important; 
     aspect-ratio: 428 / 530 !important; 
@@ -178,10 +167,33 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
     border-radius: 20px !important;
     overflow: hidden !important;
     width: 100%;
-    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important; 
-    box-shadow: none !important;
     background-color: #ebebeb !important; 
 }
+
+/* 1. Trạng thái mặc định của các thẻ (Khi KHÔNG nằm ở giữa) */
+.teacherSwiper .swiper-slide .teacher-card {
+    transform: scale(0.85) !important; /* Thu nhỏ các thẻ ở 2 bên */
+    opacity: 1 !important; /* KHÔNG LÀM MỜ - GIỮ NGUYÊN ĐỘ SÁNG 100% */
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+    box-shadow: none !important;
+}
+
+/* 2. Trạng thái khi thẻ trượt vào vị trí trung tâm (ACTIVE) */
+.teacherSwiper .swiper-slide-active .teacher-card {
+    transform: scale(1.1) !important; /* Phóng to thẻ chính giữa */
+    opacity: 1 !important; /* Hiển thị rõ nét nhất */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15) !important; /* Đổ bóng tạo hiệu ứng 3D */
+    z-index: 10 !important;
+}
+
+/* 3. Hiệu ứng khi rê chuột (Hover) vào thẻ đang ở giữa */
+.teacherSwiper .swiper-slide-active .teacher-card:hover {
+    transform: scale(1.1) translateY(-8px) !important; 
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25) !important; 
+    z-index: 20 !important;
+}
+
+/* Khung thông tin giáo viên (Chữ trắng, nền xanh) */
 .teacher-info {
     position: absolute !important; 
     bottom: -80px !important; 
@@ -197,7 +209,7 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
     transition: all 0.3s ease !important;
 }
 
-/* HIỂN THỊ KHUNG THÔNG TIN KHI HOVER HOẶC KHI SLIDE ĐANG ACTIVE (Ở GIỮA) */
+/* HIỂN THỊ TÊN KHI HOVER HOẶC KHI ĐANG Ở GIỮA (ACTIVE) */
 .teacher-card:hover .teacher-info,
 .teacherSwiper .swiper-slide-active .teacher-info {
     bottom: 0 !important; 
@@ -218,78 +230,75 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
     margin: 0 !important; 
     color: #ffffff !important; 
 }
-.teacherSwiper .swiper-button-next, .teacherSwiper .swiper-button-prev {
-    background-color: rgba(255, 255, 255, 0.9);
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    color: #333;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    transition: 0.3s;
-    z-index: 50;
-}
-.teacherSwiper .swiper-button-next:hover, .teacherSwiper .swiper-button-prev:hover {
-    background-color: #fff;
-    transform: scale(1.1);
-}
-.teacherSwiper .swiper-button-next::after, .teacherSwiper .swiper-button-prev::after {
-    font-size: 18px;
-    font-weight: bold;
-}
-.teacherSwiper .swiper-slide { 
-    height: auto; 
-    display: flex; 
-    padding: 20px 10px; 
-    align-items: center; 
-    justify-content: center;
-}
-.teacherSwiper .swiper-pagination-bullet { 
-    width: 12px !important; 
-    height: 12px !important; 
-    border-radius: 50% !important; 
-    background: #ccc !important; 
-    opacity: 1 !important; 
-    transition: all 0.3s ease !important; 
-    margin: 0 6px !important;
-}
-.teacherSwiper .swiper-pagination-bullet-active { 
-    background: #00d5ff !important; 
-    transform: scale(1.3) !important; 
-}
-.teacherSwiper .swiper-slide .teacher-card {
-    transform: scale(1) !important;
-    opacity: 1 !important;
-}
-.teacherSwiper .swiper-slide-active .teacher-card {
-    transform: scale(1) !important;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
-    z-index: 10 !important;
-}
-.teacherSwiper .swiper-slide .teacher-card:hover {
-    transform: translateY(-5px) !important;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
-    z-index: 20 !important;
-}
+
 .teacher-badge { position: absolute; top: 0; right: 15px; background: #e31837; color: white; padding: 6px 12px; border-radius: 0 0 10px 10px; text-align: center; z-index: 10; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 .teacher-badge span { font-size: 20px; display: block; font-weight: 800; line-height: 1; margin-bottom: 2px;}
 .teacher-badge small { font-size: 9px; text-transform: lowercase; font-weight: bold; line-height: 1.1; display: block; }
-.teacher-img {
-    width: 100% !important;
-    height: 100% !important; 
-    object-fit: cover !important;
-    object-position: center !important; 
-    display: block !important;
-}
+.teacher-img { width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center !important; display: block !important; }
 
-/* ÁP DỤNG Ô TRÒN CHO TẤT CẢ CÁC THANH TRƯỢT KHÁC */
+.teacherSwiper .swiper-button-next, .teacherSwiper .swiper-button-prev { background-color: rgba(255, 255, 255, 0.9); width: 44px; height: 44px; border-radius: 50%; color: #333; box-shadow: 0 4px 15px rgba(0,0,0,0.15); transition: 0.3s; z-index: 50; }
+.teacherSwiper .swiper-button-next:hover, .teacherSwiper .swiper-button-prev:hover { background-color: #fff; transform: scale(1.1); }
+.teacherSwiper .swiper-button-next::after, .teacherSwiper .swiper-button-prev::after { font-size: 18px; font-weight: bold; }
+.teacherSwiper .swiper-slide { height: auto; display: flex; padding: 20px 10px; align-items: center; justify-content: center; }
+.teacherSwiper .swiper-pagination-bullet { width: 12px !important; height: 12px !important; border-radius: 50% !important; background: #ccc !important; opacity: 1 !important; transition: all 0.3s ease !important; margin: 0 6px !important; }
+.teacherSwiper .swiper-pagination-bullet-active { background: #00d5ff !important; transform: scale(1.3) !important; }
+
+/* Các Swiper khác */
 .techSwiper, .englishSwiper { width: 100%; padding-bottom: 50px !important; }
 .techSwiper .swiper-slide, .englishSwiper .swiper-slide { height: auto; display: flex; padding: 10px; }
-.techSwiper .swiper-pagination-bullet, .englishSwiper .swiper-pagination-bullet { 
-    width: 12px !important; height: 12px !important; border-radius: 50% !important; background: #ccc !important; opacity: 1 !important; transition: all 0.3s ease !important; margin: 0 6px !important;
-}
+.techSwiper .swiper-pagination-bullet, .englishSwiper .swiper-pagination-bullet { width: 12px !important; height: 12px !important; border-radius: 50% !important; background: #ccc !important; opacity: 1 !important; transition: all 0.3s ease !important; margin: 0 6px !important; }
 .techSwiper .swiper-pagination-bullet-active { background: var(--primary-color) !important; transform: scale(1.3) !important; }
 .englishSwiper .swiper-pagination-bullet-active { background: #112255 !important; transform: scale(1.3) !important; }
 
+/* Hoạt động */
+.activity-container { max-width: 900px; margin: 0 auto; }
+.activitySwiper { width: 100%; padding-bottom: 40px !important; }
+.activity-slide-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.activity-slide-text { font-style: italic; text-align: center; margin-top: 15px; color: #333; font-size: 15px; font-weight: 500;}
+.activitySwiper .swiper-button-next, .activitySwiper .swiper-button-prev { color: var(--primary-color); }
+.activitySwiper .swiper-pagination-bullet-active { background: var(--primary-color); }
+
+/* ========================================================
+   FOOTER SECTION
+   ======================================================== */
+.main-footer { position: relative; background-color: rgb(16, 64, 178) !important; padding: 50px 30px; margin: 0; border-radius: 0; color: #ffffff; overflow: hidden; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+.main-footer::before { display: none !important; }
+.footer-container { position: relative; z-index: 1; max-width: 1500px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between; }
+.footer-left { flex: 1; min-width: 300px; }
+.footer-right { width: 350px; min-width: 300px; text-align: right; }
+.f-logo { height: 165px; object-fit: contain; margin-bottom: 18px; display: block; }
+.f-name { color: #ffffff; font-weight: 700; font-size: 22px; margin-bottom: 10px; text-transform: uppercase; word-wrap: break-word; word-break: break-word; line-height: 1.4; }
+.f-text { color: #f1f5f9; font-size: 18px; line-height: 1.6; margin-bottom: 6px; }
+.f-privacy { color: #ffffff; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 6px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 15px;}        
+.f-privacy i { color: #198754; font-size: 16px; }
+.f-map-wrapper { border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 15px; }
+.f-support-btn { background-color: #00d5ff; color: #112255; border: none; border-radius: 50px; padding: 14px 25px; font-weight: 700; width: 100%; display: inline-flex; justify-content: center; align-items: center; text-transform: uppercase; transition: all 0.3s; cursor: pointer; text-decoration: none !important; }
+.f-support-btn:hover { background-color: #00bce6; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0, 213, 255, 0.4); color: #112255; }
+.f-support-btn i { margin-right: 8px; font-size: 18px; }
+
+/* Social Footer & Forms */
+.footer-social-card { background-color: #ffffff; border-radius: 20px; padding: 25px 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 650px; }
+.footer-social-text { color: #112255; font-weight: 700; font-size: 18px; margin-bottom: 20px; }
+.social-icons-wrapper { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+.social-icon-btn { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; border: 2px solid #112255; color: #112255; font-size: 20px; text-decoration: none !important; transition: all 0.3s ease; background-color: transparent; }
+.social-icon-btn:hover { transform: translateY(-3px); background-color: #e31837 !important; border-color: #e31837 !important; color: white !important; box-shadow: 0 8px 20px rgba(227, 24, 55, 0.4) !important; }
+.social-icon-btn .zalo-text { font-size: 13px; font-weight: 700; line-height: 1; }
+
+@keyframes tiltShaking { 0% { transform: rotate(-3deg); } 10% { transform: rotate(5deg); } 20% { transform: rotate(-8deg); } 30% { transform: rotate(2deg); } 40% { transform: rotate(-5deg); } 50% { transform: rotate(-3deg); } 100% { transform: rotate(-3deg); } }
+.advice-highlight-wrapper { position: relative; display: inline-block; animation: tiltShaking 2s infinite; }
+.advice-highlight { background-color: #e31837; color: white; padding: 5px 25px; border-radius: 50px; display: inline-block; font-weight: 800; position: relative; z-index: 2; }
+.advice-sparkle { position: absolute; top: -20px; right: -35px; width: 50px; height: 50px; z-index: 1; pointer-events: none; }
+.contact-footer-input { padding: 12px 20px !important; background: rgba(255, 255, 255, 0.9) !important; border: none !important; border-radius: 50px !important; font-size: 14px; transition: 0.3s; }
+.contact-footer-input:focus { background: #fff !important; box-shadow: 0 0 15px rgba(255,255,255,0.5) !important; }
+.btn-submit-dark { background-color: #233066 !important; color: white !important; border-radius: 50px !important; padding: 14px !important; font-weight: 700; transition: 0.3s; border: none; }
+.btn-submit-dark:hover { background-color: #112255 !important; transform: translateY(-2px); }
+
+/* Khắc phục lỗi menu che tiêu đề khi dùng điểm neo */
+.custom-text-box, .mb-5, .english-programs-section, .news-section, .section-master, [id^="wrap_"] { scroll-margin-top: 170px !important; }
+
+/* ========================================================
+   RESPONSIVE MOBILE (Dưới 720px)
+   ======================================================== */
 @media (max-width: 720px) {
     .main-header { height: 70px; } .header-logo { width: 50px; height: 50px; } .header-title { font-size: 15px; }
     .header-nav { display: none; }
@@ -305,16 +314,14 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
     
     .btn-fixed-register { display: none !important; }
     
-    .f-support-btn { padding: 10px 15px; font-size: 13px; }
-    .f-support-btn i { font-size: 15px; }
-    
     #backToTopBtn { bottom: 30px; right: 20px; width: 45px; height: 45px; font-size: 24px; }
-    .footer-right { width: 100%; text-align: left;} .footer-container { gap: 20px; }
+    
     .course-card-img { height: 180px; margin-bottom: 20px; }
-    .icon-box { top: 160px; left: 20px; width: 45px; height: 45px; font-size: 22px; border-radius: 12px; }
+    .icon-box { top: 160px; width: 45px; height: 45px; font-size: 22px; border-radius: 12px; }
     .course-title { font-size: 18px !important; padding: 0 20px; margin-bottom: 10px; margin-top: 12px; }
     .course-desc { font-size: 14px; padding: 0 20px; line-height: 1.5; }
     .course-card { padding: 0 0 20px 0; border-radius: 15px; }
+    
     .ep-card { padding: 20px; border-radius: 15px; }
     .ep-header { flex-direction: row; margin-bottom: 15px; gap: 10px; align-items: flex-start; }
     .ep-title { font-size: 15px !important; }
@@ -325,14 +332,15 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
     .ep-desc { font-size: 13px; margin-bottom: 15px; }
     .ep-btn { padding: 10px; font-size: 12px; }
     .ep-btn i { width: 22px; height: 22px; font-size: 11px; margin-left: 6px; }
+    
     .teacher-card { padding: 0 !important; }
     .teacherSwiper .swiper-slide, .techSwiper .swiper-slide, .englishSwiper .swiper-slide { padding: 0 5px; }
     #wrap_about { margin-top: -30px !important; padding-top: 0 !important; }
     
+    /* Footer Mobile */
     .main-footer { margin: 0 10px 15px 10px !important; padding: 25px 15px !important; border-radius: 15px !important; }
     .footer-container { gap: 15px !important; }
     .footer-right { width: 100% !important; text-align: left !important; }
-    
     .f-logo { height: 75px !important; margin-bottom: 12px !important; }
     .f-name { font-size: 15px !important; margin-bottom: 5px !important; line-height: 1.4 !important; } 
     .f-text { font-size: 13px !important; line-height: 1.5 !important; margin-bottom: 5px !important; } 
@@ -340,52 +348,7 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
     .f-map-wrapper { margin-bottom: 10px !important; }
     .f-map-wrapper iframe { height: 120px !important; } 
     .f-support-btn { padding: 10px 15px !important; font-size: 13px !important; }
-} 
-
-/* --- HIỆU ỨNG POPUP CHI TIẾT --- */
-#detailModal.fade .modal-dialog { transform: scale(0.8) translateY(-50px); transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); opacity: 0; }
-#detailModal.show .modal-dialog { transform: scale(1) translateY(0); opacity: 1; }
-#registrationModal.fade .modal-dialog { transform: translateY(60px); transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); opacity: 0; }
-#registrationModal.show .modal-dialog { transform: translateY(0); opacity: 1; }
-
-/* --- STYLE CHO FORM ĐĂNG KÝ FOOTER --- */
-@keyframes tiltShaking { 0% { transform: rotate(-3deg); } 10% { transform: rotate(5deg); } 20% { transform: rotate(-8deg); } 30% { transform: rotate(2deg); } 40% { transform: rotate(-5deg); } 50% { transform: rotate(-3deg); } 100% { transform: rotate(-3deg); } }
-.advice-highlight-wrapper { position: relative; display: inline-block; animation: tiltShaking 2s infinite; }
-.advice-highlight { background-color: #e31837; color: white; padding: 5px 25px; border-radius: 50px; display: inline-block; font-weight: 800; position: relative; z-index: 2; }
-.advice-sparkle { position: absolute; top: -20px; right: -35px; width: 50px; height: 50px; z-index: 1; pointer-events: none; }
-.contact-footer-input { padding: 12px 20px !important; background: rgba(255, 255, 255, 0.9) !important; border: none !important; border-radius: 50px !important; font-size: 14px; transition: 0.3s; }
-.contact-footer-input:focus { background: #fff !important; box-shadow: 0 0 15px rgba(255,255,255,0.5) !important; }
-.btn-submit-dark { background-color: #233066 !important; color: white !important; border-radius: 50px !important; padding: 14px !important; font-weight: 700; transition: 0.3s; border: none; }
-.btn-submit-dark:hover { background-color: #112255 !important; transform: translateY(-2px); }
-
-/* --- CĂN GIỮA CHỮ VÀ ICON TRONG KHỐI KHÓA HỌC --- */
-.course-title, .course-desc { text-align: center !important; }
-.icon-box { left: 50% !important; transform: translateX(-50%) !important; }
-.ep-title, .ep-desc { text-align: center !important; }
-.ep-header { justify-content: center !important; }
-
-/* --- CĂN GIỮA TOÀN BỘ TIÊU ĐỀ CÁC KHỐI --- */
-.section-heading, .section-heading[style] { text-align: center !important; }
-.section-heading h2, .section-heading h2[style] { display: flex !important; justify-content: center !important; align-items: center !important; text-align: center !important; width: 100% !important; }
-.section-heading h2 i { margin-right: 12px !important; }
-
-/* --- KHẮC PHỤC LỖI MENU CHE TIÊU ĐỀ KHI DÙNG ĐIỂM NEO --- */
-.custom-text-box, .mb-5, .english-programs-section, .news-section, .section-master, [id^="wrap_"] { scroll-margin-top: 170px !important; }
-
-/* --- ÉP MÀU CAM MẶC ĐỊNH CHO NÚT TƯ VẤN NGAY --- */
-.course-card .mt-auto button:first-child { background-color: #f15a3a !important; color: #ffffff !important; border: none !important; }
-.ep-card .ep-btn { background-color: #f15a3a !important; color: #ffffff !important; }
-.ep-card .ep-btn i { color: #f15a3a !important; background-color: #ffffff !important; }
-.course-card .mt-auto button:first-child:hover, .ep-card .ep-btn:hover { background-color: #d94e30 !important; opacity: 1 !important; }
-
-/* --- SOCIAL FOOTER VIEW TRANG NGƯỜI DÙNG --- */
-.footer-social-card { background-color: #ffffff; border-radius: 20px; padding: 25px 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 650px; }
-.footer-social-text { color: #112255; font-weight: 700; font-size: 18px; margin-bottom: 20px; }
-.social-icons-wrapper { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
-.social-icon-btn { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; border: 2px solid #112255; color: #112255; font-size: 20px; text-decoration: none !important; transition: all 0.3s ease; background-color: transparent; }
-.social-icon-btn:hover { transform: translateY(-3px); background-color: #e31837 !important; border-color: #e31837 !important; color: white !important; box-shadow: 0 8px 20px rgba(227, 24, 55, 0.4) !important; }
-.social-icon-btn .zalo-text { font-size: 13px; font-weight: 700; line-height: 1; }
-@media (max-width: 720px) {
+    
     .footer-social-card { padding: 20px; border-radius: 15px; }
     .footer-social-text { font-size: 15px; margin-bottom: 15px; }
     .social-icon-btn { width: 40px; height: 40px; font-size: 18px; border-width: 2px; }
