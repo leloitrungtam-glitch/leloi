@@ -2,7 +2,34 @@ if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
 window.scrollTo(0, 0);
 window.addEventListener('beforeunload', function () { window.scrollTo(0, 0); });
 
-AOS.init({ duration: 800, once: true, offset: 50 });
+// Đã thêm mirror: true để hiệu ứng có thể reset khi cuộn ngược lên
+AOS.init({ duration: 800, once: false, mirror: true, offset: 50 });
+
+// --- BẮT ĐẦU CODE SỬA LỖI CLICK MENU ÉP CHẠY LẠI ANIMATION ---
+document.addEventListener('click', function(e) {
+    const link = e.target.closest('a');
+    if (link && link.getAttribute('href') && link.getAttribute('href').startsWith('#')) {
+        const targetId = link.getAttribute('href').substring(1);
+        if(targetId) {
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+                // Xóa và thêm lại animation cho khối chính
+                if (targetEl.hasAttribute('data-aos')) {
+                    targetEl.classList.remove('aos-animate');
+                    setTimeout(() => { targetEl.classList.add('aos-animate'); }, 150);
+                }
+                // Xóa và thêm lại animation cho các khối con bên trong (nếu có)
+                const aosChildren = targetEl.querySelectorAll('[data-aos]');
+                aosChildren.forEach(child => {
+                    child.classList.remove('aos-animate');
+                    setTimeout(() => { child.classList.add('aos-animate'); }, 150);
+                });
+            }
+        }
+    }
+});
+// --- KẾT THÚC CODE SỬA LỖI ---
+
 const backToTopBtn = document.getElementById("backToTopBtn");
 window.addEventListener("scroll", () => { if (window.scrollY > 400) { backToTopBtn.style.display = "flex"; } else { backToTopBtn.style.display = "none"; } });
 backToTopBtn.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: "smooth" }); });
@@ -160,7 +187,7 @@ onValue(ref(db, 'pageContent'), (snapshot) => {
                 data.english_cards.forEach((card, index) => { 
                     if(card) {
                         let btnDetail = card.has_detail ? `<button type="button" class="btn w-100 mt-2 btn-detail" style="background-color: ${card.detail_bg||'#3866f0'}; color: ${card.detail_color||'#ffffff'}; font-size: ${card.detail_size||'14'}px; font-family: ${card.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(card.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${card.detail_text||'Xem chi tiết'}</button>` : '';
-                        englishContainer.innerHTML += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${card.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${card.text_color || '#112255'};">${card.title}</h3><div class="ep-age-badge" style="background-color: ${card.text_color || '#112255'};"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${card.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${card.img}" class="ep-img"><p class="ep-desc" style="color: ${card.text_color || '#475569'};">${card.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: #f15a3a; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: #f15a3a; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
+                        englishContainer.innerHTML += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${card.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${card.text_color || '#112255'};">${card.title}</h3><div class="ep-age-badge" style="background-color: rgb(255, 75, 15);"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${card.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${card.img}" class="ep-img"><p class="ep-desc" style="color: ${card.text_color || '#475569'};">${card.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: #f15a3a; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: #f15a3a; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
                     }
                 });
             }
@@ -205,7 +232,7 @@ onValue(ref(db, 'pageContent'), (snapshot) => {
                                 block.cards.forEach((c, i) => { 
                                     if(c) {
                                         let btnDetail = c.has_detail ? `<button type="button" class="btn w-100 mt-2 btn-detail" style="background-color: ${c.detail_bg||'#3866f0'}; color: ${c.detail_color||'#ffffff'}; font-size: ${c.detail_size||'14'}px; font-family: ${c.detail_font||'Inter'}, sans-serif;" data-content="${encodeURIComponent(c.detail_content || 'Nội dung chi tiết đang cập nhật...')}" onclick="window.showDetailModal(this.getAttribute('data-content'))">${c.detail_text||'Xem chi tiết'}</button>` : '';
-                                        innerCards += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${c.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${c.text_color || '#112255'};">${c.title}</h3><div class="ep-age-badge" style="background-color: ${c.text_color || '#112255'};"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${c.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${c.img}" class="ep-img"><p class="ep-desc" style="color: ${c.text_color || '#475569'};">${c.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: #f15a3a; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: #f15a3a; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
+                                        innerCards += `<div class="swiper-slide"><div class="ep-card" style="background-color: ${c.bg_color || '#ffffff'};"><div class="ep-header"><h3 class="ep-title" style="color: ${c.text_color || '#112255'};">${c.title}</h3><div class="ep-age-badge" style="background-color: rgb(255, 75, 15);"><span style="color:#ffffff!important;">Từ</span><strong style="color:#ffffff!important;">${c.age}</strong><span style="color:#ffffff!important;">tuổi</span></div></div><img src="${c.img}" class="ep-img"><p class="ep-desc" style="color: ${c.text_color || '#475569'};">${c.desc}</p><div class="mt-auto"><button type="button" class="ep-btn" style="background-color: #f15a3a; color: #fff;" data-bs-toggle="modal" data-bs-target="#registrationModal">TƯ VẤN NGAY <i class="bi bi-telephone-fill" style="color: #f15a3a; background-color: #fff;"></i></button>${btnDetail}</div></div></div>`; 
                                     }
                                 }); 
                             } 
