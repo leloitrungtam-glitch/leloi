@@ -203,7 +203,7 @@ div#loading { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; disp
     opacity: 1 !important; 
     
     /* Đổi 0.95 thành 0.7 để màu xanh trong suốt hơn */
-    background: rgba(4, 11, 54, 0.7) !important; 
+  background: rgb(16, 64, 178) !important;
     
     /* Tăng 5px lên 10px để ảnh phía sau nhòe hơn */
     backdrop-filter: blur(10px) !important; 
